@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const groups = [
+  { title: 'Inteligência artificial', number: '01', links: [['Anthropic — Research', 'Artigos e pesquisas sobre modelos e segurança.'], ['Hugging Face', 'Modelos, datasets e comunidade open source.'], ['Ollama', 'Execução simples de modelos localmente.']] },
+  { title: 'Cursos & aprendizagem', number: '02', links: [['fast.ai', 'Deep learning prático e acessível.'], ['MIT OpenCourseWare', 'Cursos abertos de ciência e tecnologia.'], ['The Missing Semester', 'Ferramentas essenciais para computação.']] },
+  { title: 'Documentação', number: '03', links: [['Astro Docs', 'Referência do framework deste blog.'], ['MDN Web Docs', 'A base confiável da web.'], ['Cloudflare Developers', 'Infraestrutura, segurança e edge.']] },
+  { title: 'Recomendados', number: '04', links: [['Marginalia Search', 'Uma forma diferente de explorar a web.'], ['Internet Archive', 'A memória coletiva da internet.'], ['Kagi Small Web', 'Descobertas fora das grandes plataformas.']] },
+];
+---
+<BaseLayout title="Links" description="Uma biblioteca pessoal de referências úteis.">
+  <section class="page-head shell"><p class="eyebrow">Biblioteca</p><h1>Links que merecem<br />ser reencontrados.</h1><p>Uma coleção curada de ferramentas, cursos, documentação e cantos interessantes da internet.</p></section>
+  <section class="link-library shell">
+    {groups.map((group) => <div class="link-group"><header><span>{group.number}</span><h2>{group.title}</h2></header><div>{group.links.map(([title, description]) => <a href="#" class="resource-link"><span><strong>{title}</strong><small>{description}</small></span><b>↗</b></a>)}</div></div>)}
+  </section>
+</BaseLayout>

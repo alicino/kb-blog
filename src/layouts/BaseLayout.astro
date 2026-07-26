@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'alicino/knowledge base',
+  description = 'Notas, experiências e referências sobre inteligência artificial, tecnologia e aprendizagem.',
+} = Astro.props;
+const pageTitle = title === 'alicino/knowledge base' ? title : `${title} — alicino/knowledge base`;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="site-frame">
+      <Header />
+      <main id="conteudo"><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+<BaseLayout title="Posts" description="Todos os artigos publicados, do mais recente ao mais antigo.">
+  <section class="page-head shell">
+    <p class="eyebrow">Arquivo completo</p>
+    <h1>Todos os posts</h1>
+    <p>{posts.length} notas sobre tecnologia, IA, ferramentas e aprendizagem.</p>
+  </section>
+  <section class="posts-section shell"><div class="post-list">{posts.map((post, index) => <PostCard post={post} index={index} />)}</div></section>
+</BaseLayout>

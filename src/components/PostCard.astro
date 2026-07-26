@@ -1,0 +1,28 @@
+---
+interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      description: string;
+      publishedAt: Date;
+      category: string;
+      tags: string[];
+    };
+  };
+  index?: number;
+}
+const { post, index } = Astro.props;
+const date = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }).format(post.data.publishedAt);
+---
+
+<article class="post-card">
+  {typeof index === 'number' && <span class="post-index">{String(index + 1).padStart(2, '0')}</span>}
+  <div class="post-card-body">
+    <div class="post-meta"><span>{post.data.category}</span><time datetime={post.data.publishedAt.toISOString()}>{date}</time></div>
+    <h2><a href={`/posts/${post.id}`}>{post.data.title}</a></h2>
+    <p>{post.data.description}</p>
+    <div class="tag-row">{post.data.tags.map((tag) => <span>#{tag}</span>)}</div>
+  </div>
+  <a class="post-arrow" href={`/posts/${post.id}`} aria-label={`Ler ${post.data.title}`}>↗</a>
+</article>

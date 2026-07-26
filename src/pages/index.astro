@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 10);
+---
+
+<BaseLayout>
+  <section class="hero shell">
+    <p class="eyebrow">Notas públicas · ideias em progresso</p>
+    <h1>Curiosidade,<br /><em>documentada.</em></h1>
+    <div class="hero-bottom">
+      <p>Um arquivo pessoal sobre inteligência artificial, tecnologia e tudo o que vale a pena aprender com calma.</p>
+      <span class="status"><i></i> atualizado continuamente</span>
+    </div>
+  </section>
+
+  <section class="posts-section shell">
+    <div class="section-heading">
+      <h2>Últimas publicações</h2>
+      <a href="/posts">Ver todos os posts →</a>
+    </div>
+    <div class="post-list">{posts.map((post, index) => <PostCard post={post} index={index} />)}</div>
+  </section>
+
+  <section class="manifesto shell">
+    <p>Este blog é um <strong>laboratório público.</strong></p>
+    <p>As respostas envelhecem. Boas perguntas continuam trabalhando.</p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).map((post) => ({ title: post.data.title, description: post.data.description, category: post.data.category, tags: post.data.tags, href: `/posts/${post.id}` }));
+---
+<BaseLayout title="Busca">
+  <section class="search-page shell">
+    <p class="eyebrow">Busca</p><h1>O que você procura?</h1>
+    <label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Digite um assunto, título ou palavra…" autocomplete="off" autofocus /></label>
+    <p id="search-status" class="search-status">Comece a digitar para pesquisar em todo o arquivo.</p>
+    <div id="results" class="search-results"></div>
+  </section>
+  <script is:inline define:vars={{ posts }}>
+    const input = document.querySelector('#search');
+    const results = document.querySelector('#results');
+    const status = document.querySelector('#search-status');
+    const normalize = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    input.addEventListener('input', () => {
+      const query = normalize(input.value.trim());
+      if (!query) { results.innerHTML = ''; status.textContent = 'Comece a digitar para pesquisar em todo o arquivo.'; return; }
+      const found = posts.filter((post) => normalize([post.title, post.description, post.category, ...post.tags].join(' ')).includes(query));
+      status.textContent = `${found.length} ${found.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}`;
+      results.innerHTML = found.length ? found.map((post) => `<a href="${post.href}"><small>${post.category}</small><strong>${post.title}</strong><span>${post.description}</span><b>↗</b></a>`).join('') : '<p class="empty-state">Nada por aqui ainda. Tente outra palavra.</p>';
+    });
+  </script>
+</BaseLayout>
