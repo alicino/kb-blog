@@ -1,0 +1,59 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  image?: string;
+  publishDate?: Date;
+  updatedDate?: Date;
+  author?: string;
+  noindex?: boolean;
+}
+
+const { title, description, type, image, publishDate, updatedDate, author, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO
+      title={title}
+      description={description}
+      type={type}
+      image={image}
+      publishDate={publishDate}
+      updatedDate={updatedDate}
+      author={author}
+      noindex={noindex}
+    />
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+    <Navbar />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

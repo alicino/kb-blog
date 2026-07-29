@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getCategories, categoryHref } from '../../lib/articles';
+import { siteConfig } from '../../site.config';
+
+const categories = await getCategories();
+---
+
+<BaseLayout
+  title="Categorias"
+  description={`Todas as categorias de artigos em ${siteConfig.name}.`}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Categorias' }]} />
+      <h1>Categorias</h1>
+      <p class="meta categories-count">
+        {categories.length} categoria{categories.length === 1 ? '' : 's'}
+      </p>
+
+      <ul class="category-list">
+        {
+          categories.map((category) => (
+            <li class="category-item">
+              <a class="category-link" href={categoryHref(category.name)}>
+                <h2 class="category-name">{category.name}</h2>
+                <p class="category-desc">{category.description}</p>
+                <p class="meta">
+                  {category.count} artigo{category.count === 1 ? '' : 's'}
+                </p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .categories-count {
+    margin-top: calc(var(--space-2) * -1);
+    margin-bottom: var(--space-6);
+  }
+
+  .category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .category-item {
+    position: relative;
+  }
+
+  .category-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    height: 100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .category-link:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-card);
+  }
+
+  .category-name {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .category-desc {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  @media (max-width: 640px) {
+    .category-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

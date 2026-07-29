@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleRow from '../../components/ArticleRow.astro';
+import { getPublishedArticles, getTags, slugify } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const tags = await getTags();
+  const articles = await getPublishedArticles();
+
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: {
+      tag,
+      articles: articles.filter((article) => article.data.tags.some((t) => slugify(t) === tag.slug)),
+    },
+  }));
+}
+
+const { tag, articles } = Astro.props;
+---
+
+<BaseLayout
+  title={`Tag: ${tag.name}`}
+  description={`${tag.count} artigo${tag.count === 1 ? '' : 's'} marcado${tag.count === 1 ? '' : 's'} com "${tag.name}".`}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Tags', href: '/tags' },
+          { label: tag.name },
+        ]}
+      />
+      <p class="eyebrow">Tag</p>
+      <h1>{tag.name}</h1>
+      <p class="meta tag-page-count">
+        {tag.count} artigo{tag.count === 1 ? '' : 's'}
+      </p>
+
+      <div class="article-list">
+        {articles.map((article) => <ArticleRow article={article} />)}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page-count {
+    margin-bottom: var(--space-6);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

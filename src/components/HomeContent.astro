@@ -1,0 +1,225 @@
+---
+import type { Paginated } from '../lib/paginate';
+import type { Article } from '../lib/articles';
+import ArticleCard from './ArticleCard.astro';
+import Pagination from './Pagination.astro';
+import { siteConfig } from '../site.config';
+
+interface Props {
+  page: Paginated<Article>;
+}
+
+const { page } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+---
+
+{
+  isFirstPage ? (
+    <section class="home-intro">
+      <h1 class="visually-hidden">{siteConfig.name}</h1>
+      <p class="home-headline">
+        <strong>{siteConfig.headline.bold}</strong>
+        <br />
+        <em>{siteConfig.headline.italic}</em>
+      </p>
+      <p class="home-intro-text">{siteConfig.tagline}</p>
+    </section>
+  ) : (
+    <h1 class="visually-hidden">
+      {siteConfig.name} — página {page.currentPage}
+    </h1>
+  )
+}
+
+<section aria-label="Artigos recentes">
+  <h2 class="visually-hidden">Artigos recentes</h2>
+  <div class="home-grid">
+    {page.data.map((article) => <ArticleCard article={article} />)}
+  </div>
+
+  <Pagination page={page} firstPageHref="/" pagePathPrefix="" />
+</section>
+
+{
+  isFirstPage && (
+    <section class="home-editorial">
+      <svg
+        class="home-editorial-decor"
+        aria-hidden="true"
+        viewBox="0 0 400 400"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <ellipse
+          cx="230"
+          cy="170"
+          rx="150"
+          ry="60"
+          stroke="currentColor"
+          stroke-width="1.5"
+          fill="none"
+          transform="rotate(-18 230 170)"
+        />
+        <ellipse
+          cx="230"
+          cy="170"
+          rx="150"
+          ry="60"
+          stroke="currentColor"
+          stroke-width="1"
+          fill="none"
+          stroke-dasharray="2 8"
+          transform="rotate(34 230 170)"
+        />
+        <circle cx="352" cy="140" r="5" fill="currentColor" />
+        <circle cx="130" cy="214" r="3.5" fill="currentColor" />
+        <text
+          class="home-editorial-decor-mark"
+          x="196"
+          y="255"
+          font-size="230"
+          fill="currentColor"
+          text-anchor="middle"
+        >
+          ?
+        </text>
+      </svg>
+
+      <h2>Entre humanos, máquinas e perguntas</h2>
+
+      <div class="home-editorial-body">
+        <p>
+          Este blog é um laboratório público, criado no encontro entre
+          experiência humana, curiosidade e inteligência artificial. Aqui, eu e
+          o Hermes exploramos tecnologia, infraestrutura, segurança,
+          inteligência artificial e ideias que merecem sair do rascunho. Cada
+          artigo nasce de uma pergunta, passa por pesquisa, experimentação e
+          revisão, e permanece aberto a novas descobertas. Não buscamos
+          respostas definitivas, porque a tecnologia muda, o conhecimento
+          evolui e certezas envelhecem.
+        </p>
+        <p>
+          Preferimos perguntas capazes de continuar trabalhando, provocar
+          conexões e revelar novos caminhos. Entre, explore, questione e volte
+          sempre: o próximo experimento talvez comece justamente com uma
+          pergunta que você ainda nem imaginou que faria.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .home-intro {
+    max-width: 62ch;
+    margin-bottom: var(--space-8);
+  }
+
+  .home-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 1.9rem + 2vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    margin: var(--space-3) 0 0;
+  }
+
+  .home-headline strong {
+    font-weight: 700;
+  }
+
+  .home-headline em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--color-accent-strong);
+  }
+
+  .home-intro-text {
+    font-family: var(--font-ui);
+    font-size: clamp(1rem, 0.94rem + 0.25vw, 1.1rem);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 46ch;
+    margin: var(--space-5) 0 0;
+  }
+
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 900px) {
+    .home-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .home-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .home-editorial {
+    position: relative;
+    overflow: hidden;
+    max-width: none;
+    margin: var(--space-8) 0 0;
+    padding: var(--space-8) var(--space-7);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .home-editorial-decor {
+    position: absolute;
+    top: -8%;
+    right: -6%;
+    width: 60%;
+    max-width: 420px;
+    height: auto;
+    color: var(--color-accent);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  .home-editorial-decor-mark {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .home-editorial h2 {
+    position: relative;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 1.55rem + 1.4vw, 2.6rem);
+    line-height: 1.15;
+    color: var(--color-accent-strong);
+    max-width: 20ch;
+    margin: 0 0 var(--space-6);
+  }
+
+  .home-editorial-body {
+    position: relative;
+    max-width: 66ch;
+  }
+
+  .home-editorial-body p {
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .home-editorial {
+      padding: var(--space-6) var(--space-5);
+    }
+
+    .home-editorial-decor {
+      width: 80%;
+      opacity: 0.12;
+    }
+  }
+</style>

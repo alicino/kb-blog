@@ -1,0 +1,215 @@
+---
+import SearchBox from './SearchBox.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import Logo from './Logo.astro';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Artigos', href: '/artigos' },
+  { label: 'About', href: '/about' },
+  { label: 'Links', href: '/links' },
+  { label: 'Categorias', href: '/categorias' },
+  { label: 'Tags', href: '/tags' },
+];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+}
+---
+
+<header class="navbar-header">
+  <div class="page-shell navbar-shell">
+    <div class="navbar surface">
+      <a class="navbar-brand" href="/">
+        <Logo />
+      </a>
+
+      <button
+        class="navbar-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="navbar-menu"
+        id="navbar-toggle"
+      >
+        <span class="visually-hidden">Abrir menu</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <div class="navbar-menu" id="navbar-menu" data-collapsed="true">
+        <nav class="navbar-links" aria-label="Navegação principal">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="navbar-tools">
+          <SearchBox />
+          <ThemeToggle />
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .navbar-header {
+    padding-top: var(--space-5);
+  }
+
+  .navbar-shell {
+    padding-block: 0;
+  }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    font-family: var(--font-ui);
+    /* .surface (global.css) sets overflow: hidden for the rounded-card look,
+       which clips the absolutely-positioned search results panel below it. */
+    overflow: visible;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  .navbar-brand:hover {
+    color: var(--color-accent-strong);
+  }
+
+  .navbar-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    flex: 1;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .navbar-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    padding: var(--space-1) 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .navbar-links a:hover {
+    color: var(--color-text);
+  }
+
+  .navbar-links a[aria-current='page'] {
+    color: var(--color-accent-strong);
+    border-bottom-color: var(--color-accent);
+  }
+
+  .navbar-tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .navbar-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .navbar-menu {
+      position: absolute;
+      top: calc(100% + var(--space-2));
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-4);
+      gap: var(--space-4);
+    }
+
+    .navbar-shell {
+      position: relative;
+    }
+
+    .navbar-menu[data-collapsed='true'] {
+      display: none;
+    }
+
+    .navbar-links {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+    }
+
+    .navbar-tools {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('navbar-toggle');
+  const menu = document.getElementById('navbar-menu');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const collapsed = menu.getAttribute('data-collapsed') === 'true';
+      menu.setAttribute('data-collapsed', collapsed ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', collapsed ? 'true' : 'false');
+    });
+
+    const mediaQuery = window.matchMedia('(min-width: 901px)');
+    const syncWithViewport = () => {
+      if (mediaQuery.matches) {
+        menu.setAttribute('data-collapsed', 'false');
+        toggle.setAttribute('aria-expanded', 'false');
+      } else {
+        menu.setAttribute('data-collapsed', 'true');
+      }
+    };
+    mediaQuery.addEventListener('change', syncWithViewport);
+    syncWithViewport();
+  }
+</script>

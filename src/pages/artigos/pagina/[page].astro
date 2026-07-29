@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleRow from '../../../components/ArticleRow.astro';
+import Pagination from '../../../components/Pagination.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { getPublishedArticles } from '../../../lib/articles';
+import { paginate } from '../../../lib/paginate';
+import { siteConfig } from '../../../site.config';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+  const lastPage = Math.max(1, Math.ceil(articles.length / siteConfig.articlesPerPage));
+
+  return Array.from({ length: lastPage - 1 }, (_, i) => i + 2).map((pageNumber) => ({
+    params: { page: String(pageNumber) },
+  }));
+}
+
+const { page: pageParam } = Astro.params;
+const currentPage = Number(pageParam);
+
+const articles = await getPublishedArticles();
+const page = paginate(articles, { page: currentPage, pageSize: siteConfig.articlesPerPage });
+---
+
+<BaseLayout title={`Artigos · Página ${page.currentPage}`} description={`Todos os artigos publicados em ${siteConfig.name}.`}>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Artigos', href: '/artigos' },
+          { label: `Página ${page.currentPage}` },
+        ]}
+      />
+      <h1>Artigos</h1>
+
+      <div class="article-list">
+        {page.data.map((article) => <ArticleRow article={article} />)}
+      </div>
+
+      <Pagination page={page} firstPageHref="/artigos" pagePathPrefix="/artigos/pagina" />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

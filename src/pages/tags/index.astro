@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getTags, tagHref } from '../../lib/articles';
+import { siteConfig } from '../../site.config';
+
+const tags = await getTags();
+---
+
+<BaseLayout title="Tags" description={`Todas as tags usadas nos artigos de ${siteConfig.name}.`}>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tags' }]} />
+      <h1>Tags</h1>
+      <p class="meta tags-count">{tags.length} tags</p>
+
+      <ul class="tag-cloud">
+        {
+          tags.map((tag) => (
+            <li>
+              <a class="tag-pill tag-cloud-item" href={tagHref(tag.name)}>
+                {tag.name}
+                <span class="tag-count">({tag.count})</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-count {
+    margin-top: calc(var(--space-2) * -1);
+    margin-bottom: var(--space-6);
+  }
+
+  .tag-cloud {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .tag-cloud-item {
+    font-size: 0.88rem;
+    padding: 0.4rem 0.85rem;
+    gap: 0.35rem;
+  }
+
+  .tag-count {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-text-faint);
+  }
+</style>
