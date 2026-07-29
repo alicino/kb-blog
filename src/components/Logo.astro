@@ -1,0 +1,57 @@
+---
+import { siteConfig } from '../site.config';
+
+interface Props {
+  size?: 'sm' | 'md';
+}
+
+const { size = 'md' } = Astro.props;
+---
+
+<span class={`logo logo-${size}`}>
+  <span class="logo-badge" aria-hidden="true">a/</span>
+  <span class="logo-text">{siteConfig.name}</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 7px;
+    background: #17181a;
+    color: #d6f24c;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-text {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .logo-sm .logo-badge {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  .logo-sm .logo-text {
+    font-size: 0.95rem;
+  }
+</style>

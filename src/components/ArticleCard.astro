@@ -1,0 +1,112 @@
+---
+import type { Article } from '../lib/articles';
+import { articleHref, categoryHref, formatDate } from '../lib/articles';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const href = articleHref(article);
+---
+
+<article class="article-card">
+  <p class="eyebrow">
+    <a class="article-card-category" href={categoryHref(article.data.category)}>{article.data.category}</a>
+  </p>
+  <h3 class="article-card-title"><a href={href}>{article.data.title}</a></h3>
+  <p class="article-card-desc">{article.data.description}</p>
+
+  <div class="article-card-footer">
+    <time class="meta" datetime={article.data.publishDate.toISOString()}>
+      {formatDate(article.data.publishDate)}
+    </time>
+    {
+      article.data.tags.length > 0 && (
+        <div class="article-card-tags">
+          {article.data.tags.slice(0, 2).map((tag) => (
+            <span class="tag-pill">{tag}</span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .article-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .article-card:hover,
+  .article-card:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+
+  .article-card-category {
+    position: relative;
+    z-index: 2;
+    text-decoration: none;
+  }
+
+  .article-card-category:hover {
+    text-decoration: underline;
+  }
+
+  .article-card-title {
+    font-size: 1.15rem;
+    margin: var(--space-2) 0 var(--space-2);
+  }
+
+  .article-card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .article-card-title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .article-card-title a:hover {
+    color: var(--color-accent-strong);
+  }
+
+  .article-card-desc {
+    font-family: var(--font-ui);
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .article-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .article-card-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+</style>

@@ -1,0 +1,362 @@
+---
+---
+
+<div class="search" data-search>
+  <div class="search-field">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7" />
+      <path d="M20 20l-3.6-3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+    <label for="search-input" class="visually-hidden">Buscar no blog</label>
+    <input
+      id="search-input"
+      type="search"
+      placeholder="Buscar artigos, tags, categorias…"
+      autocomplete="off"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="search-results"
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
+    />
+  </div>
+
+  <div class="search-panel" id="search-panel" hidden>
+    <ul class="search-results" id="search-results" role="listbox" aria-label="Resultados da busca"></ul>
+    <p class="search-empty" id="search-empty" hidden></p>
+  </div>
+</div>
+
+<style>
+  .search {
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-muted);
+    padding: 0.4rem 0.7rem;
+    color: var(--color-text-faint);
+  }
+
+  .search-field:focus-within {
+    border-color: var(--color-accent);
+    color: var(--color-text-muted);
+  }
+
+  .search-field input {
+    border: 0;
+    background: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .search-field input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .search-panel {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    left: 0;
+    right: 0;
+    min-width: 320px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    z-index: 40;
+  }
+
+  .search-results {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2);
+  }
+
+  /*
+   * :global() below: these elements (.search-result and its children) are
+   * created dynamically in the client script via document.createElement,
+   * not rendered by Astro at build time. Astro's CSS scoping only tags
+   * elements present in this component's static template with a
+   * data-astro-cid-* attribute, so scoped selectors would never match
+   * elements created later in JS — the rules would silently never apply.
+   * :global() opts these selectors out of scoping so they still target
+   * the dynamically created nodes.
+   */
+  :global(.search-result) {
+    display: block;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  :global(.search-result:hover),
+  :global(.search-result[aria-selected='true']) {
+    background: var(--color-accent-soft);
+  }
+
+  :global(.search-result-title) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  :global(.search-result-type) {
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent-strong);
+    background: var(--color-accent-soft);
+    border-radius: 999px;
+    padding: 0.05rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Same font + size + color as .meta (global.css) — used for author,
+     publish date, and reading time on the article page. */
+  :global(.search-result-desc) {
+    margin: var(--space-1) 0 0;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .search-empty {
+    margin: 0;
+    padding: var(--space-4);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .search {
+      max-width: none;
+    }
+
+    .search-panel {
+      position: static;
+      margin-top: var(--space-2);
+      box-shadow: none;
+    }
+  }
+</style>
+
+<script>
+  import { normalize, TYPE_LABELS, type SearchDoc } from '../lib/search';
+
+  const root = document.querySelector<HTMLElement>('[data-search]');
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const panel = document.getElementById('search-panel') as HTMLElement | null;
+  const list = document.getElementById('search-results') as HTMLUListElement | null;
+  const emptyMsg = document.getElementById('search-empty') as HTMLParagraphElement | null;
+
+  if (root && input && panel && list && emptyMsg) {
+    let docs: SearchDoc[] | null = null;
+    let loading: Promise<SearchDoc[]> | null = null;
+    let activeIndex = -1;
+    let currentResults: SearchDoc[] = [];
+    let debounceHandle: number | undefined;
+
+    function loadIndex(): Promise<SearchDoc[]> {
+      if (docs) return Promise.resolve(docs);
+      if (!loading) {
+        loading = fetch('/search-index.json')
+          .then((res) => res.json())
+          .then((data: SearchDoc[]) => {
+            docs = data;
+            return data;
+          })
+          .catch(() => {
+            docs = [];
+            return [];
+          });
+      }
+      return loading;
+    }
+
+    function score(doc: SearchDoc, query: string): number {
+      const title = normalize(doc.title);
+      const description = normalize(doc.description);
+      const content = normalize(doc.content ?? '');
+      const category = normalize(doc.category ?? '');
+      const tags = normalize((doc.tags ?? []).join(' '));
+
+      if (title.includes(query)) return 4;
+      if (category.includes(query) || tags.includes(query)) return 3;
+      if (description.includes(query)) return 2;
+      if (content.includes(query)) return 1;
+      return 0;
+    }
+
+    function closePanel() {
+      panel!.hidden = true;
+      input!.setAttribute('aria-expanded', 'false');
+      activeIndex = -1;
+      list!.innerHTML = '';
+    }
+
+    function openPanel() {
+      panel!.hidden = false;
+      input!.setAttribute('aria-expanded', 'true');
+    }
+
+    function renderResults(results: SearchDoc[], query: string) {
+      currentResults = results;
+      activeIndex = -1;
+      list!.innerHTML = '';
+
+      if (results.length === 0) {
+        emptyMsg!.hidden = false;
+        emptyMsg!.textContent = `Nenhum resultado encontrado para "${query}".`;
+        list!.hidden = true;
+        return;
+      }
+
+      emptyMsg!.hidden = true;
+      list!.hidden = false;
+
+      results.forEach((doc, index) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.setAttribute('id', `search-result-${index}`);
+        li.setAttribute('aria-selected', 'false');
+        li.className = 'search-result';
+        li.tabIndex = -1;
+
+        const title = document.createElement('div');
+        title.className = 'search-result-title';
+
+        const badge = document.createElement('span');
+        badge.className = 'search-result-type';
+        badge.textContent = TYPE_LABELS[doc.type];
+        title.appendChild(badge);
+
+        const titleText = document.createElement('span');
+        titleText.textContent = doc.title;
+        title.appendChild(titleText);
+
+        const desc = document.createElement('p');
+        desc.className = 'search-result-desc';
+        desc.textContent = doc.description;
+
+        li.appendChild(title);
+        li.appendChild(desc);
+
+        li.addEventListener('mousedown', (event) => {
+          event.preventDefault();
+          window.location.href = doc.url;
+        });
+
+        li.addEventListener('mouseenter', () => {
+          setActive(index);
+        });
+
+        list!.appendChild(li);
+      });
+    }
+
+    function setActive(index: number) {
+      const options = list!.querySelectorAll<HTMLLIElement>('.search-result');
+      options.forEach((opt) => opt.setAttribute('aria-selected', 'false'));
+      activeIndex = index;
+      const active = options[index];
+      if (active) {
+        active.setAttribute('aria-selected', 'true');
+        active.scrollIntoView({ block: 'nearest' });
+        input!.setAttribute('aria-activedescendant', active.id);
+      } else {
+        input!.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    async function runSearch(rawQuery: string) {
+      const query = normalize(rawQuery.trim());
+      if (!query) {
+        closePanel();
+        return;
+      }
+
+      const data = await loadIndex();
+      const scored = data
+        .map((doc) => ({ doc, s: score(doc, query) }))
+        .filter((entry) => entry.s > 0)
+        .sort((a, b) => b.s - a.s)
+        .slice(0, 8)
+        .map((entry) => entry.doc);
+
+      openPanel();
+      renderResults(scored, rawQuery.trim());
+    }
+
+    input.addEventListener('focus', () => {
+      loadIndex();
+    });
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(debounceHandle);
+      const value = input.value;
+      debounceHandle = window.setTimeout(() => runSearch(value), 120);
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (panel.hidden && event.key !== 'Escape') return;
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          if (currentResults.length > 0) setActive((activeIndex + 1) % currentResults.length);
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          if (currentResults.length > 0) {
+            setActive((activeIndex - 1 + currentResults.length) % currentResults.length);
+          }
+          break;
+        case 'Enter':
+          if (activeIndex >= 0 && currentResults[activeIndex]) {
+            event.preventDefault();
+            window.location.href = currentResults[activeIndex].url;
+          }
+          break;
+        case 'Escape':
+          event.preventDefault();
+          closePanel();
+          input.blur();
+          break;
+        default:
+          break;
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!root.contains(event.target as Node)) {
+        closePanel();
+      }
+    });
+  }
+</script>

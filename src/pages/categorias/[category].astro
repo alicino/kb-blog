@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleRow from '../../components/ArticleRow.astro';
+import { getPublishedArticles, getCategories, describeCategory, slugify } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  const articles = await getPublishedArticles();
+
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: {
+      category,
+      articles: articles.filter((article) => slugify(article.data.category) === category.slug),
+    },
+  }));
+}
+
+const { category, articles } = Astro.props;
+---
+
+<BaseLayout
+  title={`Categoria: ${category.name}`}
+  description={`${describeCategory(category.name)} (${category.count} artigos)`}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Categorias', href: '/categorias' },
+          { label: category.name },
+        ]}
+      />
+      <p class="eyebrow">Categoria</p>
+      <h1>{category.name}</h1>
+      <p class="category-page-desc">{category.description}</p>
+
+      <div class="article-list">
+        {articles.map((article) => <ArticleRow article={article} />)}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .category-page-desc {
+    font-family: var(--font-ui);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

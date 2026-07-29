@@ -1,0 +1,205 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import {
+  getPublishedArticles,
+  articleHref,
+  categoryHref,
+  tagHref,
+  formatDate,
+  readingTime,
+} from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+  return articles.map((article, index) => ({
+    params: { slug: article.id },
+    props: {
+      article,
+      prev: articles[index - 1] ?? null,
+      next: articles[index + 1] ?? null,
+    },
+  }));
+}
+
+const { article, prev, next } = Astro.props;
+const { Content } = await render(article);
+const minutes = readingTime(article.body ?? '');
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  type="article"
+  publishDate={article.data.publishDate}
+  updatedDate={article.data.updatedDate}
+  author={article.data.author}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Artigos', href: '/artigos' },
+          { label: article.data.title },
+        ]}
+      />
+
+      <header class="article-header">
+        <p class="eyebrow">
+          <a href={categoryHref(article.data.category)}>{article.data.category}</a>
+        </p>
+        <h1>{article.data.title}</h1>
+        <p class="article-subtitle">{article.data.description}</p>
+
+        <div class="article-meta">
+          <span class="meta">Por {article.data.author}</span>
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <time class="meta" datetime={article.data.publishDate.toISOString()}>
+            Publicado em {formatDate(article.data.publishDate)}
+          </time>
+          {
+            article.data.updatedDate && (
+              <>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <time class="meta" datetime={article.data.updatedDate.toISOString()}>
+                  Atualizado em {formatDate(article.data.updatedDate)}
+                </time>
+              </>
+            )
+          }
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <span class="meta">{minutes} min de leitura</span>
+        </div>
+
+        {
+          article.data.tags.length > 0 && (
+            <div class="article-tags">
+              {article.data.tags.map((tag) => (
+                <a class="tag-pill" href={tagHref(tag)}>
+                  {tag}
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <nav class="article-nav" aria-label="Navegação entre artigos">
+        {
+          prev ? (
+            <a class="article-nav-link" href={articleHref(prev)}>
+              <span class="meta">← Artigo anterior</span>
+              <span class="article-nav-title">{prev.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="article-nav-link article-nav-link-next" href={articleHref(next)}>
+              <span class="meta">Próximo artigo →</span>
+              <span class="article-nav-title">{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+
+      <p class="article-back">
+        <a class="btn" href="/artigos">← Voltar para todos os artigos</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-header {
+    max-width: 68ch;
+    margin: 0 auto var(--space-7);
+  }
+
+  .article-subtitle {
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 var(--space-4);
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .meta-sep {
+    color: var(--color-text-faint);
+  }
+
+  .article-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .article-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    max-width: 68ch;
+    margin: var(--space-8) auto 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .article-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    text-decoration: none;
+    color: var(--color-text);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+  }
+
+  .article-nav-link:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .article-nav-link-next {
+    text-align: right;
+    align-items: flex-end;
+    grid-column: 2;
+  }
+
+  .article-nav-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .article-back {
+    max-width: 68ch;
+    margin: var(--space-6) auto 0;
+  }
+
+  @media (max-width: 640px) {
+    .article-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .article-nav-link-next {
+      text-align: left;
+      align-items: flex-start;
+      grid-column: 1;
+    }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import type { Paginated } from '../lib/paginate';
+
+interface Props {
+  page: Paginated<unknown>;
+  /** URL da primeira página, ex: "/" ou "/artigos". */
+  firstPageHref: string;
+  /** Prefixo para páginas 2+, ex: "" (gera "/2") ou "/artigos/pagina" (gera "/artigos/pagina/2"). */
+  pagePathPrefix: string;
+}
+
+const { page, firstPageHref, pagePathPrefix } = Astro.props;
+
+function hrefFor(num: number): string {
+  if (num === 1) return firstPageHref;
+  return `${pagePathPrefix}/${num}`;
+}
+
+const hasPrev = page.currentPage > 1;
+const hasNext = page.currentPage < page.lastPage;
+---
+
+{
+  page.lastPage > 1 && (
+    <nav class="pagination" aria-label="Paginação de artigos">
+      <a
+        class="btn pagination-prev"
+        href={hasPrev ? hrefFor(page.currentPage - 1) : undefined}
+        aria-disabled={!hasPrev}
+        aria-label="Página anterior"
+      >
+        ← Anterior
+      </a>
+
+      <ul class="pagination-pages">
+        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map((num) => (
+          <li>
+            <a href={hrefFor(num)} aria-current={num === page.currentPage ? 'page' : undefined}>
+              {num}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <a
+        class="btn pagination-next"
+        href={hasNext ? hrefFor(page.currentPage + 1) : undefined}
+        aria-disabled={!hasNext}
+        aria-label="Próxima página"
+      >
+        Próxima →
+      </a>
+    </nav>
+  )
+}
+
+<style>
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-7);
+    font-family: var(--font-ui);
+    flex-wrap: wrap;
+  }
+
+  .pagination-pages {
+    display: flex;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pagination-pages a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .pagination-pages a:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .pagination-pages a[aria-current='page'] {
+    background: var(--color-accent-strong);
+    color: #fff;
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página não encontrada" description="A página que você procura não existe ou foi movida." noindex>
+  <div class="page-shell">
+    <div class="surface surface-inner not-found">
+      <p class="eyebrow">Erro 404</p>
+      <h1>Essa página não existe</h1>
+      <p class="not-found-desc">
+        O endereço acessado pode ter sido movido, renomeado ou nunca ter existido.
+        Que tal voltar para um lugar conhecido?
+      </p>
+      <div class="not-found-actions">
+        <a class="btn btn-accent" href="/">Voltar para a Home</a>
+        <a class="btn" href="/artigos">Ver todos os artigos</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    text-align: center;
+    max-width: 52ch;
+    margin-inline: auto;
+    padding-block: var(--space-8);
+  }
+
+  .not-found-desc {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .not-found-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>
