@@ -40,7 +40,7 @@ export const siteConfig = {
     'Um arquivo pessoal sobre inteligência artificial, tecnologia e tudo o que vale a pena aprender com calma.',
 
   /** URL canônica de produção do blog (sem barra final). */
-  url: 'https://campoaberto.exemplo.com',
+  url: 'https://kb.alicino.me',
 
   /** Usado em meta description padrão, RSS e JSON-LD. */
   description:
@@ -52,7 +52,7 @@ export const siteConfig = {
   author: {
     name: 'Alicino',
     email: 'alicino@gmail.com',
-    bio: 'Desenvolvedor(a) e escritor(a), interessado em construir ferramentas simples e bem pensadas.',
+    bio: 'Desenvolvedor e escritor de blog, interessado em construir ferramentas simples e bem pensadas.',
     avatar: null as string | null,
   },
 
