@@ -11,7 +11,9 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: (page) =>
-        !page.includes('/404') && !page.endsWith('search-index.json') && !page.endsWith('robots.txt'),
+        !page.includes('/404') &&
+        !page.endsWith('search-index.json') &&
+        !page.endsWith('robots.txt'),
     }),
   ],
   markdown: {
