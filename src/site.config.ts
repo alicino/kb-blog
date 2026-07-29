@@ -44,14 +44,14 @@ export const siteConfig = {
 
   /** Usado em meta description padrão, RSS e JSON-LD. */
   description:
-    'Um blog pessoal sobre engenharia de software, ferramentas de produtividade e aprendizados ao longo do caminho.',
+    'Um blog pessoal sobre cybersegurança, linux, gerenciamento de projetos, ferramentas de produtividade e aprendizados ao longo do caminho.',
 
   /** Caminho do logo dentro de /public, ou null para usar apenas o nome em texto. */
   logo: null as string | null,
 
   author: {
     name: 'Alicino',
-    bio: 'Solution Engineer em Cyber, escritor de blog, interessado em construir ferramentas simples e bem pensadas.',
+    bio: 'Sou Solution Engineer em Cybersecurity, escritor de blog, interessado em construir ferramentas simples e bem pensadas.',
     avatar: null as string | null,
   },
 
