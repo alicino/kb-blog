@@ -51,8 +51,7 @@ export const siteConfig = {
 
   author: {
     name: 'Alicino',
-    email: 'alicino@gmail.com',
-    bio: 'Desenvolvedor e escritor de blog, interessado em construir ferramentas simples e bem pensadas.',
+    bio: 'Solution Engineer em Cyber, escritor de blog, interessado em construir ferramentas simples e bem pensadas.',
     avatar: null as string | null,
   },
 
