@@ -2,6 +2,9 @@
 dist/
 .astro/
 
+# documentation
+_docs/
+
 # dependencies
 node_modules/
 
