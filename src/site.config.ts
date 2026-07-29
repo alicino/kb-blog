@@ -60,7 +60,7 @@ export const siteConfig = {
 
   /** Redes sociais exibidas no footer. Remova itens que não se aplicam. */
   socials: [
-    { label: 'GitHub', url: 'https://github.com/', icon: 'github' },
+    { label: 'GitHub', url: 'https://github.com/alicino', icon: 'github' },
     { label: 'RSS', url: '/rss.xml', icon: 'rss' },
   ] satisfies SocialLink[],
 
