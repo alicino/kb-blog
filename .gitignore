@@ -4,6 +4,7 @@ dist/
 
 # documentation
 _docs/
+docs/superpowers/
 
 # dependencies
 node_modules/
