@@ -11,7 +11,7 @@ draft: false
 # Cloudflare OS: O Sistema Operacional Aberto que Vai Mudar como Trabalhamos
 
 
-Imagine um mundo onde cada pessoa na sua empresa tem um assistente de IA que realmente entende como o negócio funciona. Não um chatbot genérico que responde com informações da internet, mas um agente que conhece a terminologia da sua empresa, os sistemas internos, os processos e as regras. Este mundo acaba de se tornar realidade com o lançamento do [Cloudflare OS](https://os.cloudflare.app){:target="_blank"}, e poucas pessoas percebem o tamanho desta revolução.
+Imagine um mundo onde cada pessoa na sua empresa tem um assistente de IA que realmente entende como o negócio funciona. Não um chatbot genérico que responde com informações da internet, mas um agente que conhece a terminologia da sua empresa, os sistemas internos, os processos e as regras. Este mundo acaba de se tornar realidade com o lançamento do [Cloudflare OS](https://os.cloudflare.app), e poucas pessoas percebem o tamanho desta revolução.
 
 ## O que você vai aprender
 
