@@ -8,8 +8,6 @@ tags: ["git", "seguranca", "boas-praticas", "tutorial", "devops"]
 draft: false
 ---
 
-# A importância de um bom .gitignore para seu repositório e como reverter deslizes
-
 Você já parou para pensar no que acontece quando roda `git add .` e depois `git commit`? O Git pega tudo que está na pasta do projeto. Tudo mesmo. Arquivos de configuração com senhas, pastas de dependências, arquivos temporários do seu sistema operacional, e até anotações pessoais. Sem um bom `.gitignore`, o seu repositório vira um depósito de arquivos que não deveriam estar ali. E o pior: uma vez que algo sensível entra no histórico do Git, simplesmente deletar o arquivo não resolve. Ele continua lá, acessível para qualquer um que olhar os commits antigos.
 
 Neste artigo, você vai entender por que o `.gitignore` é uma das primeiras linhas de defesa da segurança do seu projeto. Vamos ver exemplos práticos para diferentes linguagens, aprender a evitar arquivos de ferramentas de IA, e descobrir como limpar o histórico quando um deslize acontece.
