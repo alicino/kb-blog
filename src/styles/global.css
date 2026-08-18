@@ -181,7 +181,7 @@ textarea {
 }
 
 .surface-inner {
-  padding: var(--space-7) var(--space-7);
+  padding: var(--space-6) var(--space-5);
 }
 
 @media (max-width: 900px) {
@@ -190,7 +190,7 @@ textarea {
   }
 
   .surface-inner {
-    padding: var(--space-6) var(--space-5);
+    padding: var(--space-5) var(--space-4);
   }
 }
 
@@ -200,7 +200,7 @@ textarea {
   }
 
   .surface-inner {
-    padding: var(--space-5) var(--space-4);
+    padding: var(--space-4) var(--space-3);
   }
 
   body {
