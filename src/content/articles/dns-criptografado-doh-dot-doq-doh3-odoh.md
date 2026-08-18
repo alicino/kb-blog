@@ -12,6 +12,33 @@ O DNS foi criado nos anos 80 sem nenhuma preocupação com segurança. As consul
 
 Resolver isso não é trivial. Cada protocolo de DNS seguro resolve um problema diferente e tem seus próprios trade-offs. Este artigo explica os 8 principais: como funcionam, em que portas rodam, quais RFCs os definem, quando usar cada um, e onde a Cloudflare se encaixa nesse ecossistema.
 
+## Como o DNS funciona (o que estamos protegendo)
+
+Antes de falar de segurança, vale entender o fluxo básico de uma consulta DNS. Quando você digita `www.exemplo.com` no navegador, acontece algo como:
+
+```mermaid
+sequenceDiagram
+    participant C as Cliente (navegador)
+    participant R as Resolvedor recursivo
+    participant Raiz as Servidor raiz
+    participant TLD as Servidor .com
+    participant Auth as Servidor autoritativo (exemplo.com)
+
+    C->>R: www.exemplo.com?
+    R->>Raiz: www.exemplo.com?
+    Raiz->>R: Procure em .com
+    R->>TLD: www.exemplo.com?
+    TLD->>R: Procure em exemplo.com
+    R->>Auth: www.exemplo.com?
+    Auth->>R: 192.0.2.1
+    R->>C: 192.0.2.1
+    Note over C,R: Tudo em texto puro na porta 53
+```
+
+Cada pergunta e cada resposta viaja em texto puro pela porta 53 UDP. Não há criptografia. Não há autenticação. O resolvedor recursivo (geralmente operado pelo seu ISP) vê todos os domínios que você consulta. Um atacante no meio do caminho pode forjar respostas. E seu ISP pode redirecionar suas consultas para resolvedores próprios.
+
+Os protocolos que veremos a seguir protegem diferentes partes desse fluxo.
+
 ## O problema que todos eles resolvem
 
 Uma consulta DNS tradicional (proto original, RFC 1035) envia um pacote UDP para a porta 53 do resolvedor. O pacote não é criptografado nem autenticado. Isso abre três vulnerabilidades:
