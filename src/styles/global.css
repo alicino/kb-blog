@@ -2,9 +2,6 @@
 @import '@fontsource/fraunces/400.css';
 @import '@fontsource/fraunces/600.css';
 @import '@fontsource/fraunces/600-italic.css';
-@import '@fontsource/literata/400.css';
-@import '@fontsource/literata/400-italic.css';
-@import '@fontsource/literata/600.css';
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/700.css';
@@ -14,7 +11,7 @@
 
   /* Tipografia */
   --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
-  --font-body: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-body: Georgia, 'Times New Roman', serif;
   --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Cor de destaque única */
