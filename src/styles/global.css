@@ -11,7 +11,7 @@
 
   /* Tipografia */
   --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
-  --font-body: Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Cor de destaque única */
