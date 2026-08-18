@@ -307,7 +307,7 @@ textarea {
 
 /* Estilos de leitura para o corpo de artigos (Markdown/MDX renderizado). */
 .prose {
-  max-width: 78ch;
+  max-width: 90ch;
   margin-inline: auto;
   font-size: 1.08rem;
   line-height: 1.75;
