@@ -17,22 +17,31 @@ jobs:
   build:
     name: Build Astro
     runs-on: ubuntu-latest
+    # Nenhum step deste job deve levar mais que isso; se algo travar
+    # (apt, download de browser, chromium pendurado), falha rápido e com log,
+    # em vez de segurar a fila do grupo github-pages por horas.
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       # Os diagramas Mermaid são renderizados como SVG durante o build
-      # (plugins/rehype-mermaid.mjs) usando o Chromium headless do Playwright,
-      # que precisa estar instalado no runner antes do `astro build`.
+      # (plugins/rehype-mermaid.mjs) usando o Chromium headless do Playwright.
+      # O runner ubuntu-latest já traz as bibliotecas de sistema do Chromium
+      # (a imagem inclui Chrome/Edge), então instalamos só o navegador, sem
+      # `--with-deps` — o apt-get dele é lento e é o passo mais propenso a travar.
       - name: Install dependencies
         run: npm ci
+        timeout-minutes: 5
 
       - name: Install Playwright Chromium (Mermaid build-time rendering)
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
+        timeout-minutes: 5
 
       - name: Build and upload Astro site
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6
+        timeout-minutes: 10
 
   deploy:
     name: Deploy GitHub Pages
