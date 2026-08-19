@@ -36,6 +36,10 @@ All article queries funnel through `src/lib/articles.ts` (`getPublishedArticles`
 
 Rendering an entry's body uses the Content Layer's `render(entry)` import from `astro:content` (not `entry.render()` — that method doesn't exist on glob-loader entries).
 
+### Mermaid diagrams
+
+Fenced ```mermaid code blocks are rendered to inline SVG **at build time** by a custom rehype plugin (`plugins/rehype-mermaid.mjs`, registered in `markdown.rehypePlugins` in `astro.config.mjs`). It uses `mermaid-isomorphic`, which drives a headless Playwright Chromium — so building (and `npm run dev`, which renders Markdown on demand) requires the browser to be installed once via `npx playwright install chromium`; the deploy workflow installs it explicitly before `astro build`. Each diagram is rendered twice (light + dark variants with distinct id prefixes to avoid embedded-`<style>` collisions) and `global.css` toggles which one is visible based on `data-theme` — no Mermaid JavaScript ships to the browser. The plugin runs before Expressive Code's rehype plugin (integration-injected plugins run after `markdown.rehypePlugins`), so EC never sees `mermaid` blocks and all other code fences keep their syntax highlighting. Note the Content Layer caches rendered Markdown in `.astro/` and `node_modules/.astro/`; changes to the plugin/config don't invalidate it, so delete those caches to force re-rendering.
+
 ### Links data
 
 `/links` reads from `src/data/links.json` (a plain JSON array of `{ group, links: [{ label, url, description }] }`), imported directly in `src/pages/links.astro` via Vite's JSON module support (`resolveJsonModule` is set in `tsconfig.json`). This was deliberately split out of `site.config.ts` into its own JSON file so it can be edited (add/remove/reorder entries) without touching TypeScript syntax — everything else editorial/structural still lives in `site.config.ts`.

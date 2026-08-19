@@ -55,40 +55,5 @@ const { title, description, type, image, publishDate, updatedDate, author, noind
       <slot />
     </main>
     <Footer />
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" defer></script>
-    <script is:inline>
-      document.addEventListener('DOMContentLoaded', () => {
-        if (typeof mermaid === 'undefined') return;
-
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: 'base',
-          themeVariables: {
-            primaryColor: '#4a9eff',
-            primaryBorderColor: '#4a9eff',
-            lineColor: '#4a4a8a',
-            secondaryColor: '#16213e',
-            tertiaryColor: '#1a1a2e',
-          },
-        });
-
-        const blocks = document.querySelectorAll('pre[data-language="mermaid"]');
-        blocks.forEach((pre, index) => {
-          const code = pre.querySelector('code');
-          if (!code) return;
-
-          const text = code.textContent || '';
-          const div = document.createElement('div');
-          div.className = 'mermaid';
-          div.id = 'mermaid-' + index;
-          div.textContent = text;
-          pre.parentElement.replaceChild(div, pre);
-        });
-
-        if (document.querySelector('.mermaid')) {
-          mermaid.run({ querySelector: '.mermaid' });
-        }
-      });
-    </script>
   </body>
 </html>

@@ -26,21 +26,23 @@ const { tag, articles } = Astro.props;
 >
   <div class="page-shell">
     <div class="surface surface-inner">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Tags', href: '/tags' },
-          { label: tag.name },
-        ]}
-      />
-      <p class="eyebrow">Tag</p>
-      <h1>{tag.name}</h1>
-      <p class="meta tag-page-count">
-        {tag.count} artigo{tag.count === 1 ? '' : 's'}
-      </p>
+      <div class="section-content">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Tags', href: '/tags' },
+            { label: tag.name },
+          ]}
+        />
+        <p class="eyebrow">Tag</p>
+        <h1>{tag.name}</h1>
+        <p class="meta tag-page-count">
+          {tag.count} artigo{tag.count === 1 ? '' : 's'}
+        </p>
 
-      <div class="article-list">
-        {articles.map((article) => <ArticleRow article={article} />)}
+        <div class="article-list">
+          {articles.map((article) => <ArticleRow article={article} />)}
+        </div>
       </div>
     </div>
   </div>

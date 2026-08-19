@@ -10,22 +10,24 @@ const tags = await getTags();
 <BaseLayout title="Tags" description={`Todas as tags usadas nos artigos de ${siteConfig.name}.`}>
   <div class="page-shell">
     <div class="surface surface-inner">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tags' }]} />
-      <h1>Tags</h1>
-      <p class="meta tags-count">{tags.length} tags</p>
+      <div class="section-content">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tags' }]} />
+        <h1>Tags</h1>
+        <p class="meta tags-count">{tags.length} tags</p>
 
-      <ul class="tag-cloud">
-        {
-          tags.map((tag) => (
-            <li>
-              <a class="tag-pill tag-cloud-item" href={tagHref(tag.name)}>
-                {tag.name}
-                <span class="tag-count">({tag.count})</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+        <ul class="tag-cloud">
+          {
+            tags.map((tag) => (
+              <li>
+                <a class="tag-pill tag-cloud-item" href={tagHref(tag.name)}>
+                  {tag.name}
+                  <span class="tag-count">({tag.count})</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </div>
 </BaseLayout>

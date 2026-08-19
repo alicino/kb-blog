@@ -8,51 +8,53 @@ import linkGroups from '../data/links.json';
 <BaseLayout title="Links" description={`Links recomendados por ${siteConfig.author.name}.`}>
   <div class="page-shell">
     <div class="surface surface-inner">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Links' }]} />
-      <h1>Links recomendados</h1>
-      <p class="links-intro meta">
-        Uma seleção de sites e recursos que uso ou consulto com frequência, organizados por tema.
-      </p>
+      <div class="section-content">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Links' }]} />
+        <h1>Links recomendados</h1>
+        <p class="links-intro meta">
+          Uma seleção de sites e recursos que uso ou consulto com frequência, organizados por tema.
+        </p>
 
-      {
-        linkGroups.map((group) => (
-          <section class="link-group">
-            <h2>{group.group}</h2>
-            <ul class="link-list">
-              {group.links.map((link) => (
-                <li class="link-item">
-                  <a
-                    class="link-item-title"
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {link.label}
-                    <svg
-                      class="external-icon"
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      aria-hidden="true"
+        {
+          linkGroups.map((group) => (
+            <section class="link-group">
+              <h2>{group.group}</h2>
+              <ul class="link-list">
+                {group.links.map((link) => (
+                  <li class="link-item">
+                    <a
+                      class="link-item-title"
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <path
-                        d="M7 17 17 7M9 7h8v8"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    <span class="visually-hidden">(abre em nova aba)</span>
-                  </a>
-                  <p class="link-item-desc">{link.description}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))
-      }
+                      {link.label}
+                      <svg
+                        class="external-icon"
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M7 17 17 7M9 7h8v8"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <span class="visually-hidden">(abre em nova aba)</span>
+                    </a>
+                    <p class="link-item-desc">{link.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
     </div>
   </div>
 </BaseLayout>

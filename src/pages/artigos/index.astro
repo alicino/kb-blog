@@ -14,17 +14,19 @@ const page = paginate(articles, { page: 1, pageSize: siteConfig.articlesPerPage 
 <BaseLayout title="Artigos" description={`Todos os artigos publicados em ${siteConfig.name}.`}>
   <div class="page-shell">
     <div class="surface surface-inner">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Artigos' }]} />
-      <h1>Artigos</h1>
-      <p class="meta articles-count">
-        {articles.length} artigo{articles.length === 1 ? '' : 's'} publicado{articles.length === 1 ? '' : 's'}
-      </p>
+      <div class="section-content">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Artigos' }]} />
+        <h1>Artigos</h1>
+        <p class="meta articles-count">
+          {articles.length} artigo{articles.length === 1 ? '' : 's'} publicado{articles.length === 1 ? '' : 's'}
+        </p>
 
-      <div class="article-list">
-        {page.data.map((article) => <ArticleRow article={article} />)}
+        <div class="article-list">
+          {page.data.map((article) => <ArticleRow article={article} />)}
+        </div>
+
+        <Pagination page={page} firstPageHref="/artigos" pagePathPrefix="/artigos/pagina" />
       </div>
-
-      <Pagination page={page} firstPageHref="/artigos" pagePathPrefix="/artigos/pagina" />
     </div>
   </div>
 </BaseLayout>

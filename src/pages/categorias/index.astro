@@ -13,27 +13,29 @@ const categories = await getCategories();
 >
   <div class="page-shell">
     <div class="surface surface-inner">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Categorias' }]} />
-      <h1>Categorias</h1>
-      <p class="meta categories-count">
-        {categories.length} categoria{categories.length === 1 ? '' : 's'}
-      </p>
+      <div class="section-content">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Categorias' }]} />
+        <h1>Categorias</h1>
+        <p class="meta categories-count">
+          {categories.length} categoria{categories.length === 1 ? '' : 's'}
+        </p>
 
-      <ul class="category-list">
-        {
-          categories.map((category) => (
-            <li class="category-item">
-              <a class="category-link" href={categoryHref(category.name)}>
-                <h2 class="category-name">{category.name}</h2>
-                <p class="category-desc">{category.description}</p>
-                <p class="meta">
-                  {category.count} artigo{category.count === 1 ? '' : 's'}
-                </p>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+        <ul class="category-list">
+          {
+            categories.map((category) => (
+              <li class="category-item">
+                <a class="category-link" href={categoryHref(category.name)}>
+                  <h2 class="category-name">{category.name}</h2>
+                  <p class="category-desc">{category.description}</p>
+                  <p class="meta">
+                    {category.count} artigo{category.count === 1 ? '' : 's'}
+                  </p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </div>
 </BaseLayout>
