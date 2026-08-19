@@ -5,9 +5,15 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 import { siteConfig } from './src/site.config.ts';
+import rehypeMermaid from './plugins/rehype-mermaid.mjs';
 
 export default defineConfig({
   site: siteConfig.url,
+  markdown: {
+    // Roda antes do rehype plugin do Expressive Code (plugins de integrações
+    // são anexados depois destes) — só os fences ```mermaid são consumidos.
+    rehypePlugins: [rehypeMermaid],
+  },
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark'],

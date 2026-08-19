@@ -48,6 +48,11 @@
   --container-width: 80%;
   --container-max: 1180px;
 
+  /* Coluna de conteúdo padrão das seções — ver `.section-content`. */
+  --section-pad-x: var(--space-5);
+  --section-pad-y: var(--space-6);
+  --section-content-max: 90ch;
+
   --focus-ring: 0 0 0 3px hsl(var(--color-accent-h) 55% 88%);
 }
 
@@ -181,26 +186,31 @@ textarea {
 }
 
 .surface-inner {
-  padding: var(--space-6) var(--space-5);
+  padding: var(--section-pad-y) var(--section-pad-x);
+}
+
+/* Coluna de conteúdo padrão das seções (/artigos, /sobre, /links,
+   /categorias, /tags). Centralizada dentro do cartão, com o mesmo respiro
+   horizontal à esquerda e à direita, e a mesma medida usada pelo corpo dos
+   posts — assim todas as seções alinham entre si sem alterar os posts. */
+.section-content {
+  max-width: var(--section-content-max);
+  margin-inline: auto;
 }
 
 @media (max-width: 900px) {
   :root {
     --container-width: 92%;
-  }
-
-  .surface-inner {
-    padding: var(--space-5) var(--space-4);
+    --section-pad-x: var(--space-4);
+    --section-pad-y: var(--space-5);
   }
 }
 
 @media (max-width: 560px) {
   :root {
     --container-width: 96%;
-  }
-
-  .surface-inner {
-    padding: var(--space-4) var(--space-3);
+    --section-pad-x: var(--space-3);
+    --section-pad-y: var(--space-4);
   }
 
   body {
@@ -381,6 +391,42 @@ textarea {
   font-family: var(--font-ui);
   font-size: 0.85rem;
   color: var(--color-text-muted);
+}
+
+/* Diagramas Mermaid — SVG gerado em build-time (plugins/rehype-mermaid.mjs).
+   Cada diagrama carrega uma variante clara e uma escura; alternamos qual
+   aparece conforme o data-theme, sem JavaScript no cliente. */
+.prose .mermaid-diagram {
+  margin: var(--space-6) 0;
+  overflow-x: auto;
+}
+
+.prose .mermaid-diagram svg {
+  display: block;
+  margin-inline: auto;
+  width: 100%;
+  height: auto;
+}
+
+.prose .mermaid-svg-dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .prose .mermaid-svg-light {
+  display: none;
+}
+
+:root[data-theme='dark'] .prose .mermaid-svg-dark {
+  display: block;
+}
+
+/* Em telas estreitas, diagramas largos manteriam texto minúsculo se apenas
+   encolhessem. Mantemos o tamanho natural (--mermaid-natural-width, definido
+   inline pelo plugin) e deixamos o contêiner rolar horizontalmente. */
+@media (max-width: 640px) {
+  .prose .mermaid-diagram svg {
+    min-width: var(--mermaid-natural-width, 100%);
+  }
 }
 
 .prose hr {

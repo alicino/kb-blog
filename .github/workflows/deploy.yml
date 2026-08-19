@@ -22,6 +22,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
+      # Os diagramas Mermaid são renderizados como SVG durante o build
+      # (plugins/rehype-mermaid.mjs) usando o Chromium headless do Playwright,
+      # que precisa estar instalado no runner antes do `astro build`.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium (Mermaid build-time rendering)
+        run: npx playwright install --with-deps chromium
+
       - name: Build and upload Astro site
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6
 
