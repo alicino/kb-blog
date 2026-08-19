@@ -50,7 +50,12 @@ const darkConfig = {
 
 // Um único renderer para o build inteiro; a instância do browser é
 // reaproveitada entre arquivos e fechada quando não há mais diagramas.
-const renderer = createMermaidRenderer();
+// `--no-sandbox`: o conteúdo renderizado é o Markdown do próprio repositório
+// (confiável), e o sandbox do Chromium é a fonte mais comum de falhas/travas
+// em CI e containers (user namespaces restritos, AppArmor etc.).
+const renderer = createMermaidRenderer({
+  launchOptions: { args: ['--no-sandbox'] },
+});
 
 /**
  * @param {import('hast').Element} code
