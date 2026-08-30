@@ -204,10 +204,12 @@ xychart-beta
     title "Custo acumulado: Local (RTX 4090) vs API (uso intenso)"
     x-axis "Meses" [1, 3, 6, 9, 12, 18, 24]
     y-axis "Custo acumulado (R$)" 0 --> 30000
-    line "Local RTX 4090" [22500, 22700, 23000, 23300, 23600, 24000, 24400]
-    line "API Claude/GPT-4o" [400, 1100, 2200, 3300, 4500, 6800, 9100]
-    line "API DeepSeek V3" [80, 90, 100, 110, 120, 150, 180]
+    line "💰 Local RTX 4090" [22500, 22700, 23000, 23300, 23600, 24000, 24400]
+    line "☁️ API Claude/GPT-4o" [400, 1100, 2200, 3300, 4500, 6800, 9100]
+    line "⚡ API DeepSeek V3" [80, 90, 100, 110, 120, 150, 180]
 ```
+
+O gráfico mostra três linhas: o custo acumulado de uma RTX 4090 (incluindo hardware + energia), o custo de API usando Claude Sonnet 4 e GPT-4o mini combinados, e o custo de API usando apenas DeepSeek V3. A linha do hardware local começa alta pelo investimento inicial mas cresce devagar. As linhas de API começam baixas mas crescem conforme o uso aumenta.
 
 O local nunca fica mais barato que a API no curto prazo. Ele só começa a fazer sentido financeiro depois de muitos meses de uso intenso com energia barata e sem precisar trocar de hardware.
 
