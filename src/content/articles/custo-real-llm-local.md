@@ -231,6 +231,8 @@ Mas existe um cenário onde o local faz todo o sentido: privacidade absoluta, us
 
 Para a maioria das pessoas e empresas, a combinação ideal é usar APIs para tarefas complexas e um modelo local pequeno para tarefas rotineiras que envolvem dados sensíveis. Você não precisa escolher um ou outro. Dá para usar os dois.
 
+> **Aviso importante:** os valores apresentados neste artigo são estimativas baseadas em preços de agosto de 2026 e podem variar significativamente conforme a sua localidade, taxa de câmbio (dólar/real), custo da energia elétrica na sua região, modelo de hardware escolhido, provedor de API utilizado e volume real de tokens processados. Consulte as fontes listadas abaixo para verificar valores atualizados antes de tomar decisões de investimento.
+
 ### Fontes
 
 - [OpenAI API Pricing](https://openai.com/api/pricing/)
