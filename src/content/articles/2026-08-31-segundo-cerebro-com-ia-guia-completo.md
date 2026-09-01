@@ -1,7 +1,7 @@
 ---
 title: "Segundo Cérebro com IA: o que é, como montar o seu e por que isso muda tudo"
 description: "Um guia completo sobre o conceito de Second Brain, com ou sem IA, explicando como usar ferramentas como Obsidian e modelos locais para nunca mais perder uma ideia."
-publishDate: 2026-08-30
+publishDate: 2026-08-31
 author: "Alicino"
 category: "Produtividade"
 tags: ["segundo cérebro", "second brain", "Obsidian", "PKM", "RAG", "produtividade", "conhecimento", "IA local", "Ollama"]
