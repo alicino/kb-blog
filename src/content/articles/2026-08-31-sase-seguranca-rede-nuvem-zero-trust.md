@@ -65,7 +65,7 @@ flowchart TB
 
     subgraph Destinos
         D1[Aplicações<br>corporativas<br>on-premise]
-        D2[Aplicações<br>SaaS<br>(M365, Salesforce)]
+        D2["Aplicações SaaS (M365, Salesforce)"]
         D3[Internet<br>aberta]
     end
 
