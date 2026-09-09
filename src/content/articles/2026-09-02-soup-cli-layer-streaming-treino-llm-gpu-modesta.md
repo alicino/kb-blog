@@ -294,13 +294,15 @@ soup export --model ./output --format gguf --quant q4_k_m
 soup push --model ./output --repo seu-usuario/seu-modelo
 ```
 
-## Casos de uso
+## Casos de uso com seu hardware
 
-**O entusiasta com um notebook gamer.** Você tem um notebook com RTX 3050 4 GB e quer fine-tunar um Llama-3.1-8B para responder perguntas sobre a documentação da sua empresa. Antes, isso exigiria uma GPU na nuvem. Com Soup, você prepara um JSONL com exemplos, escreve um YAML de 20 linhas, e o treinamento roda no seu notebook em algumas horas.
+**No desktop com RTX 2060 Super 8 GB.** Você fine-tuna um Llama-3.1-8B-Instruct com dados de suporte técnico da sua empresa. O YAML de configuração usa `stream_layers: true` e `batch_size: 8`. O pre-flight confirma que cabe nos 8 GB. O treinamento roda por algumas horas enquanto você trabalha em outras coisas. O modelo resultante responde perguntas sobre a base de conhecimento da empresa com muito mais precisão que o modelo base.
 
-**O pesquisador com orçamento limitado.** Você está testando hipóteses de alignment (DPO, ORPO, KTO) em modelos de 3B e 8B, mas não tem acesso a GPUs grandes. Com Soup + layer streaming, você testa diferentes configurações de preferência na sua máquina local, e só sobe para a nuvem quando precisa escalar.
+**No Mac Mini M4 32 GB para experimentação rápida.** Você usa `mlx-lm` (fora do Soup) para fine-tunar um Qwen2.5-7B em bf16 com LoRA. O fine-tuning leva minutos para datasets pequenos. Você testa diferentes configurações de prompt, comparando respostas antes e depois do fine-tuning. Como a memória unificada de 32 GB é suficiente, não precisa se preocupar com streaming.
 
-**O desenvolvedor de aplicações com IA.** Você fine-tuna modelos para tarefas específicas (classificação, sumarização, chat) e precisa iterar rápido. Com Soup, cada experimento é um arquivo YAML diferente, e você compara resultados sem sair da sua máquina.
+**No desktop para alinhamento por preferência (DPO).** Com a RTX 2060 Super, você coleta pares de resposta escolhida/rejeitada de usuários e fine-tuna um Mistral-7B com DPO + layer streaming. O pico de VRAM fica em ~3,7 GB (apenas 44 MB acima do SFT, porque o DPO reusa a mesma base streamada com adaptadores desligados). O modelo alinhado produz respostas mais alinhadas com as preferências dos seus usuários.
+
+**No Mac Mini para inferência de modelos maiores.** Com Ollama + MLX preview, você roda Qwen3.6 35B-A3B (Mixture of Experts, 3B ativos por token) em NF4, ocupando cerca de 22 GB dos 32 GB disponíveis. O modelo serve como assistente local de codificação, com boa velocidade de inferência graças aos 120 GB/s de banda do M4.
 
 **No desktop com RTX 2060 Super 8 GB.** Você fine-tuna um Llama-3.1-8B-Instruct com dados de suporte técnico da sua empresa. O YAML usa `stream_layers: true` e `batch_size: 8`. O pre-flight confirma que cabe nos 8 GB. O treinamento roda por algumas horas enquanto você trabalha em outras coisas. O modelo resultante responde perguntas sobre a base de conhecimento da empresa com muito mais precisão que o modelo base.
 
