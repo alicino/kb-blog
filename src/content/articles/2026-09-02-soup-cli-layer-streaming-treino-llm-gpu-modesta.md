@@ -8,7 +8,7 @@ tags: ["Soup", "layer streaming", "fine-tuning", "LLM", "LoRA", "treinamento", "
 draft: false
 ---
 
-Você tem uma placa de vídeo com 4, 6 ou 8 GB de VRAM. Um notebook gamer, um desktop com uma RTX 3050, ou até um Mac com Apple Silicon. Você quer treinar ou ajustar um modelo de linguagem grande, mas descobre que o modelo não cabe na sua GPU.
+Você tem uma placa de vídeo com 4, 6 ou 8 GB de VRAM. Um notebook gamer, um desktop com uma RTX 2060 Super, ou um Mac Mini M4 com 32 GB de memória unificada. Você quer treinar ou ajustar um modelo de linguagem grande, mas descobre que o modelo não cabe na sua GPU.
 
 A resposta usual para esse problema tem três opções: quantizar mais (e perder qualidade), alugar uma GPU na nuvem (e pagar por hora), ou desistir.
 
@@ -56,9 +56,13 @@ O Soup faz o seguinte:
 
 O resultado é que o pico de VRAM é limitado pelo tamanho de **uma camada**, não do modelo inteiro. Com quantização NF4 (NormalFloat4), que reduz o armazenamento em cerca de 4x, um Llama-3.1-8B cabe em 3,32 GB de VRAM.
 
-## Números reais
+## Números reais em três cenários de hardware
 
-Os benchmarks foram feitos em uma placa RTX 3050 Laptop de 4 GB, rodando Windows, a mesma máquina para a qual o recurso foi criado:
+O layer streaming foi desenvolvido e medido em uma RTX 3050 Laptop de 4 GB. Mas você pode ter um hardware diferente, e o que muda é quanta margem você tem. Abaixo, três cenários que cobrem desde o hardware mínimo até máquinas mais confortáveis.
+
+### Cenário A: RTX 3050 Laptop 4 GB (o hardware de referência)
+
+Esta é a placa usada pela documentação oficial do Soup. Os benchmarks abaixo foram medidos nela, rodando Windows:
 
 | Modelo | Quantização | Throughput | Pico VRAM | RAM |
 |---|---|---|---|---|
@@ -68,7 +72,43 @@ Os benchmarks foram feitos em uma placa RTX 3050 Laptop de 4 GB, rodando Windows
 | Qwen2.5-1.5B | bf16 | 525,0 tok/s | 1,82 GB | — |
 | Qwen2.5-0.5B | bf16 | 978,6 tok/s | 1,47 GB | — |
 
-O custo honesto do layer streaming é **1,43x mais lento que o treinamento residente**, medido no modelo de 0,5B (o único que caberia tanto em modo residente quanto streaming na mesma máquina). Modelos maiores que 1,5B simplesmente não rodam residentes nesse hardware.
+Com 4 GB de VRAM e layer streaming NF4, você fine-tuna um Llama-3.1-8B com 119,6 tokens por segundo. O modelo cabe com folga (3,32 GB de pico), e o custo é 1,43x mais lento que o treinamento residente.
+
+### Cenário B: RTX 2060 Super 8 GB (seu desktop)
+
+A RTX 2060 Super tem 8 GB de VRAM GDDR6, 2176 núcleos CUDA e arquitetura Turing (compute capability 7.5). É uma placa de 2019, mas perfeitamente capaz para fine-tuning com Soup.
+
+Com 8 GB, você tem duas opções:
+
+**Sem layer streaming (modo residente).** Modelos de até 3B cabem inteiros na VRAM com quantização NF4. Um Qwen2.5-3B ocupa cerca de 1,76 GB, então sobra espaço para batch size maior e sequências mais longas. O treinamento roda na velocidade máxima da placa.
+
+**Com layer streaming.** Você pode fine-tunar modelos de 8B (Llama-3.1, Qwen3, Mistral) em NF4 com bastante margem. O pico medido de 3,32 GB para um 8B deixa mais da metade da VRAM livre, o que permite aumentar `batch_size` sem preocupação. O throughput será limitado pela transferência host-to-device, não pela GPU, então a RTX 2060 Super não será significativamente mais rápida que a RTX 3050 Laptop no streaming. O ganho real está em poder usar batch size maior.
+
+| Carga | VRAM ocupada | Recomendação |
+|---|---|---|
+| Qwen2.5-3B residente NF4 | ~1,8 GB | Sem streaming, batch alto |
+| Llama-3.1-8B streaming NF4 | ~3,3 GB | Streaming com batch 8+ |
+| Qwen3-14B streaming NF4 | ~4,5 GB | Streaming, batch controlado |
+| DPO/ORPO em 8B streaming | ~3,7 GB | Streaming com preferência |
+
+### Cenário C: Mac Mini M4 32 GB (seu segundo hardware)
+
+O Mac Mini M4 tem 32 GB de memória unificada e 120 GB/s de banda. A grande vantagem do Apple Silicon é que CPU e GPU compartilham a mesma memória, então não existe o custo de cópia host-to-device que o layer streaming tenta esconder.
+
+No entanto, o Soup tem suporte a Apple Silicon via backend MPS (Metal Performance Shaders), que é classificado como experimental. O backend MLX (nativo Apple) também está disponível via `pip install "soup-cli[mlx]"`, mas o layer streaming não funciona com MLX. Ele é um mecanismo CUDA.
+
+O que isso significa na prática:
+
+**Se você usar o Soup no Mac Mini M4 (backend CUDA não disponível), o layer streaming não se aplica.** O Soup roda via MPS ou MLX, e modelos de até 8B cabem inteiros na memória unificada de 32 GB sem precisar de streaming. Um Llama-3.1-8B em bf16 ocupa cerca de 16 GB, deixando 16 GB livres para o sistema. Com NF4, cai para aproximadamente 5 GB.
+
+**Se você quiser a experiência de fine-tuning otimizada para Apple Silicon**, o MLX (fora do Soup) é a ferramenta certa. Com `mlx-lm`, você fine-tuna modelos de 8B em bf16 sem streaming, aproveitando a memória unificada. O throughput de inferência no M4 é de cerca de 30-40 tok/s para modelos 8B em bf16, e o fine-tuning LoRA roda confortavelmente dentro de 32 GB.
+
+| Abordagem | Modelo máximo | Notas |
+|---|---|---|
+| Soup + MPS (experimental) | 3B-8B NF4 | Sem streaming, sem garantia de performance |
+| Soup + MLX backend | 8B-14B NF4 | Streaming não disponível, mas modelo cabe |
+| MLX direto (mlx-lm) | 8B bf16 | Fine-tuning LoRA nativo, 32 GB suficientes |
+| Ollama + MLX preview | Inferência 8B-30B | Roda Qwen3.6 35B-A3B em 22 GB (NF4) |
 
 Em agosto de 2026, a técnica foi validada externamente em um cluster 8x H100, confirmando a exatidão do forward pass até 72B parâmetros e encontrando um defeito no gradiente NF4 acima de 165 MB por camada decoder, corrigido na v0.73.0.
 
@@ -254,13 +294,15 @@ soup export --model ./output --format gguf --quant q4_k_m
 soup push --model ./output --repo seu-usuario/seu-modelo
 ```
 
-## Casos de uso
+## Casos de uso com seu hardware
 
-**O entusiasta com um notebook gamer.** Você tem um notebook com RTX 3050 4 GB e quer fine-tunar um Llama-3.1-8B para responder perguntas sobre a documentação da sua empresa. Antes, isso exigiria uma GPU na nuvem. Com Soup, você prepara um JSONL com exemplos, escreve um YAML de 20 linhas, e o treinamento roda no seu notebook em algumas horas.
+**No desktop com RTX 2060 Super 8 GB.** Você fine-tuna um Llama-3.1-8B-Instruct com dados de suporte técnico da sua empresa. O YAML de configuração usa `stream_layers: true` e `batch_size: 8`. O pre-flight confirma que cabe nos 8 GB. O treinamento roda por algumas horas enquanto você trabalha em outras coisas. O modelo resultante responde perguntas sobre a base de conhecimento da empresa com muito mais precisão que o modelo base.
 
-**O pesquisador com orçamento limitado.** Você está testando hipóteses de alignment (DPO, ORPO, KTO) em modelos de 3B e 8B, mas não tem acesso a GPUs grandes. Com Soup + layer streaming, você testa diferentes configurações de preferência na sua máquina local, e só sobe para a nuvem quando precisa escalar.
+**No Mac Mini M4 32 GB para experimentação rápida.** Você usa `mlx-lm` (fora do Soup) para fine-tunar um Qwen2.5-7B em bf16 com LoRA. O fine-tuning leva minutos para datasets pequenos. Você testa diferentes configurações de prompt, comparando respostas antes e depois do fine-tuning. Como a memória unificada de 32 GB é suficiente, não precisa se preocupar com streaming.
 
-**O desenvolvedor de aplicações com IA.** Você fine-tuna modelos para tarefas específicas (classificação, sumarização, chat) e precisa iterar rápido. Com Soup, cada experimento é um arquivo YAML diferente, e você compara resultados sem sair da sua máquina.
+**No desktop para alinhamento por preferência (DPO).** Com a RTX 2060 Super, você coleta pares de resposta escolhida/rejeitada de usuários e fine-tuna um Mistral-7B com DPO + layer streaming. O pico de VRAM fica em ~3,7 GB (apenas 44 MB acima do SFT, porque o DPO reusa a mesma base streamada com adaptadores desligados). O modelo alinhado produz respostas mais alinhadas com as preferências dos seus usuários.
+
+**No Mac Mini para inferência de modelos maiores.** Com Ollama + MLX preview, você roda Qwen3.6 35B-A3B (Mixture of Experts, 3B ativos por token) em NF4, ocupando cerca de 22 GB dos 32 GB disponíveis. O modelo serve como assistente local de codificação, com boa velocidade de inferência graças aos 120 GB/s de banda do M4.
 
 ## Limitações honestas
 
