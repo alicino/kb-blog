@@ -34,12 +34,12 @@ O layer streaming diz: se o modelo base está congelado, por que mantê-lo intei
 
 ```mermaid
 flowchart LR
-    subgraph RESIDENT["Treinamento tradicional"]
+    subgraph RESIDENT[Treinamento tradicional]
         VRAM1[VRAM<br>Modelo base<br>+ LoRA<br>+ Gradientes<br>+ Otimizador]
     end
 
-    subgraph STREAMING["Layer streaming (Soup)"]
-        RAM[RAM<br>Modelo base<br>inteiro<br>(quantizado NF4)]
+    subgraph STREAMING[Layer streaming Soup]
+        RAM[RAM<br>Modelo base<br>inteiro<br>NF4]
         VRAM2[VRAM<br>1 camada por vez<br>+ LoRA<br>+ Gradientes<br>+ Otimizador]
         RAM -->|Copia camada 1| VRAM2
         RAM -->|Copia camada 2| VRAM2
