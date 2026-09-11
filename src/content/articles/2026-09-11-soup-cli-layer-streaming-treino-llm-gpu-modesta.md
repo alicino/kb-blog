@@ -1,7 +1,7 @@
 ---
 title: "Soup CLI: treine modelos de IA que não cabem na sua GPU usando layer streaming"
 description: "Conheça o Soup, uma ferramenta open source que permite fine-tuning de LLMs de até 8B parâmetros em GPUs de apenas 4 GB. Instalação, configuração, treinamento e serving."
-publishDate: 2026-09-02
+publishDate: 2026-09-11
 author: "Alicino"
 category: "Inteligência Artificial"
 tags: ["Soup", "layer streaming", "fine-tuning", "LLM", "LoRA", "treinamento", "GPU", "machine learning", "open source"]
