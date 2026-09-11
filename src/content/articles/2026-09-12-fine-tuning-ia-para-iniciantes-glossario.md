@@ -1,7 +1,7 @@
 ---
 title: "Fine-tuning de IA para iniciantes: o que significa cada termo que você encontra por aí"
 description: "Um guia simples e direto sobre os termos usados em fine-tuning de modelos de IA: LLM, LoRA, quantização, GPU, VRAM, dataset, SFT, DPO e muito mais."
-publishDate: 2026-09-11
+publishDate: 2026-09-12
 author: "Alicino"
 category: "Inteligência Artificial"
 tags: ["fine-tuning", "iniciantes", "LLM", "LoRA", "quantização", "GPU", "glossário", "IA", "aprendizado"]
