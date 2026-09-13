@@ -1,11 +1,11 @@
 ---
 import ArticlePage from '../../components/pages/ArticlePage.astro';
-import { getPublishedArticles } from '../../lib/articles';
+import { getPublishedArticles, articleSlug } from '../../lib/articles';
 
 export async function getStaticPaths() {
   const articles = await getPublishedArticles();
   return articles.map((article, index) => ({
-    params: { slug: article.id },
+    params: { slug: articleSlug(article) },
     props: {
       article,
       prev: articles[index - 1] ?? null,
