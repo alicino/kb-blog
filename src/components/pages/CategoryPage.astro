@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import ArticleRow from '../ArticleRow.astro';
+import type { Article, CategorySummary } from '../../lib/articles';
+import { describeCategory, getCategories } from '../../lib/articles';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  category: CategorySummary;
+  articles: Article[];
+  lang?: Locale;
+}
+
+const { category, articles, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const homeHref = lang === 'en' ? '/en' : '/';
+const categoriesHref = lang === 'en' ? '/en/categories' : '/categorias';
+
+// Só existe hreflang para o outro locale se aquela mesma categoria (mesmo
+// slug) tiver ao menos um artigo publicado lá também — com só 1-2 artigos
+// traduzidos por enquanto, a maioria das categorias não tem par em /en.
+const otherLocale = lang === 'en' ? 'pt-br' : 'en';
+const otherCategories = await getCategories(otherLocale);
+const hasCounterpart = otherCategories.some((c) => c.slug === category.slug);
+const alternateUrls = hasCounterpart
+  ? {
+      [lang]: `${categoriesHref}/${category.slug}`,
+      [otherLocale]: `${otherLocale === 'en' ? '/en/categories' : '/categorias'}/${category.slug}`,
+    }
+  : undefined;
+---
+
+<BaseLayout
+  title={`${dict.category.eyebrow}: ${category.displayName}`}
+  description={`${describeCategory(category.name, lang)} (${category.count})`}
+  lang={lang}
+  alternateUrls={alternateUrls}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <div class="section-content">
+        <Breadcrumbs
+          lang={lang}
+          items={[
+            { label: dict.article.breadcrumbHome, href: homeHref },
+            { label: dict.category.breadcrumb, href: categoriesHref },
+            { label: category.displayName },
+          ]}
+        />
+        <p class="eyebrow">{dict.category.eyebrow}</p>
+        <h1>{category.displayName}</h1>
+        <p class="category-page-desc">{category.description}</p>
+
+        <div class="article-list">
+          {articles.map((article) => <ArticleRow article={article} lang={lang} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .category-page-desc {
+    font-family: var(--font-ui);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

@@ -1,17 +1,36 @@
 ---
+import { t, type Locale } from '../lib/i18n';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const indexUrl = lang === 'en' ? '/en/search-index.json' : '/search-index.json';
+// "__QUERY__" é um placeholder substituído no client-side script — a
+// mensagem em si (com a interpolação já resolvida para o texto certo no
+// locale certo) precisa nascer aqui no server, não ser remontada em JS.
+const noResultsTemplate = dict.search.noResults('__QUERY__');
 ---
 
-<div class="search" data-search>
+<div
+  class="search"
+  data-search
+  data-index-url={indexUrl}
+  data-no-results-template={noResultsTemplate}
+  data-type-labels={JSON.stringify(dict.search.typeLabels)}
+>
   <div class="search-field">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7" />
       <path d="M20 20l-3.6-3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
     </svg>
-    <label for="search-input" class="visually-hidden">Buscar no blog</label>
+    <label for="search-input" class="visually-hidden">{dict.search.label}</label>
     <input
       id="search-input"
       type="search"
-      placeholder="Buscar artigos, tags, categorias…"
+      placeholder={dict.search.placeholder}
       autocomplete="off"
       role="combobox"
       aria-expanded="false"
@@ -22,7 +41,7 @@
   </div>
 
   <div class="search-panel" id="search-panel" hidden>
-    <ul class="search-results" id="search-results" role="listbox" aria-label="Resultados da busca"></ul>
+    <ul class="search-results" id="search-results" role="listbox" aria-label={dict.search.resultsAriaLabel}></ul>
     <p class="search-empty" id="search-empty" hidden></p>
   </div>
 </div>
@@ -167,7 +186,7 @@
 </style>
 
 <script>
-  import { normalize, TYPE_LABELS, type SearchDoc } from '../lib/search';
+  import { normalize, type SearchDoc } from '../lib/search';
 
   const root = document.querySelector<HTMLElement>('[data-search]');
   const input = document.getElementById('search-input') as HTMLInputElement | null;
@@ -176,6 +195,14 @@
   const emptyMsg = document.getElementById('search-empty') as HTMLParagraphElement | null;
 
   if (root && input && panel && list && emptyMsg) {
+    // Lidos do DOM (em vez de embutidos no bundle do script) para que este
+    // mesmo script sirva as páginas pt-BR e /en sem duplicar o JS por locale.
+    const indexUrl = root.dataset.indexUrl || '/search-index.json';
+    const noResultsTemplate = root.dataset.noResultsTemplate || 'No results for "__QUERY__".';
+    const TYPE_LABELS: Record<SearchDoc['type'], string> = root.dataset.typeLabels
+      ? JSON.parse(root.dataset.typeLabels)
+      : { article: 'Article', pagina: 'Page', categoria: 'Category', tag: 'Tag' };
+
     let docs: SearchDoc[] | null = null;
     let loading: Promise<SearchDoc[]> | null = null;
     let activeIndex = -1;
@@ -185,7 +212,7 @@
     function loadIndex(): Promise<SearchDoc[]> {
       if (docs) return Promise.resolve(docs);
       if (!loading) {
-        loading = fetch('/search-index.json')
+        loading = fetch(indexUrl)
           .then((res) => res.json())
           .then((data: SearchDoc[]) => {
             docs = data;
@@ -232,7 +259,7 @@
 
       if (results.length === 0) {
         emptyMsg!.hidden = false;
-        emptyMsg!.textContent = `Nenhum resultado encontrado para "${query}".`;
+        emptyMsg!.textContent = noResultsTemplate.replace('__QUERY__', query);
         list!.hidden = true;
         return;
       }

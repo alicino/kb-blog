@@ -1,10 +1,13 @@
-/* Fontes auto-hospedadas via @fontsource, com fallbacks seguros. */
-@import '@fontsource/fraunces/400.css';
-@import '@fontsource/fraunces/600.css';
-@import '@fontsource/fraunces/600-italic.css';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/700.css';
+/* Fontes auto-hospedadas via @fontsource, com fallbacks seguros.
+   Usamos os subsets `latin-*` (em vez de `400.css` etc, que empacotam
+   TODOS os subsets — cirílico, grego, vietnamita) porque o conteúdo do
+   blog é só pt-BR/en; isso corta ~2/3 dos @font-face gerados. */
+@import '@fontsource/fraunces/latin-400.css';
+@import '@fontsource/fraunces/latin-600.css';
+@import '@fontsource/fraunces/latin-600-italic.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-700.css';
 
 :root {
   color-scheme: light;

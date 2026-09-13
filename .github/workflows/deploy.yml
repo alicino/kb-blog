@@ -26,6 +26,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
+      # Astro 7 exige Node >=22.12 (ver engines em node_modules/astro).
+      # cache: npm usa o hash do package-lock.json como chave — builds sem
+      # mudança de dependências pulam o download do npm inteiro.
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+
       # Os diagramas Mermaid são renderizados como SVG durante o build
       # (plugins/rehype-mermaid.mjs) usando o Chromium headless do Playwright.
       # O runner ubuntu-latest já traz as bibliotecas de sistema do Chromium
@@ -35,9 +44,33 @@ jobs:
         run: npm ci
         timeout-minutes: 5
 
+      # Cacheia o browser baixado pelo Playwright (~130MB) entre builds.
+      # Chave inclui a versão do playwright (via package-lock.json) porque
+      # um bump de versão precisa de um download novo.
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-chromium-${{ runner.os }}-
+
       - name: Install Playwright Chromium (Mermaid build-time rendering)
         run: npx playwright install chromium
         timeout-minutes: 5
+
+      # SVGs de diagramas Mermaid já renderizados (plugins/rehype-mermaid.mjs),
+      # chaveados por hash do texto do diagrama + versão da config de tema —
+      # entradas obsoletas simplesmente não batem o hash e são ignoradas, então
+      # uma key sempre nova (por run) + restore-keys por prefixo faz o cache
+      # crescer indefinidamente sem nunca ficar desatualizado de forma incorreta.
+      - name: Cache Mermaid SVG renders
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .cache/mermaid-svg
+          key: mermaid-svg-${{ github.run_id }}
+          restore-keys: |
+            mermaid-svg-
 
       - name: Build and upload Astro site
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6

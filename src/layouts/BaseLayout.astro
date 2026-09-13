@@ -3,6 +3,13 @@ import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { t, htmlLang, type Locale } from '../lib/i18n';
+
+// Preload dos dois pesos de fonte usados acima da dobra em toda página
+// (corpo/UI em Inter 400, títulos em Fraunces 600) — evita que o navegador
+// só descubra o .woff2 depois de baixar e parsear global.css.
+import interRegularWoff2 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import frauncesBoldWoff2 from '@fontsource/fraunces/files/fraunces-latin-600-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -13,17 +20,44 @@ interface Props {
   updatedDate?: Date;
   author?: string;
   noindex?: boolean;
+  /** Locale da página atual — default pt-br para não quebrar chamadas existentes. */
+  lang?: Locale;
+  /**
+   * Caminhos (relativos, ex. "/artigos/slug") desta MESMA página em cada
+   * locale em que ela existe. Só emite <link rel="alternate" hreflang> quando
+   * há 2+ entradas — uma página sem tradução (ainda) não aponta hreflang
+   * para uma URL que não existe.
+   */
+  alternateUrls?: Partial<Record<Locale, string>>;
 }
 
-const { title, description, type, image, publishDate, updatedDate, author, noindex } = Astro.props;
+const {
+  title,
+  description,
+  type,
+  image,
+  publishDate,
+  updatedDate,
+  author,
+  noindex,
+  lang = 'pt-br',
+  alternateUrls,
+} = Astro.props;
+
+const dict = t(lang);
+const alternateEntries = alternateUrls ? Object.entries(alternateUrls) : [];
+const showAlternates = alternateEntries.length > 1;
+const xDefaultHref = alternateUrls?.['pt-br'] ?? alternateEntries[0]?.[1];
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={htmlLang[lang]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="font" type="font/woff2" href={interRegularWoff2} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={frauncesBoldWoff2} crossorigin />
     <meta name="generator" content={Astro.generator} />
     <SEO
       title={title}
@@ -34,7 +68,18 @@ const { title, description, type, image, publishDate, updatedDate, author, noind
       updatedDate={updatedDate}
       author={author}
       noindex={noindex}
+      lang={lang}
     />
+    {
+      showAlternates && (
+        <>
+          {alternateEntries.map(([loc, href]) => (
+            <link rel="alternate" hreflang={htmlLang[loc as Locale]} href={new URL(href, Astro.site)} />
+          ))}
+          {xDefaultHref && <link rel="alternate" hreflang="x-default" href={new URL(xDefaultHref, Astro.site)} />}
+        </>
+      )
+    }
     <script is:inline>
       (function () {
         try {
@@ -49,11 +94,11 @@ const { title, description, type, image, publishDate, updatedDate, author, noind
     </script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
-    <Navbar />
+    <a href="#main-content" class="skip-link">{dict.skipToContent}</a>
+    <Navbar lang={lang} />
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

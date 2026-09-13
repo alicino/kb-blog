@@ -2,20 +2,36 @@
 import SearchBox from './SearchBox.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import Logo from './Logo.astro';
+import { t, type Locale, otherLocaleHome } from '../lib/i18n';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const prefix = lang === 'en' ? '/en' : '';
+const homeHref = lang === 'en' ? '/en' : '/';
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Artigos', href: '/artigos' },
-  { label: 'Sobre', href: '/about' },
-  { label: 'Links', href: '/links' },
-  { label: 'Categorias', href: '/categorias' },
-  { label: 'Tags', href: '/tags' },
+  { label: dict.nav.home, href: homeHref },
+  { label: dict.nav.articles, href: `${prefix}${lang === 'en' ? '/articles' : '/artigos'}` },
+  { label: dict.nav.about, href: `${prefix}/about` },
+  { label: dict.nav.links, href: `${prefix}/links` },
+  { label: dict.nav.categories, href: `${prefix}${lang === 'en' ? '/categories' : '/categorias'}` },
+  { label: dict.nav.tags, href: `${prefix}/tags` },
 ];
+
+const language = otherLocaleHome(lang);
+// O rótulo do seletor é o do locale ATUAL (ex.: na página pt-BR, mostra "EN"
+// como convite para trocar; language.locale é o destino do link, não o texto).
+const languageLabel = dict.languageSwitch.label;
+const languageSwitchAria = dict.languageSwitch.switchToLabel;
 
 const currentPath = Astro.url.pathname;
 
 function isActive(href: string): boolean {
-  if (href === '/') return currentPath === '/';
+  if (href === homeHref) return currentPath === href || currentPath === `${href}/`;
   return currentPath === href || currentPath.startsWith(`${href}/`);
 }
 ---
@@ -23,7 +39,7 @@ function isActive(href: string): boolean {
 <header class="navbar-header">
   <div class="page-shell navbar-shell">
     <div class="navbar surface">
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" href={homeHref}>
         <Logo />
       </a>
 
@@ -34,14 +50,14 @@ function isActive(href: string): boolean {
         aria-controls="navbar-menu"
         id="navbar-toggle"
       >
-        <span class="visually-hidden">Abrir menu</span>
+        <span class="visually-hidden">{dict.nav.openMenu}</span>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
         </svg>
       </button>
 
       <div class="navbar-menu" id="navbar-menu" data-collapsed="true">
-        <nav class="navbar-links" aria-label="Navegação principal">
+        <nav class="navbar-links" aria-label={dict.nav.ariaLabel}>
           {
             navItems.map((item) => (
               <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
@@ -49,11 +65,14 @@ function isActive(href: string): boolean {
               </a>
             ))
           }
+          <a href={language.href} class="navbar-lang-switch" title={languageSwitchAria}>
+            {languageLabel}
+          </a>
         </nav>
 
         <div class="navbar-tools">
-          <SearchBox />
-          <ThemeToggle />
+          <SearchBox lang={lang} />
+          <ThemeToggle lang={lang} />
         </div>
       </div>
     </div>
@@ -138,6 +157,31 @@ function isActive(href: string): boolean {
   .navbar-links a[aria-current='page'] {
     color: var(--color-accent-strong);
     border-bottom-color: var(--color-accent);
+  }
+
+  .navbar-lang-switch {
+    /* .navbar-links a (acima) define border-bottom: 2px solid transparent
+       pro sublinhado de página ativa — sem !important aqui, essa regra mais
+       específica (.navbar-links a) ganhava da nossa em todos os 4 lados
+       "border: 1px", deixando só o inferior com 2px transparente. Resultado:
+       a pílula ficava com borda inferior mais grossa que as outras 3,
+       parecendo cortada por baixo. !important força a pílula a ter os 4
+       lados iguais. */
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.03em;
+    color: var(--color-text-faint) !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-sm);
+    padding: 0.3rem 0.55rem !important;
+  }
+
+  .navbar-lang-switch:hover {
+    color: var(--color-accent-strong) !important;
+    border-color: var(--color-accent) !important;
   }
 
   .navbar-tools {

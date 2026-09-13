@@ -1,6 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import HomeContent from '../components/HomeContent.astro';
+import HomePage from '../components/pages/HomePage.astro';
 import { getPublishedArticles } from '../lib/articles';
 import { paginate } from '../lib/paginate';
 import { siteConfig } from '../site.config';
@@ -21,13 +20,4 @@ const articles = await getPublishedArticles();
 const page = paginate(articles, { page: currentPage, pageSize: siteConfig.articlesPerPage });
 ---
 
-<BaseLayout
-  title={`${siteConfig.name} · Página ${page.currentPage}`}
-  description={siteConfig.description}
->
-  <div class="page-shell">
-    <div class="surface surface-inner">
-      <HomeContent page={page} />
-    </div>
-  </div>
-</BaseLayout>
+<HomePage page={page} />

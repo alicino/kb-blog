@@ -3,8 +3,8 @@ title: "Como Usar LLMs Gratuitos na Cloudflare Workers AI"
 description: "Guia completo para executar modelos de linguagem de grande porte no tier gratuito da Cloudflare sem gerenciar GPUs."
 publishDate: 2026-07-30
 author: "Alicino"
-category: "Inteligência artificial"
-tags: ["cloudflare", "llm", "workers-ai", "tutorial", "ia-generativa"]
+category: "Inteligência Artificial"
+tags: ["Cloudflare", "LLM", "workers-ai", "tutorial", "ia-generativa"]
 draft: false
 ---
 

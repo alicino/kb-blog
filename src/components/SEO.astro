@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../site.config';
+import { htmlLang, type Locale } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
   updatedDate?: Date;
   author?: string;
   noindex?: boolean;
+  lang?: Locale;
 }
 
 const {
@@ -21,11 +23,14 @@ const {
   updatedDate,
   author,
   noindex = false,
+  lang = 'pt-br',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const pageTitle = title === siteConfig.name ? title : `${title} · ${siteConfig.name}`;
 const ogImage = image ? new URL(image, Astro.site) : null;
+// og:locale usa o formato com underscore (pt_BR), diferente do hreflang (pt-BR).
+const ogLocale = htmlLang[lang].replace('-', '_');
 
 const jsonLd =
   type === 'article' && publishDate
@@ -34,6 +39,7 @@ const jsonLd =
         '@type': 'BlogPosting',
         headline: title,
         description,
+        inLanguage: htmlLang[lang],
         author: { '@type': 'Person', name: author ?? siteConfig.author.name },
         datePublished: publishDate.toISOString(),
         dateModified: (updatedDate ?? publishDate).toISOString(),
@@ -46,6 +52,7 @@ const jsonLd =
         name: siteConfig.name,
         description: siteConfig.description,
         url: siteConfig.url,
+        inLanguage: htmlLang[lang],
       };
 ---
 
@@ -59,6 +66,7 @@ const jsonLd =
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:locale" content={ogLocale} />
 {ogImage && <meta property="og:image" content={ogImage} />}
 
 <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />

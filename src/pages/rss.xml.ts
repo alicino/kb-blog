@@ -1,12 +1,12 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { getPublishedArticles, articleHref } from '../lib/articles';
+import { getPublishedArticles, articleHref, categoryDisplayName } from '../lib/articles';
 import { siteConfig } from '../site.config';
 
 export const prerender = true;
 
 export async function GET(context: APIContext) {
-  const articles = await getPublishedArticles();
+  const articles = await getPublishedArticles('pt-br');
 
   return rss({
     title: siteConfig.name,
@@ -17,7 +17,7 @@ export async function GET(context: APIContext) {
       description: article.data.description,
       pubDate: article.data.publishDate,
       link: articleHref(article),
-      categories: [article.data.category, ...article.data.tags],
+      categories: [categoryDisplayName(article.data.category, 'pt-br'), ...article.data.tags],
       author: article.data.author,
     })),
     customData: `<language>pt-br</language>`,

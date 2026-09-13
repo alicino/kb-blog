@@ -4,7 +4,7 @@ description: "Guia completo sobre os protocolos de DNS criptografado e autentica
 publishDate: "2026-08-16"
 author: "Alicino"
 category: "Infraestrutura e Redes"
-tags: ["dns", "doh", "dot", "doq", "doh3", "odoh", "dnscrypt", "dnssec", "seguranca", "cloudflare"]
+tags: ["DNS", "doh", "dot", "doq", "doh3", "odoh", "dnscrypt", "dnssec", "segurança", "Cloudflare"]
 draft: false
 ---
 

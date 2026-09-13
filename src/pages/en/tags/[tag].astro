@@ -1,0 +1,21 @@
+---
+import TagPage from '../../../components/pages/TagPage.astro';
+import { getPublishedArticles, getTags, slugify } from '../../../lib/articles';
+
+export async function getStaticPaths() {
+  const tags = await getTags('en');
+  const articles = await getPublishedArticles('en');
+
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: {
+      tag,
+      articles: articles.filter((article) => article.data.tags.some((t) => slugify(t) === tag.slug)),
+    },
+  }));
+}
+
+const { tag, articles } = Astro.props;
+---
+
+<TagPage tag={tag} articles={articles} lang="en" />

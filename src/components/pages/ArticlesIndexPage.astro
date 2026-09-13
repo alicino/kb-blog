@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleRow from '../ArticleRow.astro';
+import Pagination from '../Pagination.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import type { Paginated } from '../../lib/paginate';
+import type { Article } from '../../lib/articles';
+import { siteConfig } from '../../site.config';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  page: Paginated<Article>;
+  /** Total de artigos publicados (independente da paginação) — só é exibido na página 1. */
+  totalCount: number;
+  lang?: Locale;
+}
+
+const { page, totalCount, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const isFirstPage = page.currentPage === 1;
+const title = isFirstPage ? dict.articlesIndex.title : dict.articlesIndex.pageTitle(page.currentPage);
+
+const homeHref = lang === 'en' ? '/en' : '/';
+const articlesHref = lang === 'en' ? '/en/articles' : '/artigos';
+const pagePathPrefix = lang === 'en' ? '/en/articles/page' : '/artigos/pagina';
+
+// Assim como a home, a listagem de artigos (página 1) sempre existe nos dois
+// locales — só páginas 2+ dependem de haver artigos suficientes traduzidos.
+const alternateUrls =
+  page.currentPage === 1 ? { 'pt-br': '/artigos', en: '/en/articles' } : undefined;
+---
+
+<BaseLayout
+  title={title}
+  description={`${dict.articlesIndex.title} · ${siteConfig.name}`}
+  lang={lang}
+  alternateUrls={alternateUrls}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <div class="section-content">
+        <Breadcrumbs
+          lang={lang}
+          items={
+            isFirstPage
+              ? [{ label: dict.article.breadcrumbHome, href: homeHref }, { label: dict.articlesIndex.breadcrumb }]
+              : [
+                  { label: dict.article.breadcrumbHome, href: homeHref },
+                  { label: dict.articlesIndex.breadcrumb, href: articlesHref },
+                  { label: dict.common.pageLabel(page.currentPage) },
+                ]
+          }
+        />
+        <h1>{dict.articlesIndex.title}</h1>
+        {
+          isFirstPage && (
+            <p class="meta articles-count">{dict.articlesIndex.countLabel(totalCount)}</p>
+          )
+        }
+
+        <div class="article-list">
+          {page.data.map((article) => <ArticleRow article={article} lang={lang} />)}
+        </div>
+
+        <Pagination page={page} firstPageHref={articlesHref} pagePathPrefix={pagePathPrefix} lang={lang} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .articles-count {
+    margin-top: calc(var(--space-2) * -1);
+    margin-bottom: var(--space-6);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

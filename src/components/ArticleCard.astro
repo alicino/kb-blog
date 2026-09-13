@@ -1,25 +1,30 @@
 ---
 import type { Article } from '../lib/articles';
-import { articleHref, categoryHref, formatDate } from '../lib/articles';
+import { articleHref, categoryHref, categoryDisplayName, formatDate, articleLocale } from '../lib/articles';
+import type { Locale } from '../lib/i18n';
 
 interface Props {
   article: Article;
+  lang?: Locale;
 }
 
-const { article } = Astro.props;
+const { article, lang } = Astro.props;
+const locale = lang ?? articleLocale(article);
 const href = articleHref(article);
 ---
 
 <article class="article-card">
   <p class="eyebrow">
-    <a class="article-card-category" href={categoryHref(article.data.category)}>{article.data.category}</a>
+    <a class="article-card-category" href={categoryHref(article.data.category, locale)}>
+      {categoryDisplayName(article.data.category, locale)}
+    </a>
   </p>
   <h3 class="article-card-title"><a href={href}>{article.data.title}</a></h3>
   <p class="article-card-desc">{article.data.description}</p>
 
   <div class="article-card-footer">
     <time class="meta" datetime={article.data.publishDate.toISOString()}>
-      {formatDate(article.data.publishDate)}
+      {formatDate(article.data.publishDate, locale)}
     </time>
     {
       article.data.tags.length > 0 && (

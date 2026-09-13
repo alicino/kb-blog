@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { getTags, tagHref } from '../../lib/articles';
+import { siteConfig } from '../../site.config';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const tags = await getTags(lang);
+const homeHref = lang === 'en' ? '/en' : '/';
+
+const alternateUrls = { 'pt-br': '/tags', en: '/en/tags' };
+---
+
+<BaseLayout
+  title={dict.tags.title}
+  description={`${dict.tags.title} · ${siteConfig.name}`}
+  lang={lang}
+  alternateUrls={alternateUrls}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <div class="section-content">
+        <Breadcrumbs lang={lang} items={[{ label: dict.article.breadcrumbHome, href: homeHref }, { label: dict.tags.title }]} />
+        <h1>{dict.tags.title}</h1>
+        <p class="meta tags-count">{dict.tags.countLabel(tags.length)}</p>
+
+        <ul class="tag-cloud">
+          {
+            tags.map((tag) => (
+              <li>
+                <a class="tag-pill tag-cloud-item" href={tagHref(tag.name, lang)}>
+                  {tag.name}
+                  <span class="tag-count">({tag.count})</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-count {
+    margin-top: calc(var(--space-2) * -1);
+    margin-bottom: var(--space-6);
+  }
+
+  .tag-cloud {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .tag-cloud-item {
+    font-size: 0.88rem;
+    padding: 0.4rem 0.85rem;
+    gap: 0.35rem;
+  }
+
+  .tag-count {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-text-faint);
+  }
+</style>

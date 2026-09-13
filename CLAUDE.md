@@ -56,7 +56,7 @@ Fenced ```mermaid code blocks are rendered to inline SVG **at build time** by a 
 
 `src/layouts/BaseLayout.astro` is the only layout; every page wraps its content in `<div class="page-shell"><div class="surface surface-inner">...</div></div>` — this produces the global centered-card look (grey page background, white rounded card) and should be reused rather than reimplemented per page. `src/styles/global.css` holds all design tokens as CSS custom properties (colors, spacing, radii, shadows) plus a dark theme override under `:root[data-theme='dark']` and the `.prose` class used specifically for rendered Markdown body content in `/artigos/[slug].astro` and `about.astro`. Theme switching is done by `ThemeToggle.astro` toggling `data-theme` on `<html>` and persisting to `localStorage`; `BaseLayout.astro` has an inline (non-module) script in `<head>` that reads that value before paint to avoid a flash of the wrong theme.
 
-Fonts are self-hosted via `@fontsource/*` packages (Fraunces for display/headings, Literata for article body copy, Inter for UI chrome/nav/metadata) imported at the top of `global.css` — there are no external font CDN requests.
+Fonts are self-hosted via `@fontsource/*` packages (Fraunces for display/headings, Inter for article body copy and UI chrome/nav/metadata) imported at the top of `global.css` via the `latin-*` subset variants (the content is pt-BR/en only, so the default imports — which bundle Cyrillic/Greek/Vietnamese subsets too — are unnecessary weight) — there are no external font CDN requests.
 
 ### SEO
 

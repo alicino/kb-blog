@@ -1,4 +1,6 @@
 ---
+import { t, type Locale } from '../lib/i18n';
+
 export interface Crumb {
   label: string;
   href?: string;
@@ -6,12 +8,14 @@ export interface Crumb {
 
 interface Props {
   items: Crumb[];
+  lang?: Locale;
 }
 
-const { items } = Astro.props;
+const { items, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
 ---
 
-<nav class="breadcrumbs" aria-label="Trilha de navegação">
+<nav class="breadcrumbs" aria-label={dict.breadcrumbs.ariaLabel}>
   <ol>
     {
       items.map((item, index) => (

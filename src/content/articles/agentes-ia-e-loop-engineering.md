@@ -4,7 +4,7 @@ description: "Entenda o que são agentes de IA, quando usá-los, como evitar est
 publishDate: "2026-08-16"
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["agentes-ia", "loop-engineering", "llm", "boas-praticas", "token-management"]
+tags: ["agentes-ia", "loop-engineering", "LLM", "boas-praticas", "token-management"]
 draft: false
 ---
 

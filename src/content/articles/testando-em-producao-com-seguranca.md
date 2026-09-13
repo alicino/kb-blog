@@ -5,7 +5,7 @@ publishDate: 2026-05-28
 updatedDate: 2026-06-01
 author: "Alicino"
 category: "Engenharia"
-tags: ["testes", "seguranca", "observabilidade"]
+tags: ["testes", "segurança", "observabilidade"]
 draft: false
 ---
 

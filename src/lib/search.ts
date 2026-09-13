@@ -27,10 +27,3 @@ export function stripMarkdown(markdown: string): string {
     .replace(/\s+/g, ' ')
     .trim();
 }
-
-export const TYPE_LABELS: Record<SearchDoc['type'], string> = {
-  article: 'Artigo',
-  pagina: 'Página',
-  categoria: 'Categoria',
-  tag: 'Tag',
-};

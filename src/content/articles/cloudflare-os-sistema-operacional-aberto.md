@@ -4,7 +4,7 @@ description: "Uma análise completa do lançamento do Cloudflare OS, a plataform
 publishDate: 2026-08-05
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["cloudflare", "ia", "agentes", "automação", "open-source", "produtividade"]
+tags: ["Cloudflare", "ia", "agentes", "automação", "open source", "produtividade"]
 draft: false
 ---
 

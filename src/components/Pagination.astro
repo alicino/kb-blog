@@ -1,5 +1,6 @@
 ---
 import type { Paginated } from '../lib/paginate';
+import { t, type Locale } from '../lib/i18n';
 
 interface Props {
   page: Paginated<unknown>;
@@ -7,9 +8,11 @@ interface Props {
   firstPageHref: string;
   /** Prefixo para páginas 2+, ex: "" (gera "/2") ou "/artigos/pagina" (gera "/artigos/pagina/2"). */
   pagePathPrefix: string;
+  lang?: Locale;
 }
 
-const { page, firstPageHref, pagePathPrefix } = Astro.props;
+const { page, firstPageHref, pagePathPrefix, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
 
 function hrefFor(num: number): string {
   if (num === 1) return firstPageHref;
@@ -22,14 +25,14 @@ const hasNext = page.currentPage < page.lastPage;
 
 {
   page.lastPage > 1 && (
-    <nav class="pagination" aria-label="Paginação de artigos">
+    <nav class="pagination" aria-label={dict.pagination.ariaLabel}>
       <a
         class="btn pagination-prev"
         href={hasPrev ? hrefFor(page.currentPage - 1) : undefined}
         aria-disabled={!hasPrev}
-        aria-label="Página anterior"
+        aria-label={dict.pagination.prevAria}
       >
-        ← Anterior
+        {dict.pagination.prev}
       </a>
 
       <ul class="pagination-pages">
@@ -46,9 +49,9 @@ const hasNext = page.currentPage < page.lastPage;
         class="btn pagination-next"
         href={hasNext ? hrefFor(page.currentPage + 1) : undefined}
         aria-disabled={!hasNext}
-        aria-label="Próxima página"
+        aria-label={dict.pagination.nextAria}
       >
-        Próxima →
+        {dict.pagination.next}
       </a>
     </nav>
   )

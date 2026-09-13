@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 const articles = defineCollection({
@@ -10,7 +11,18 @@ const articles = defineCollection({
       publishDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       author: z.string().default('Alicino'),
-      category: z.string(),
+      category: z.enum([
+        'Carreira',
+        'Design',
+        'DevOps',
+        'Engenharia',
+        'Ferramentas',
+        'Infraestrutura e Redes',
+        'Inteligência Artificial',
+        'Produtividade',
+        'Redes',
+        'Segurança',
+      ]),
       tags: z.array(z.string()).default([]),
       draft: z.boolean().default(false),
       cover: image().optional(),

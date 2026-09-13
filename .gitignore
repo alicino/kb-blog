@@ -1,4 +1,8 @@
+# ferramentas de trabalho local (planos, debug)
+debug/
+
 # build
+.cache/
 dist/
 .astro/
 

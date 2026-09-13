@@ -1,0 +1,11 @@
+---
+import ArticlesIndexPage from '../../../components/pages/ArticlesIndexPage.astro';
+import { getPublishedArticles } from '../../../lib/articles';
+import { paginate } from '../../../lib/paginate';
+import { siteConfig } from '../../../site.config';
+
+const articles = await getPublishedArticles('en');
+const page = paginate(articles, { page: 1, pageSize: siteConfig.articlesPerPage });
+---
+
+<ArticlesIndexPage page={page} totalCount={articles.length} lang="en" />

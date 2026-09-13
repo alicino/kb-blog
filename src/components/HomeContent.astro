@@ -4,13 +4,18 @@ import type { Article } from '../lib/articles';
 import ArticleCard from './ArticleCard.astro';
 import Pagination from './Pagination.astro';
 import { siteConfig } from '../site.config';
+import { t, type Locale } from '../lib/i18n';
 
 interface Props {
   page: Paginated<Article>;
+  lang?: Locale;
 }
 
-const { page } = Astro.props;
+const { page, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
 const isFirstPage = page.currentPage === 1;
+const homeHref = lang === 'en' ? '/en' : '/';
+const pagePathPrefix = lang === 'en' ? '/en/page' : '';
 ---
 
 {
@@ -18,95 +23,76 @@ const isFirstPage = page.currentPage === 1;
     <section class="home-intro">
       <h1 class="visually-hidden">{siteConfig.name}</h1>
       <p class="home-headline">
-        <strong>{siteConfig.headline.bold}</strong>
+        <strong>{dict.home.heroBold}</strong>
         <br />
-        <em>{siteConfig.headline.italic}</em>
+        <em>{dict.home.heroItalic}</em>
       </p>
-      <p class="home-intro-text">{siteConfig.tagline}</p>
+      <p class="home-intro-text">{dict.home.heroTagline}</p>
     </section>
   ) : (
     <h1 class="visually-hidden">
-      {siteConfig.name} — página {page.currentPage}
+      {siteConfig.name}{dict.home.pageSuffix(page.currentPage)}
     </h1>
   )
 }
 
-<section aria-label="Artigos recentes">
-  <h2 class="visually-hidden">Artigos recentes</h2>
+<section aria-label={dict.home.recentArticles}>
+  <h2 class="visually-hidden">{dict.home.recentArticles}</h2>
   <div class="home-grid">
-    {page.data.map((article) => <ArticleCard article={article} />)}
+    {page.data.map((article) => <ArticleCard article={article} lang={lang} />)}
   </div>
 
-  <Pagination page={page} firstPageHref="/" pagePathPrefix="" />
+  <Pagination page={page} firstPageHref={homeHref} pagePathPrefix={pagePathPrefix} lang={lang} />
 </section>
 
-{
-  isFirstPage && (
-    <section class="home-editorial">
-      <svg
-        class="home-editorial-decor"
-        aria-hidden="true"
-        viewBox="0 0 400 400"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <ellipse
-          cx="230"
-          cy="170"
-          rx="150"
-          ry="60"
-          stroke="currentColor"
-          stroke-width="1.5"
-          fill="none"
-          transform="rotate(-18 230 170)"
-        />
-        <ellipse
-          cx="230"
-          cy="170"
-          rx="150"
-          ry="60"
-          stroke="currentColor"
-          stroke-width="1"
-          fill="none"
-          stroke-dasharray="2 8"
-          transform="rotate(34 230 170)"
-        />
-        <circle cx="352" cy="140" r="5" fill="currentColor" />
-        <circle cx="130" cy="214" r="3.5" fill="currentColor" />
-        <text
-          class="home-editorial-decor-mark"
-          x="196"
-          y="255"
-          font-size="230"
-          fill="currentColor"
-          text-anchor="middle"
-        >
-          ?
-        </text>
-      </svg>
+<section class="home-editorial">
+  <svg
+    class="home-editorial-decor"
+    aria-hidden="true"
+    viewBox="0 0 400 400"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <ellipse
+      cx="230"
+      cy="170"
+      rx="150"
+      ry="60"
+      stroke="currentColor"
+      stroke-width="1.5"
+      fill="none"
+      transform="rotate(-18 230 170)"
+    />
+    <ellipse
+      cx="230"
+      cy="170"
+      rx="150"
+      ry="60"
+      stroke="currentColor"
+      stroke-width="1"
+      fill="none"
+      stroke-dasharray="2 8"
+      transform="rotate(34 230 170)"
+    />
+    <circle cx="352" cy="140" r="5" fill="currentColor" />
+    <circle cx="130" cy="214" r="3.5" fill="currentColor" />
+    <text
+      class="home-editorial-decor-mark"
+      x="196"
+      y="255"
+      font-size="230"
+      fill="currentColor"
+      text-anchor="middle"
+    >
+      ?
+    </text>
+  </svg>
 
-      <h2>Entre humanos, máquinas e perguntas</h2>
+  <h2>{dict.home.editorialTitle}</h2>
 
-      <div class="home-editorial-body">
-        <p>
-          Este blog é um laboratório público, criado no encontro entre
-          experiência humana, curiosidade e inteligência artificial. Aqui, eu e
-          o Hermes exploramos tecnologia, infraestrutura, segurança,
-          inteligência artificial e ideias que merecem sair do rascunho. Cada
-          artigo nasce de uma pergunta, passa por pesquisa, experimentação e
-          revisão, e permanece aberto a novas descobertas. Não buscamos
-          respostas definitivas, porque a tecnologia muda, o conhecimento
-          evolui e certezas envelhecem.
-        </p>
-        <p>
-          Preferimos perguntas capazes de continuar trabalhando, provocar
-          conexões e revelar novos caminhos. Entre, explore, questione e volte
-          sempre: o próximo experimento talvez comece justamente com uma
-          pergunta que você ainda nem imaginou que faria.
-        </p>
-      </div>
-    </section>
-  )
-}
+  <div class="home-editorial-body">
+    {dict.home.editorialParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</section>
 
 <style>
   .home-intro {

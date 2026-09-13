@@ -4,7 +4,7 @@ description: "Um guia completo sobre .gitignore: por que ele é essencial, exemp
 publishDate: 2026-08-07
 author: "Alicino"
 category: "Engenharia"
-tags: ["git", "seguranca", "boas-praticas", "tutorial", "devops"]
+tags: ["git", "segurança", "boas-praticas", "tutorial", "devops"]
 draft: false
 ---
 
@@ -37,7 +37,7 @@ Antes de ver exemplos, é importante entender como o `.gitignore` funciona. A si
 
 Veja este exemplo básico:
 
-```gitignore
+```text
 # Isso é um comentário. Tudo depois da hashtag é ignorado pelo Git.
 
 # Ignora um arquivo específico
@@ -66,7 +66,7 @@ Agora vamos conversar sobre o que cada linguagem costuma gerar que não deve ir 
 
 Quando você trabalha com Node.js, a primeira coisa que nota é a pasta `node_modules/`. Ela aparece assim que você roda `npm install` e pode ter milhares de arquivos. São as dependências do seu projeto, e elas não são suas. Cada desenvolvedor pode instalá-las localmente com um simples comando. Levar isso para o Git é como tentar guardar a biblioteca inteira quando você só precisa do catálogo.
 
-```gitignore
+```text
 # Dependências: esta pasta contém tudo que o npm/yarn baixa.
 # Você recria ela com npm install, então não precisa versionar.
 node_modules/
@@ -120,7 +120,7 @@ Note que `package-lock.json` e `yarn.lock` são um caso especial. Em um projeto 
 
 Python é uma linguagem maravilhosa, mas ela deixa rastros. Quando você executa um arquivo `.py`, o interpretador cria bytecode compilado para acelerar a próxima execução. Esse bytecode fica na pasta `__pycache__/`. O problema é que esse bytecode é específico da versão do Python e do sistema operacional. Se você versionar isso, seu colega que usa Linux vai receber bytecode gerado no seu macOS, e isso simplesmente não faz sentido.
 
-```gitignore
+```text
 # Bytecode compilado do Python. É gerado automaticamente
 # quando você roda um script. Específico da sua máquina.
 __pycache__/
@@ -168,7 +168,7 @@ Atenção especial ao `__pycache__/`. Muita gente nova em Python não entende po
 
 Go tem uma filosofia diferente. A linguagem foi projetada para ser simples e direta. Quando você compila um programa Go, gera um binário executável. Esse binário é específico da arquitetura onde foi compilado. Um binário compilado no macOS não roda no Linux, então não faz sentido versionar.
 
-```gitignore
+```text
 # Binários compilados. São gerados com go build.
 # Específicos do sistema operacional e arquitetura.
 *.exe
@@ -209,7 +209,7 @@ A linha `# vendor/` está comentada de propósito. Em Go, existe um debate saud�
 
 Ruby, com sua elegância, usa o Bundler para gerenciar dependências. Quando você roda `bundle install`, as gems são instaladas. Em desenvolvimento, você pode usar o modo `--path vendor/bundle` para isolar as gems do projeto. Essa pasta não deve ir para o Git, pois cada desenvolvedor e cada ambiente de deploy gerencia suas próprias dependências.
 
-```gitignore
+```text
 # Dependências do Bundler no modo vendor.
 # Cada ambiente instala as suas gems.
 /vendor/bundle
@@ -251,7 +251,7 @@ As linhas `!/log/.keep` e `!/tmp/.keep` usam a exclamação para criar uma exce�
 
 Java é uma linguagem compilada. Você escreve código `.java` e o compilador gera bytecode `.class`. Esses arquivos `.class` são instruções para a JVM e não precisam ser versionados, pois são gerados a partir do código fonte. Além disso, o ecossistema Java tem ferramentas de build poderosas como Maven e Gradle, que criam suas próprias pastas de trabalho.
 
-```gitignore
+```text
 # Bytecode compilado. Gerado pelo javac a partir dos .java.
 *.class
 
@@ -299,7 +299,7 @@ Note a linha `!gradle/wrapper/gradle-wrapper.jar`. O Gradle Wrapper é uma ferra
 
 Agora vamos falar de algo que muita gente ainda não considera: os arquivos que ferramentas de IA e assistentes de código criam no seu projeto. Eles podem parecer inofensivos, mas merecem atenção.
 
-```gitignore
+```text
 # Arquivos de IA e assistentes de código.
 # Eles podem conter instruções específicas do seu projeto,
 # contexto de negócio, ou referências a sistemas internos.
@@ -559,7 +559,7 @@ Se você quer começar rápido, aqui estão dois templates que servem como ponto
 
 ### Template universal (base para qualquer projeto)
 
-```gitignore
+```text
 # Sistema operacional: arquivos que o macOS e Windows
 # criam automaticamente em pastas. Nada a ver com código.
 .DS_Store
@@ -602,7 +602,7 @@ __pycache__/
 
 ### Template para projetos web full stack
 
-```gitignore
+```text
 # Frontend: tudo que é gerado pelo build do frontend.
 # O código fonte está em src/, o resto é gerado.
 node_modules/

@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomeContent from '../HomeContent.astro';
+import type { Paginated } from '../../lib/paginate';
+import type { Article } from '../../lib/articles';
+import { siteConfig } from '../../site.config';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  page: Paginated<Article>;
+  lang?: Locale;
+}
+
+const { page, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const title =
+  page.currentPage === 1 ? siteConfig.name : `${siteConfig.name} · ${dict.common.pageLabel(page.currentPage)}`;
+const description = lang === 'en' ? dict.home.heroTagline : siteConfig.description;
+
+// A home paginada sempre existe nos dois locales (a listagem não depende de
+// haver artigos traduzidos), então o par de hreflang é incondicional aqui —
+// diferente de página de categoria/tag/artigo, que só existe quando há
+// conteúdo publicado naquele locale.
+const alternateUrls =
+  page.currentPage === 1
+    ? { 'pt-br': '/', en: '/en' }
+    : lang === 'en'
+      ? { en: `/en/page/${page.currentPage}` }
+      : { 'pt-br': `/${page.currentPage}` };
+---
+
+<BaseLayout title={title} description={description} lang={lang} alternateUrls={alternateUrls}>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <HomeContent page={page} lang={lang} />
+    </div>
+  </div>
+</BaseLayout>

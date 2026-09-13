@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const homeHref = lang === 'en' ? '/en' : '/';
+const articlesHref = lang === 'en' ? '/en/articles' : '/artigos';
+---
+
+<BaseLayout title={dict.notFound.title} description={dict.notFound.description} lang={lang} noindex>
+  <div class="page-shell">
+    <div class="surface surface-inner not-found">
+      <p class="eyebrow">{dict.notFound.eyebrow}</p>
+      <h1>{dict.notFound.title}</h1>
+      <p class="not-found-desc">{dict.notFound.description}</p>
+      <div class="not-found-actions">
+        <a class="btn btn-accent" href={homeHref}>{dict.notFound.backHome}</a>
+        <a class="btn" href={articlesHref}>{dict.notFound.viewArticles}</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    text-align: center;
+    max-width: 52ch;
+    margin-inline: auto;
+    padding-block: var(--space-8);
+  }
+
+  .not-found-desc {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .not-found-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>

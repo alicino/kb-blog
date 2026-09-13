@@ -1,0 +1,219 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import {
+  articleHref,
+  categoryHref,
+  categoryDisplayName,
+  tagHref,
+  formatDate,
+  readingTime,
+  articleLocale,
+  findTranslation,
+} from '../../lib/articles';
+import type { Article } from '../../lib/articles';
+import { t } from '../../lib/i18n';
+
+interface Props {
+  article: Article;
+  prev: Article | null;
+  next: Article | null;
+}
+
+const { article, prev, next } = Astro.props;
+const locale = articleLocale(article);
+const dict = t(locale);
+const { Content } = await render(article);
+const minutes = readingTime(article.body ?? '');
+
+const otherLocale = locale === 'en' ? 'pt-br' : 'en';
+const translation = await findTranslation(article, otherLocale);
+const alternateUrls = translation
+  ? { [locale]: articleHref(article), [otherLocale]: articleHref(translation) }
+  : undefined;
+
+const homeHref = locale === 'en' ? '/en' : '/';
+const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  type="article"
+  publishDate={article.data.publishDate}
+  updatedDate={article.data.updatedDate}
+  author={article.data.author}
+  lang={locale}
+  alternateUrls={alternateUrls}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <Breadcrumbs
+        lang={locale}
+        items={[
+          { label: dict.article.breadcrumbHome, href: homeHref },
+          { label: dict.article.breadcrumbArticles, href: articlesHref },
+          { label: article.data.title },
+        ]}
+      />
+
+      <header class="article-header">
+        <p class="eyebrow">
+          <a href={categoryHref(article.data.category, locale)}>
+            {categoryDisplayName(article.data.category, locale)}
+          </a>
+        </p>
+        <h1>{article.data.title}</h1>
+        <p class="article-subtitle">{article.data.description}</p>
+
+        <div class="article-meta">
+          <span class="meta">{dict.article.byAuthor(article.data.author)}</span>
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <time class="meta" datetime={article.data.publishDate.toISOString()}>
+            {dict.article.publishedOn} {formatDate(article.data.publishDate, locale)}
+          </time>
+          {
+            article.data.updatedDate && (
+              <>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <time class="meta" datetime={article.data.updatedDate.toISOString()}>
+                  {dict.article.updatedOn} {formatDate(article.data.updatedDate, locale)}
+                </time>
+              </>
+            )
+          }
+          <span class="meta-sep" aria-hidden="true">·</span>
+          <span class="meta">{dict.article.readingTime(minutes)}</span>
+        </div>
+
+        {
+          article.data.tags.length > 0 && (
+            <div class="article-tags">
+              {article.data.tags.map((tag) => (
+                <a class="tag-pill" href={tagHref(tag, locale)}>
+                  {tag}
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <nav class="article-nav" aria-label={dict.breadcrumbs.ariaLabel}>
+        {
+          prev ? (
+            <a class="article-nav-link" href={articleHref(prev)}>
+              <span class="meta">{dict.article.prevArticle}</span>
+              <span class="article-nav-title">{prev.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="article-nav-link article-nav-link-next" href={articleHref(next)}>
+              <span class="meta">{dict.article.nextArticle}</span>
+              <span class="article-nav-title">{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+
+      <p class="article-back">
+        <a class="btn" href={articlesHref}>{dict.article.backToArticles}</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-header {
+    max-width: 90ch;
+    margin: 0 auto var(--space-7);
+  }
+
+  .article-subtitle {
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 var(--space-4);
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .meta-sep {
+    color: var(--color-text-faint);
+  }
+
+  .article-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .article-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    max-width: 90ch;
+    margin: var(--space-8) auto 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .article-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    text-decoration: none;
+    color: var(--color-text);
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+  }
+
+  .article-nav-link:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .article-nav-link-next {
+    text-align: right;
+    align-items: flex-end;
+    grid-column: 2;
+  }
+
+  .article-nav-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .article-back {
+    max-width: 90ch;
+    margin: var(--space-6) auto 0;
+  }
+
+  @media (max-width: 640px) {
+    .article-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .article-nav-link-next {
+      text-align: left;
+      align-items: flex-start;
+      grid-column: 1;
+    }
+  }
+</style>

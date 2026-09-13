@@ -3,8 +3,8 @@ title: "O Custo Real de Rodar LLMs Localmente: Vale a Pena em 2026?"
 description: "Uma análise honesta dos custos de hardware, energia elétrica e APIs para rodar modelos de linguagem localmente versus usar serviços cloud."
 publishDate: 2026-08-28
 author: "Alicino"
-category: "Inteligência artificial"
-tags: ["ia", "llm", "custo", "hardware", "automação"]
+category: "Inteligência Artificial"
+tags: ["ia", "LLM", "custo", "hardware", "automação"]
 draft: false
 ---
 

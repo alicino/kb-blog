@@ -1,14 +1,15 @@
 import type { APIRoute } from 'astro';
-import { getPublishedArticles, getCategories, getTags, articleHref, categoryHref, tagHref } from '../lib/articles';
+import { getPublishedArticles, getCategories, getTags, articleHref, categoryHref, categoryDisplayName, tagHref } from '../lib/articles';
 import { stripMarkdown, type SearchDoc } from '../lib/search';
 import { siteConfig } from '../site.config';
 
 export const prerender = true;
 
 export const GET: APIRoute = async () => {
-  const articles = await getPublishedArticles();
-  const categories = await getCategories();
-  const tags = await getTags();
+  const locale = 'pt-br' as const;
+  const articles = await getPublishedArticles(locale);
+  const categories = await getCategories(locale);
+  const tags = await getTags(locale);
 
   const docs: SearchDoc[] = [];
 
@@ -19,7 +20,7 @@ export const GET: APIRoute = async () => {
       description: article.data.description,
       content: stripMarkdown(article.body ?? ''),
       url: articleHref(article),
-      category: article.data.category,
+      category: categoryDisplayName(article.data.category, locale),
       tags: article.data.tags,
     });
   }
@@ -27,10 +28,10 @@ export const GET: APIRoute = async () => {
   for (const category of categories) {
     docs.push({
       type: 'categoria',
-      title: category.name,
+      title: category.displayName,
       description: `${category.description} (${category.count} artigo${category.count === 1 ? '' : 's'})`,
-      content: category.name,
-      url: categoryHref(category.name),
+      content: category.displayName,
+      url: categoryHref(category.name, locale),
     });
   }
 
@@ -40,7 +41,7 @@ export const GET: APIRoute = async () => {
       title: tag.name,
       description: `${tag.count} artigo${tag.count === 1 ? '' : 's'} com esta tag`,
       content: tag.name,
-      url: tagHref(tag.name),
+      url: tagHref(tag.name, locale),
     });
   }
 

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import ArticleRow from '../ArticleRow.astro';
+import type { Article, TagSummary } from '../../lib/articles';
+import { getTags } from '../../lib/articles';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+  tag: TagSummary;
+  articles: Article[];
+  lang?: Locale;
+}
+
+const { tag, articles, lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const homeHref = lang === 'en' ? '/en' : '/';
+const tagsHref = lang === 'en' ? '/en/tags' : '/tags';
+
+// Tags não são traduzidas (texto livre) — o "par" no outro locale é a MESMA
+// string de tag, então só existe se algum artigo publicado lá também usa
+// essa tag exata.
+const otherLocale = lang === 'en' ? 'pt-br' : 'en';
+const otherTags = await getTags(otherLocale);
+const hasCounterpart = otherTags.some((otherTag) => otherTag.slug === tag.slug);
+const alternateUrls = hasCounterpart
+  ? {
+      [lang]: `${tagsHref}/${tag.slug}`,
+      [otherLocale]: `${otherLocale === 'en' ? '/en/tags' : '/tags'}/${tag.slug}`,
+    }
+  : undefined;
+---
+
+<BaseLayout
+  title={`${dict.tag.eyebrow}: ${tag.name}`}
+  description={dict.tag.countLabel(tag.count)}
+  lang={lang}
+  alternateUrls={alternateUrls}
+>
+  <div class="page-shell">
+    <div class="surface surface-inner">
+      <div class="section-content">
+        <Breadcrumbs
+          lang={lang}
+          items={[
+            { label: dict.article.breadcrumbHome, href: homeHref },
+            { label: dict.tag.breadcrumb, href: tagsHref },
+            { label: tag.name },
+          ]}
+        />
+        <p class="eyebrow">{dict.tag.eyebrow}</p>
+        <h1>{tag.name}</h1>
+        <p class="meta tag-page-count">{dict.tag.countLabel(tag.count)}</p>
+
+        <div class="article-list">
+          {articles.map((article) => <ArticleRow article={article} lang={lang} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page-count {
+    margin-bottom: var(--space-6);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

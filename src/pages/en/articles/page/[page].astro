@@ -1,0 +1,23 @@
+---
+import ArticlesIndexPage from '../../../../components/pages/ArticlesIndexPage.astro';
+import { getPublishedArticles } from '../../../../lib/articles';
+import { paginate } from '../../../../lib/paginate';
+import { siteConfig } from '../../../../site.config';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles('en');
+  const lastPage = Math.max(1, Math.ceil(articles.length / siteConfig.articlesPerPage));
+
+  return Array.from({ length: lastPage - 1 }, (_, i) => i + 2).map((pageNumber) => ({
+    params: { page: String(pageNumber) },
+  }));
+}
+
+const { page: pageParam } = Astro.params;
+const currentPage = Number(pageParam);
+
+const articles = await getPublishedArticles('en');
+const page = paginate(articles, { page: currentPage, pageSize: siteConfig.articlesPerPage });
+---
+
+<ArticlesIndexPage page={page} totalCount={articles.length} lang="en" />

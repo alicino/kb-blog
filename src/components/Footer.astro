@@ -1,6 +1,15 @@
 ---
 import { siteConfig } from '../site.config';
 import Logo from './Logo.astro';
+import { t, localizedFooterLinks, type Locale } from '../lib/i18n';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'pt-br' } = Astro.props;
+const dict = t(lang);
+const footerLinks = localizedFooterLinks(lang, siteConfig.footerLinks);
 
 const startYear = siteConfig.copyrightStartYear;
 const currentYear = new Date().getFullYear();
@@ -22,13 +31,13 @@ const socialIcons: Record<string, string> = {
       <div class="footer-brand">
         <Logo size="sm" />
         <p class="meta">
-          © {yearLabel} {siteConfig.author.name}. Todos os direitos reservados.
+          {dict.footer.rights(yearLabel, siteConfig.author.name)}
         </p>
       </div>
 
-      <nav class="footer-links" aria-label="Links do rodapé">
+      <nav class="footer-links" aria-label={dict.footer.ariaLabel}>
         {
-          siteConfig.footerLinks.map((link) => (
+          footerLinks.map((link) => (
             <a href={link.url}>{link.label}</a>
           ))
         }

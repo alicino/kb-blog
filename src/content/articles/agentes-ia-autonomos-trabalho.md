@@ -4,7 +4,7 @@ description: "Um guia prático sobre agentes de IA autônomos, com exemplos reai
 publishDate: 2026-08-18
 updatedDate: 2026-08-19
 author: "Alicino"
-category: "Inteligência artificial"
+category: "Inteligência Artificial"
 tags: ["ia", "agentes-autônomos", "automação", "produtividade", "tutorial"]
 draft: false
 ---
