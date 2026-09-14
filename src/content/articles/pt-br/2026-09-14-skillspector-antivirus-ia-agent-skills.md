@@ -230,3 +230,7 @@ O SkillSpector é o único que foca especificamente no artefato SKILL.md e seus 
 O SkillSpector da NVIDIA não é uma bala de prata, mas é a primeira ferramenta que trata skills de agentes como o problema de supply chain que elas são. Com 68 padrões de detecção, análise em duas etapas e integração com CI/CD, ele preenche um vazio que existia desde que os primeiros marketplaces de skills começaram a crescer.
 
 A regra prática é simples: antes de instalar qualquer skill de terceiros, passe pelo SkillSpector. Se o score for HIGH ou CRITICAL, não instale. Se for MEDIUM, leia os achados com atenção. Se for LOW, provavelmente é seguro, mas leia o código de qualquer forma.
+
+Mais importante ainda: sempre que possível, crie sua própria skill. Uma skill escrita por você atende exatamente à sua necessidade, sem funcionalidades ocultas, sem permissões extras, sem dependências suspeitas. Você controla o que ela faz, o que ela acessa e como ela se comporta. É a única maneira de ter garantia total de segurança.
+
+Em breve vou escrever um artigo explicando como criar sua própria skill do zero, desmistificando o formato, as ferramentas e o fluxo de publicação. Se você usa agentes de IA no dia a dia, criar suas próprias skills é mais simples do que parece e muito mais seguro do que confiar em código de terceiros.

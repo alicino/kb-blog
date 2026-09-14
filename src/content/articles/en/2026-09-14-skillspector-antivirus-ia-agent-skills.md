@@ -230,3 +230,7 @@ SkillSpector is unique in its focus on the SKILL.md artifact and its companion s
 NVIDIA's SkillSpector is not a silver bullet, but it is the first tool that treats agent skills as the supply chain problem they are. With 68 detection patterns, two-stage analysis, and CI/CD integration, it fills a gap that has existed since the first skill marketplaces started growing.
 
 The rule of thumb is simple: before installing any third-party skill, run it through SkillSpector. If the score is HIGH or CRITICAL, do not install. If MEDIUM, read the findings carefully. If LOW, it is probably safe, but read the code anyway.
+
+More importantly: whenever possible, create your own skill. A skill you write yourself meets your exact needs, with no hidden functionality, no extra permissions, no suspicious dependencies. You control what it does, what it accesses, and how it behaves. It is the only way to have complete security guarantees.
+
+I will soon publish an article explaining how to create your own skill from scratch, demystifying the format, the tools, and the publishing workflow. If you use AI agents daily, creating your own skills is simpler than it sounds and much safer than trusting third-party code.
