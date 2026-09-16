@@ -255,7 +255,80 @@ Once you create a skill and understand how it works, the next natural steps are:
 
 4. **Use SkillSpector.** Even on your own skills, running NVIDIA's scanner is good practice to make sure nothing unexpected is there.
 
-## Useful links
+## How can AI help me write a skill?
+
+You do not need to write a skill from scratch. You can ask the agent itself to help.
+
+The most direct way is to talk to it. Open Claude Code, Codex CLI, Gemini CLI, or any agent that supports skills, and say something like:
+
+> "Help me create a skill for text review. I want it to prioritize clarity, professional tone, and eliminating jargon. Highlight these points in a list, deliver relevant considerations about the target audience, and ask to review the SKILL.md at the end."
+
+The agent will understand the context, create the folder, write the `SKILL.md` with frontmatter and instructions, and can even review the file afterwards. You do not need to know the syntax by heart. Just describe what you want.
+
+### The 4-step process
+
+1. **Describe the task.** Explain in natural language what problem the skill should solve. Be specific about what it should do, what to avoid, and which points deserve emphasis.
+
+2. **Ask to create the SKILL.md.** The agent generates the complete file with frontmatter and instructions. You can ask for adjustments afterwards: "add an examples section", "include spell checking", "add a warning not to modify original files".
+
+3. **Test.** Invoke the skill with `/skill-name` and see if the result matches your expectations. If not, ask for adjustments: "the response is too generic, ask for more context before writing."
+
+4. **Iterate.** A skill is never static. You can change the `SKILL.md` at any time, add new instructions, refine the description, include scripts. If the agent starts behaving differently than expected, review the instructions and adjust.
+
+### The official skill: skill-creator
+
+There is an official skill called **skill-creator** that automates this entire cycle. It was developed by Anthropic and is available in the official Claude Code marketplace.
+
+To install:
+
+```text
+/plugin install skill-creator@claude-plugins-official
+```
+
+If the marketplace is not found:
+
+```text
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin marketplace update claude-plugins-official
+/plugin install skill-creator@claude-plugins-official
+```
+
+After installation, type `/reload-plugins` to activate it. Then ask:
+
+> "Evaluate my summarize-changes skill with skill-creator."
+
+The skill-creator will write test cases, run the skill against them, compare results with expectations, and suggest improvements to the `SKILL.md`. It acts as a skill reviewer, helping to identify gaps in instructions and blind spots in the description.
+
+### Skills work across multiple agents
+
+The `SKILL.md` format is portable. The same file works in:
+
+| Agent | Personal directory | Project directory |
+|---|---|---|
+| **Claude Code** | `~/.claude/skills/` | `.claude/skills/` |
+| **Codex CLI** | `~/.codex/skills/` | `.codex/skills/` |
+| **Gemini CLI** | `~/.gemini/skills/` | `.gemini/skills/` |
+| **Cursor** | `~/.cursor/skills/` | `.cursor/skills/` |
+| **Windsurf** | `~/.windsurf/skills/` | `.windsurf/skills/` |
+
+The only difference is the installation directory. The `SKILL.md` file is the same. This means you can create a skill, test it in Claude Code, and use it in Codex CLI without changing a single line.
+
+If you use more than one agent, it is worth keeping your skills in a separate Git repository and creating a script that copies them to all directories. Or use a symlink:
+
+```bash
+ln -s ~/my-skills-repo/write-text ~/.claude/skills/write-text
+ln -s ~/my-skills-repo/write-text ~/.codex/skills/write-text
+```
+
+### Practical example: refining a skill with AI
+
+Let me show how this works in practice. Take the code review skill we created in example 3. After testing, you realize it is too generic for your team. You can ask:
+
+> "Update the code review skill. I want it to prioritize three things: secret leakage in environment variables, correct use of async/await in Python, and consistency with the PEP 8 style guide. Add a security section that checks for hardcoded tokens or passwords. Put an alert at the start: if you find a secret, stop the review and warn immediately."
+
+The agent reads the current `SKILL.md`, applies the changes, and saves. You test with `/review-code` and see if the new behavior meets your needs. If not, adjust again.
+
+This cycle of conversation, testing, and adjustment is what makes a skill evolve from a generic draft into a sharp tool that solves exactly your problem.
 
 - [Claude Code official skills documentation](https://code.claude.com/docs/en/skills)
 - [How to create custom skills (Claude Help Center)](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)

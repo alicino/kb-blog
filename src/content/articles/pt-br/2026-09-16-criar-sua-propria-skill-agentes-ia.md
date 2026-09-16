@@ -255,7 +255,80 @@ Depois que você criar uma skill e sentir como funciona, o próximo passo natura
 
 4. **Usar o SkillSpector.** Mesmo nas suas próprias skills, passar pelo scanner da NVIDIA é uma boa prática para garantir que não há nada inesperado.
 
-## Links úteis
+## Como a IA pode me ajudar a escrever uma skill?
+
+Você não precisa escrever uma skill do zero. Pode pedir para o próprio agente ajudar.
+
+A forma mais direta é conversar com ele. Abra o Claude Code, o Codex CLI, o Gemini CLI, ou qualquer agente que suporte skills, e diga algo como:
+
+> "Ajude a criar uma skill que faça revisão de texto. Quero que ela priorize clareza, tom profissional e eliminação de jargão. Dê destaque a esses pontos em uma lista, entregue considerações relevantes sobre o público alvo e peça para revisar o SKILL.md no final."
+
+O agente vai entender o contexto, criar a pasta, escrever o `SKILL.md` com frontmatter e instruções, e pode até revisar o arquivo depois. Você não precisa saber a sintaxe de cor. Basta descrever o que quer.
+
+### O processo em 4 passos
+
+1. **Descreva a tarefa.** Explique em linguagem natural qual problema a skill deve resolver. Seja específico sobre o que ela deve fazer, o que deve evitar e quais pontos merecem destaque.
+
+2. **Peça para criar o SKILL.md.** O agente gera o arquivo completo com frontmatter e instruções. Você pode pedir ajustes depois: "adicione uma seção de exemplos", "inclua verificação de ortografia", "coloque um alerta para não modificar arquivos originais".
+
+3. **Teste.** Invoque a skill com `/nome-da-skill` e veja se o resultado é o que você esperava. Se não for, peça ajustes: "a resposta está muito genérica, peça mais contexto antes de escrever".
+
+4. **Itere.** Uma skill nunca é estática. Você pode mudar o `SKILL.md` a qualquer momento, adicionar novas instruções, refinar a descrição, incluir scripts. Se o agente começar a se comportar de forma diferente do esperado, revise as instruções e ajuste.
+
+### A skill oficial: skill-creator
+
+Existe uma skill oficial chamada **skill-creator** que automatiza todo esse ciclo. Ela foi desenvolvida pela Anthropic e está disponível no marketplace oficial do Claude Code.
+
+Para instalar:
+
+```text
+/plugin install skill-creator@claude-plugins-official
+```
+
+Se o marketplace não for encontrado:
+
+```text
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin marketplace update claude-plugins-official
+/plugin install skill-creator@claude-plugins-official
+```
+
+Depois de instalada, digite `/reload-plugins` para ativar. Então peça:
+
+> "Evaluate my summarize-changes skill with skill-creator."
+
+A skill-creator vai escrever casos de teste, executar a skill contra eles, comparar os resultados com o esperado e sugerir melhorias no `SKILL.md`. Ela faz o papel de um revisor de skills, ajudando a identificar lacunas nas instruções e pontos cegos na descrição.
+
+### Skills funcionam em vários agentes
+
+O formato `SKILL.md` é portátil. O mesmo arquivo funciona em:
+
+| Agente | Diretório pessoal | Diretório do projeto |
+|---|---|---|
+| **Claude Code** | `~/.claude/skills/` | `.claude/skills/` |
+| **Codex CLI** | `~/.codex/skills/` | `.codex/skills/` |
+| **Gemini CLI** | `~/.gemini/skills/` | `.gemini/skills/` |
+| **Cursor** | `~/.cursor/skills/` | `.cursor/skills/` |
+| **Windsurf** | `~/.windsurf/skills/` | `.windsurf/skills/` |
+
+A única diferença é o diretório de instalação. O arquivo `SKILL.md` é o mesmo. Isso significa que você pode criar uma skill, testar no Claude Code, e usar no Codex CLI sem alterar uma linha.
+
+Se você usa mais de um agente, vale a pena manter suas skills em um repositório Git separado e criar um script que copia para todos os diretórios. Ou usar um symlink:
+
+```bash
+ln -s ~/meu-repo-de-skills/escrever-texto ~/.claude/skills/escrever-texto
+ln -s ~/meu-repo-de-skills/escrever-texto ~/.codex/skills/escrever-texto
+```
+
+### Exemplo prático: refinando uma skill com IA
+
+Vou mostrar como funciona na prática. Pegue a skill de revisão de código que criamos no exemplo 3. Depois de testar, você percebe que ela está genérica demais para o seu time. Você pode pedir:
+
+> "Atualize a skill de revisão de código. Quero que ela priorize três coisas: vazamento de secrets em variáveis de ambiente, uso correto de async/await em Python e consistência com o guia de estilo PEP 8. Adicione uma seção de segurança que verifica se há tokens ou senhas硬coded. Coloque um alerta no início: se encontrar um secret, pare a revisão e avise imediatamente."
+
+O agente lê o `SKILL.md` atual, aplica as mudanças e salva. Você testa com `/revisar-codigo` e vê se o novo comportamento atende. Se não, ajusta de novo.
+
+Esse ciclo de conversa, teste e ajuste é o que faz uma skill evoluir de um rascunho genérico para uma ferramenta afiada que resolve exatamente o seu problema.
 
 - [Documentação oficial do Claude Code sobre skills](https://code.claude.com/docs/pt/skills)
 - [Guia de criação de skills (Claude Help Center)](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)
