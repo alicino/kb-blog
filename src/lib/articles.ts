@@ -23,9 +23,8 @@ export function articleLocale(article: Article): Locale {
 /** Slug "puro" do artigo, sem o prefixo de locale — é o que liga a versão
  * pt-BR e a versão en de um mesmo post (ambas usam o mesmo nome de arquivo). */
 export function articleSlug(article: Article): string {
-  // Remove prefixos de locale: "en/" ou "pt-br/" — artigos pt-br soltos na raiz
-  // (sem prefixo) permanecem intactos para não quebrar URLs antigas.
-  return article.id.replace(/^(en|pt-br)\//, '');
+  // Artigos EN têm prefixo "en/", artigos PT estão na raiz (sem prefixo).
+  return article.id.replace(/^en\//, '');
 }
 
 /** Retorna todos os artigos publicados de um locale (ignora rascunhos fora do modo dev), ordenados do mais recente para o mais antigo. */
