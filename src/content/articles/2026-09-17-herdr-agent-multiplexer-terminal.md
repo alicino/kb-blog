@@ -74,9 +74,144 @@ O painel lateral do Herdr mostra o estado de cada agente com bolinhas coloridas:
 
 A detecção funciona por heurísticas. O Herdr identifica o processo em foreground de cada painel. Ele lê a saída do terminal em tempo real, procurando padrões como spinners, mensagens de "waiting for input" e indicadores de execução de ferramentas. Tudo isso acontece sem que o agente precise reportar o próprio estado.
 
-Para agentes com integração oficial (Claude Code, Codex, Cursor), o Herdr consegue ir além. Ele recupera a sessão do agente mesmo depois de um restart completo do servidor.
+Para agentes com integração oficial, o Herdr consegue ir além. Ele recupera a sessão do agente mesmo depois de um restart completo do servidor.
 
-## Workspaces, abas e painéis
+#### Agentes detectados automaticamente
+
+O Herdr detecta 20 agentes diferentes sem configuração adicional. A detecção funciona por três mecanismos:
+
+- Manifestos de tela: o Herdr lê a saída do terminal e reconhece spinners, prompts de aprovação e mensagens de espera para cada agente
+- Hooks de ciclo de vida: alguns agentes reportam estado diretamente (idle, working, blocked) com precisão total
+- Identidade de sessão: o Herdr recupera a sessão após restart do servidor
+
+**Agentes com detecção automática:**
+
+- Claude Code: sessão e estado por manifesto de tela
+- Codex CLI: sessão e estado por manifesto de tela
+- Cursor Agent CLI: sessão e estado por manifesto de tela
+- OpenCode: hooks de ciclo de vida e manifesto de tela
+- Grok CLI: sessão e estado por manifesto de tela
+- GitHub Copilot CLI: sessão por integração
+- Pi: hooks de ciclo de vida (estado completo)
+- OMP: hooks de ciclo de vida (estado completo)
+- Droid: sessão por integração
+- Kimi Code CLI: hooks de ciclo de vida (estado completo)
+- Kilo Code CLI: hooks de ciclo de vida e manifesto de tela
+- Hermes Agent: sessão por integração
+- Devin CLI: sessão por integração
+- Qoder CLI: sessão por integração
+- Qwen Code: sessão por integração
+- MastraCode: hooks de ciclo de vida (estado completo)
+- Amp: manifesto de tela (sem integração)
+- Antigravity CLI: sessão por integração
+- Kiro CLI: manifesto de tela (sem integração)
+- Maki: manifesto de tela (sem integração)
+
+Além destes, Gemini CLI e Cline têm detecção parcial. Agentes não listados rodam normalmente como processos de terminal. O Herdr funciona como gerenciador de workspaces para qualquer CLI, mas sem a detecção de estado automática.
+
+Para reportar estado manualmente de qualquer processo, existe o sistema de hooks de ciclo de vida. Um script ou plugin pode chamar `herdr agent report-agent` para informar que um painel está idle, working ou blocked.
+
+## Recursos avançados
+
+### API Socket completa
+
+O Herdr expõe uma API sobre socket local com dezenas de métodos. Além dos comandos CLI mencionados, a API permite:
+
+- Subscrever eventos em tempo real: quando um agente muda de estado, quando um painel recebe saída nova, quando um workspace é criado ou fechado
+- Controlar plugins: instalar, ativar, desativar e invocar ações
+- Gerenciar worktrees Git: criar checkouts como workspaces do Herdr
+- Exportar e importar layouts completos da sessão
+- Controlar popups e notificações programaticamente
+
+### Restauração de sessão
+
+O Herdr salva o layout da sessão em disco. Se o servidor reiniciar, ele restaura workspaces, abas, painéis e diretórios de trabalho. Para agentes com integração oficial, ele também retoma a sessão do agente usando o ID nativo de cada um. Isso significa que um Claude Code ou Codex que estava rodando volta ao estado anterior sem perder o histórico.
+
+### Notificações
+
+O Herdr notifica você quando um agente em background termina ou precisa de atenção. Três níveis de notificação:
+
+- `herdr`: notificação dentro da própria interface do Herdr
+- `terminal`: notificação no terminal externo, funciona também por SSH
+- `system`: notificação do sistema operacional (macOS, Linux, Windows)
+
+### Suporte a mouse
+
+Diferente do tmux, que trata mouse como recurso secundário, o Herdr é nativo para mouse. Você pode:
+
+- Clicar em painéis para selecionar
+- Arrastar bordas para redimensionar
+- Clicar com botão direito para menu de contexto
+- Arrastar abas para reordenar
+- Scroll na sidebar para navegar workspaces
+- Selecionar texto com o mouse e copiar automaticamente para a área de transferência
+
+O suporte a mouse funciona também sobre SSH e em clientes móveis.
+
+### Plugins e marketplace
+
+O Herdr tem um sistema de plugins onde cada plugin é um executável com manifesto `herdr-plugin.toml`. Não existe SDK separado: o CLI do Herdr é a API do plugin. O marketplace oficial lista mais de 700 plugins, instaláveis via GitHub shorthand:
+
+```bash
+herdr plugin install ogulcancelik/herdr-plugin-examples/tree-bootstrap
+```
+
+Os plugins podem criar novos painéis, adicionar hooks de evento, executar ações no servidor e estender qualquer parte da interface.
+
+### Herdr M (app desktop)
+
+Além do TUI no terminal, o Herdr tem um app macOS nativo chamado Herdr M. Ele wrappa as mesmas sessões em uma interface convencional com janelas, acesso a arquivos e conexões remotas. Como o dispositivo é vinculado à mesma sessão, você pode fechar o terminal no meio de uma tarefa e continuar de onde parou no app.
+
+### Temas e configuração
+
+O Herdr funciona sem arquivo de configuração. Quando você precisa personalizar, o arquivo fica em `~/.config/herdr/config.toml`. É possível configurar:
+
+- Keybindings completos (prefixo, atalhos, modo resize)
+- Layout da sidebar (largura, colapsar automaticamente, seções)
+- Notificações (tipo, posição, delay)
+- Tema de cores
+- Comportamento do scrollback
+- Limites de histórico dos painéis
+
+## Adaptação a diferentes dispositivos
+
+O Herdr funciona em laptop, desktop, tablet e celular. A adaptação é automática.
+
+### Uso em desktop e laptop
+
+No desktop, o Herdr mostra a interface completa com sidebar expandida, painéis lado a lado e menus de contexto. O layout é o mesmo do tmux, mas com detecção de agente e suporte a mouse.
+
+### Uso em tablet e celular
+
+Em dispositivos móveis, o Herdr pode ser acessado de duas formas:
+
+**Via SSH direto:** instale qualquer cliente SSH no celular (Moshi no iOS, Termux no Android, Blink, Termius). Conecte ao servidor onde os agentes rodam e execute `herdr`. A TUI se adapta automaticamente a telas estreitas. A sidebar é escondida e substituída por um menu switcher. O layout dos painéis muda para coluna única. O suporte a mouse e toque funciona sobre SSH.
+
+```bash
+# Do celular, via SSH
+ssh usuario@servidor
+herdr
+```
+
+O site oficial recomenda o app Moshi (iOS) que tem suporte nativo ao Herdr. Você gerencia agentes do iPhone como se estivesse no desktop.
+
+**Via Herdr M (app desktop):** no macOS, o Herdr M funciona como alternativa à interface TUI para quem prefere janelas convencionais.
+
+**Via herdr-web:** existe um projeto mantido pela comunidade que roda o TUI real do Herdr no navegador como PWA instalável. Usa xterm.js para transmitir o terminal via WebSocket. Funciona em qualquer dispositivo com navegador, incluindo celular.
+
+### Thin client remoto
+
+O comando `--remote` transforma o Herdr local em um cliente leve para uma sessão remota:
+
+```bash
+herdr --remote ssh://usuario@servidor
+```
+
+Isso é mais responsivo que SSH bruto em conexões lentas, porque apenas os dados de renderização trafegam pelo socket. O clipboard local funciona, inclusive para imagens. As teclas de atalho configuradas localmente são preservadas mesmo na sessão remota.
+
+### Limitação conhecida em multi-cliente
+
+Quando um cliente móvel (janela estreita) se conecta a uma sessão que já tem um cliente desktop conectado, a sessão compartilhada se ajusta ao menor tamanho entre os clientes. Isso pode fazer os painéis no desktop ficarem estreitos temporariamente. O time do Herdr considera adicionar redimensionamento por cliente no futuro.
 
 O Herdr organiza o trabalho em três níveis.
 

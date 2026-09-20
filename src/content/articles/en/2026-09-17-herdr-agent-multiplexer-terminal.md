@@ -74,9 +74,144 @@ The Herdr sidebar shows each agent's state with colored dots:
 
 Detection works through heuristics. Herdr identifies the foreground process in each pane and reads the terminal output in real time, looking for patterns like spinners, "waiting for input" messages, and tool execution indicators. All of this happens without the agent needing to report its own state.
 
-For agents with official integration (Claude Code, Codex, Cursor), Herdr goes further: it can recover the agent session even after a full server restart.
+For agents with official integration, Herdr goes further: it can recover the agent session even after a full server restart.
 
-## Workspaces, tabs, and panes
+#### Supported agents
+
+Herdr detects 20 different agents automatically with no configuration. Detection works through three mechanisms:
+
+- Screen manifests: Herdr reads terminal output and recognizes spinners, approval prompts, and waiting messages for each agent
+- Lifecycle hooks: some agents report state directly (idle, working, blocked) with full accuracy
+- Session identity: Herdr recovers the session after a server restart
+
+**Agents with automatic detection:**
+
+- Claude Code: session and state via screen manifest
+- Codex CLI: session and state via screen manifest
+- Cursor Agent CLI: session and state via screen manifest
+- OpenCode: lifecycle hooks and screen manifest
+- Grok CLI: session and state via screen manifest
+- GitHub Copilot CLI: session via integration
+- Pi: lifecycle hooks (full state)
+- OMP: lifecycle hooks (full state)
+- Droid: session via integration
+- Kimi Code CLI: lifecycle hooks (full state)
+- Kilo Code CLI: lifecycle hooks and screen manifest
+- Hermes Agent: session via integration
+- Devin CLI: session via integration
+- Qoder CLI: session via integration
+- Qwen Code: session via integration
+- MastraCode: lifecycle hooks (full state)
+- Amp: screen manifest (no integration)
+- Antigravity CLI: session via integration
+- Kiro CLI: screen manifest (no integration)
+- Maki: screen manifest (no integration)
+
+Additionally, Gemini CLI and Cline have partial detection. Unlisted agents run normally as terminal processes. Herdr works as a workspace manager for any CLI, but without automatic state detection.
+
+To report state manually from any process, there is a lifecycle hook system. A script or plugin can call `herdr agent report-agent` to inform that a pane is idle, working, or blocked.
+
+## Advanced features
+
+### Full Socket API
+
+Herdr exposes an API over a local socket with dozens of methods. Beyond the CLI commands already mentioned, the API allows:
+
+- Subscribing to real-time events: when an agent changes state, when a pane receives new output, when a workspace is created or closed
+- Controlling plugins: install, enable, disable, and invoke actions
+- Managing Git worktrees: creating checkouts as Herdr workspaces
+- Exporting and importing full session layouts
+- Controlling popups and notifications programmatically
+
+### Session restore
+
+Herdr saves the session layout to disk. If the server restarts, it restores workspaces, tabs, panes, and working directories. For agents with official integration, it also resumes the agent session using each one's native ID. This means a running Claude Code or Codex comes back to its previous state without losing history.
+
+### Notifications
+
+Herdr notifies you when a background agent finishes or needs attention. Three notification levels:
+
+- `herdr`: notification inside the Herdr interface
+- `terminal`: notification in the outer terminal, works over SSH too
+- `system`: operating system notification (macOS, Linux, Windows)
+
+### Mouse support
+
+Unlike tmux, which treats mouse as a secondary feature, Herdr is mouse-native. You can:
+
+- Click panes to select them
+- Drag borders to resize
+- Right-click for context menu
+- Drag tabs to reorder
+- Scroll the sidebar to navigate workspaces
+- Select text with the mouse and copy it automatically to the clipboard
+
+Mouse support also works over SSH and on mobile clients.
+
+### Plugins and marketplace
+
+Herdr has a plugin system where each plugin is an executable with a `herdr-plugin.toml` manifest. There is no separate SDK: the Herdr CLI is the plugin API. The official marketplace lists over 700 plugins, installable via GitHub shorthand:
+
+```bash
+herdr plugin install ogulcancelik/herdr-plugin-examples/tree-bootstrap
+```
+
+Plugins can create new panes, add event hooks, run server actions, and extend any part of the interface.
+
+### Herdr M (desktop app)
+
+Besides the terminal TUI, Herdr has a native macOS app called Herdr M. It wraps the same sessions in a conventional interface with windows, file access, and remote connections. Since the device is linked to the same session, you can close the terminal mid-task and continue where you left off in the app.
+
+### Themes and configuration
+
+Herdr works without a configuration file. When you need customization, the file lives at `~/.config/herdr/config.toml`. You can configure:
+
+- Full keybindings (prefix, shortcuts, resize mode)
+- Sidebar layout (width, auto-collapse, sections)
+- Notifications (type, position, delay)
+- Color theme
+- Scrollback behavior
+- Pane history limits
+
+## Device adaptation
+
+Herdr works on laptops, desktops, tablets, and phones. The adaptation is automatic.
+
+### Desktop and laptop
+
+On desktop, Herdr shows the full interface with an expanded sidebar, side-by-side panes, and context menus. The layout is the same as tmux, but with agent detection and mouse support.
+
+### Tablet and phone
+
+On mobile devices, Herdr can be accessed in two ways:
+
+**Direct SSH:** install any SSH client on your phone (Moshi on iOS, Termux on Android, Blink, Termius). Connect to the server where your agents run and run `herdr`. The TUI adapts automatically to narrow screens. The sidebar is hidden and replaced by a switcher menu. Pane layout changes to single column. Mouse and touch support work over SSH.
+
+```bash
+# From a phone, via SSH
+ssh user@server
+herdr
+```
+
+The official site recommends the Moshi app (iOS), which has native Herdr support. You manage agents from an iPhone as if you were on the desktop.
+
+**Via Herdr M (desktop app):** on macOS, Herdr M works as an alternative to the TUI interface for those who prefer conventional windows.
+
+**Via herdr-web:** there is a community-maintained project that runs the real Herdr TUI in the browser as an installable PWA. It uses xterm.js to stream the terminal over WebSocket. It works on any device with a browser, including phones.
+
+### Remote thin client
+
+The `--remote` command turns local Herdr into a lightweight client for a remote session:
+
+```bash
+herdr --remote ssh://user@server
+```
+
+This is more responsive than raw SSH on slow connections because only rendering data travels through the socket. The local clipboard works, including for images. Locally configured key bindings are preserved even on the remote session.
+
+### Known limitation with multi-client
+
+When a mobile client (narrow window) connects to a session that already has a desktop client attached, the shared session adjusts to the smallest size among clients. This can make desktop panes temporarily narrow. The Herdr team is considering per-client resizing in the future.
 
 Herdr organizes work in three levels.
 
