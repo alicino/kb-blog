@@ -15,6 +15,8 @@ tmux keeps sessions alive when you close the laptop. Zellij adds a more modern i
 
 Herdr was built to fill exactly that gap.
 
+![Herdr interface showing multiple terminal panes with AI agents](./2026-09-17-herdr-agent-multiplexer-terminal.png)
+
 ## What is Herdr
 
 Herdr is a terminal multiplexer written in Rust, created by Can Celik and incubated at Y Combinator. The name comes from "herder," because the tool was designed to herd multiple AI agents running in parallel.
