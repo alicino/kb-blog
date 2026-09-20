@@ -15,6 +15,8 @@ O tmux mantém sessões vivas quando você fecha o laptop. O Zellij adiciona uma
 
 O Herdr foi construído para preencher essa lacuna.
 
+![Interface do Herdr mostrando múltiplos terminais com agentes de IA](./2026-09-17-herdr-agent-multiplexer-terminal.png)
+
 ## O que é o Herdr
 
 O Herdr é um multiplexer de terminais escrito em Rust. Foi criado por Can Celik e incubado no Y Combinator. O nome vem de "herder" (pastor). A ferramenta foi desenhada para pastorear múltiplos agentes de IA rodando em paralelo.
