@@ -5,7 +5,6 @@ publishDate: 2026-09-17
 author: "Alicino"
 category: "Ferramentas"
 tags: ["Herdr", "terminal", "agent multiplexer", "agentes", "automação", "orquestração"]
-cover: "./2026-09-17-herdr-agent-multiplexer-terminal.png"
 draft: false
 ---
 
@@ -15,7 +14,7 @@ O tmux mantém sessões vivas quando você fecha o laptop. O Zellij adiciona uma
 
 O Herdr foi construído para preencher essa lacuna.
 
-![Interface do Herdr mostrando múltiplos terminais com agentes de IA](./2026-09-17-herdr-agent-multiplexer-terminal.png)
+<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Interface do Herdr mostrando múltiplos terminais com agentes de IA" style="width:80%;height:auto;display:block;margin:2rem auto" />
 
 ## O que é o Herdr
 

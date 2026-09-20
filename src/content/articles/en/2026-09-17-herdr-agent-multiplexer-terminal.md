@@ -5,7 +5,6 @@ publishDate: 2026-09-17
 author: "Alicino"
 category: "Ferramentas"
 tags: ["Herdr", "terminal", "agent multiplexer", "agents", "automation", "orchestration"]
-cover: "./2026-09-17-herdr-agent-multiplexer-terminal.png"
 draft: false
 ---
 
@@ -15,7 +14,7 @@ tmux keeps sessions alive when you close the laptop. Zellij adds a more modern i
 
 Herdr was built to fill exactly that gap.
 
-![Herdr interface showing multiple terminal panes with AI agents](./2026-09-17-herdr-agent-multiplexer-terminal.png)
+<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Herdr interface showing multiple terminal panes with AI agents" style="width:80%;height:auto;display:block;margin:2rem auto" />
 
 ## What is Herdr
 
