@@ -27,6 +27,18 @@ Diferente do tmux, que trata todos os terminais como anônimos, o Herdr identifi
 
 Ele também funciona como um servidor em background. Você fecha o laptop e os agentes continuam rodando. Volta depois e reconecta de qualquer terminal ou via SSH. O layout está exatamente como você deixou.
 
+### Herdr vs tmux: o que muda
+
+É comum pensar que Herdr e tmux fazem a mesma coisa. Os dois são multiplexers de terminal, os dois mantêm sessões vivas depois que você desconecta, os dois permitem dividir a tela em painéis. As semelhanças param por aí.
+
+O tmux foi criado em 2007, numa época em que ninguém imaginava agentes de IA rodando dentro de terminais. Ele trata todos os processos como anônimos. Para o tmux, um Claude Code rodando é a mesma coisa que um `htop` ou um `vim`. Não há como saber, olhando a lista de painéis, qual deles terminou uma tarefa e qual está esperando sua resposta.
+
+O Herdr foi construído dezessete anos depois, com um problema diferente em mente. Ele sabe que dentro de um painel pode haver um agente de IA. Ele mostra o estado de cada um com bolinhas coloridas no painel lateral. Ele expõe uma API para que os próprios agentes possam se coordenar. E ele tem um sistema de plugins que permite estender o comportamento sem recompilar o binário.
+
+Outra diferença prática: o tmux não tem um comando nativo para conectar a sessões remotas. Você precisa envolver tudo em SSH manualmente. O Herdr tem um comando `--remote` que faz isso em um passo só, instalando o binário no servidor remoto se necessário e preservando suas teclas de atalho e área de transferência.
+
+O resumo é simples: o tmux multiplexa terminais anônimos. O Herdr multiplexa terminais que podem conter agentes de IA e dá a você visibilidade e controle sobre eles.
+
 ## Como funciona na prática
 
 A instalação é uma linha de comando:
