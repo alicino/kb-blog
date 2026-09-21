@@ -20,6 +20,8 @@ Se você também usa o [Octomon](/artigos/octomon-ferramenta-diagnostico-rede-te
 
 ## O que o btop mostra
 
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="Tela do btop mostrando CPU, memória, discos, rede e processos em tempo real" style="width:80%;height:auto;display:block;margin:2rem auto" />
+
 O btop divide a tela em painéis que você pode reorganizar. Cada painel mostra uma categoria de recurso.
 
 **CPU.** Uso de cada núcleo com gráficos de barra e uma linha do tempo. O cálculo é inteligente: ele mostra a média ponderada no tempo em vez do valor instantâneo. Isso evita picos que desaparecem antes de você ler.
