@@ -20,6 +20,8 @@ If you also use [Octomon](/en/articles/octomon-network-diagnostics-terminal) for
 
 ## What btop shows
 
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="btop screen showing CPU, memory, disks, network, and processes in real time" style="width:80%;height:auto;display:block;margin:2rem auto" />
+
 btop splits the screen into panels that you can rearrange. Each panel shows a resource category.
 
 **CPU.** Usage per core with bar graphs and a timeline. The calculation uses a weighted average over time instead of the instant value. This avoids spikes that disappear before you can read them.
