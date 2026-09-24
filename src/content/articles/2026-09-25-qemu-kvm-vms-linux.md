@@ -7,6 +7,8 @@ category: "Infraestrutura e Redes"
 tags: ["QEMU", "KVM", "virtualização", "Linux", "Debian", "Ubuntu", "libvirt", "virt-manager", "hypervisor"]
 draft: false
 ---
+<img src="/assets/img/2026-09-25-qemu-kvm-vms-linux-1.png" alt="Crie VMs no Linux com QEMU e KVM" style="width:80%;height:auto;display:block;margin:2rem auto" />
+
 
 A ideia de que é preciso instalar o VirtualBox para rodar máquinas virtuais no Linux é um dos mitos mais persistentes da computação. Não é preciso. Nunca foi. O Linux tem virtualização nativa, dentro do próprio kernel, e ela está disponível nas distribuições desde antes de o VirtualBox existir.
 
