@@ -9,6 +9,35 @@
 @import '@fontsource/inter/latin-500.css';
 @import '@fontsource/inter/latin-700.css';
 
+/* KaTeX para notação matemática. As fontes do pacote são servidas localmente
+   pelo Vite a partir de node_modules/katex/dist/fonts (as URLs no CSS do KaTeX
+   são relativas), mantendo a regra do blog de não fazer requisição externa. */
+@import 'katex/dist/katex.min.css';
+
+/* O CSS do KaTeX é escrito para fundo claro. Estes overrides fazem a fórmula
+   herdar a cor do texto e respeitar o tema escuro, em vez de ficar preta
+   sobre fundo escuro. */
+.katex {
+  font-size: 1.05em;
+  color: var(--color-text);
+}
+
+.katex-display {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-display > .katex {
+  color: var(--color-text);
+}
+
+:root[data-theme='dark'] .katex,
+:root[data-theme='dark'] .katex-display > .katex {
+  color: var(--color-text);
+}
+
 :root {
   color-scheme: light;
 
