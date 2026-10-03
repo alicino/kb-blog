@@ -177,10 +177,15 @@ export function readingTime(body: string): number {
 }
 
 export function formatDate(date: Date, locale: Locale = defaultLocale): string {
+  // O frontmatter publica datas como meia-noite UTC (ex.: 2026-09-04T00:00:00Z).
+  // Sem timeZone fixo, o Intl formata no fuso da máquina de build (UTC-3 aqui)
+  // e a meia-noite UTC recua para o dia anterior (04/set vira 03/set).
+  // timeZone: 'UTC' faz a data exibida bater sempre com o frontmatter e o slug.
   return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'pt-BR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
+    timeZone: 'UTC',
   }).format(date);
 }
 
