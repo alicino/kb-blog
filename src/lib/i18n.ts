@@ -55,6 +55,10 @@ interface Dictionary {
     prevArticle: string;
     nextArticle: string;
     backToArticles: string;
+    share: string;
+    shareCopy: string;
+    shareCopied: string;
+    shareNative: string;
   };
   categories: {
     title: string;
@@ -156,6 +160,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       prevArticle: '← Artigo anterior',
       nextArticle: 'Próximo artigo →',
       backToArticles: '← Voltar para todos os artigos',
+      share: 'Compartilhar este artigo',
+      shareCopy: 'Copiar link',
+      shareCopied: 'Link copiado',
+      shareNative: 'Compartilhar…',
     },
     categories: {
       title: 'Categorias',
@@ -253,6 +261,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       prevArticle: '← Previous article',
       nextArticle: 'Next article →',
       backToArticles: '← Back to all articles',
+      share: 'Share this article',
+      shareCopy: 'Copy link',
+      shareCopied: 'Link copied',
+      shareNative: 'Share…',
     },
     categories: {
       title: 'Categories',
