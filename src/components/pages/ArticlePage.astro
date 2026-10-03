@@ -14,6 +14,10 @@ import {
 } from '../../lib/articles';
 import type { Article } from '../../lib/articles';
 import { t } from '../../lib/i18n';
+import ShareLinks from './ShareLinks.astro';
+import { siteConfig } from '../../site.config';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 interface Props {
   article: Article;
@@ -26,6 +30,25 @@ const locale = articleLocale(article);
 const dict = t(locale);
 const { Content } = await render(article);
 const minutes = readingTime(article.body ?? '');
+
+// PROTOTIPO DE TESTE (Fases 1 e 2): compartilhar + og:image da capa no corpo.
+// A capa nao mora no frontmatter: cada artigo referencia a propria capa como
+// primeiro <img> do corpo. Extrair dali cobre os tres casos: capa propria por
+// idioma, capa PT reaproveitada em post EN, e artigo sem capa (og:image fica
+// de fora e o card sai so com titulo e descricao).
+const shareUrl = new URL(articleHref(article), siteConfig.url).toString();
+const coverMatch = article.body?.match(
+  /<img[^>]*src="([^"]*\/assets\/img\/[^"]+\.(?:png|jpe?g|webp))"/
+);
+// Prefere a variante -og.jpg (JPEG leve da esteira de capas) quando existe:
+// os cards de WhatsApp/Telegram/LinkedIn puxam a imagem e a Meta exige
+// og:image abaixo de 600 KB — a maioria dos PNGs de capa passa disso.
+let coverUrl: string | undefined;
+if (coverMatch) {
+  const ogCandidate = coverMatch[1].replace(/\.(png|jpe?g|webp)$/, '-og.jpg');
+  const hasOgVariant = existsSync(path.join(process.cwd(), 'public', ogCandidate));
+  coverUrl = new URL(hasOgVariant ? ogCandidate : coverMatch[1], siteConfig.url).toString();
+}
 
 const otherLocale = locale === 'en' ? 'pt-br' : 'en';
 const translation = await findTranslation(article, otherLocale);
@@ -41,6 +64,7 @@ const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
   title={article.data.title}
   description={article.data.description}
   type="article"
+  image={coverUrl}
   publishDate={article.data.publishDate}
   updatedDate={article.data.updatedDate}
   author={article.data.author}
@@ -99,6 +123,8 @@ const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
           )
         }
       </header>
+
+      <ShareLinks url={shareUrl} title={article.data.title} locale={locale} />
 
       <div class="prose">
         <Content />
