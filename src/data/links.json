@@ -1,31 +1,37 @@
 [
   {
     "group": "Ferramentas",
+    "groupEn": "Tools",
     "links": [
       {
         "label": "Astro Docs",
         "url": "https://docs.astro.build",
-        "description": "Documentação oficial do framework usado para construir este blog."
+        "description": "Documentação oficial do framework usado para construir este blog.",
+        "descriptionEn": "Official documentation for the framework this blog is built with."
       },
       {
         "label": "MDN Web Docs",
         "url": "https://developer.mozilla.org",
-        "description": "Referência completa e confiável sobre HTML, CSS e JavaScript."
+        "description": "Referência completa e confiável sobre HTML, CSS e JavaScript.",
+        "descriptionEn": "Complete and reliable reference for HTML, CSS and JavaScript."
       }
     ]
   },
   {
     "group": "Leitura",
+    "groupEn": "Reading",
     "links": [
       {
         "label": "CSS-Tricks",
         "url": "https://css-tricks.com",
-        "description": "Artigos práticos sobre CSS, layout e front-end em geral."
+        "description": "Artigos práticos sobre CSS, layout e front-end em geral.",
+        "descriptionEn": "Practical articles on CSS, layout and front end in general."
       },
       {
         "label": "A List Apart",
         "url": "https://alistapart.com",
-        "description": "Ensaios sobre design, conteúdo e desenvolvimento web."
+        "description": "Ensaios sobre design, conteúdo e desenvolvimento web.",
+        "descriptionEn": "Essays on design, content and web development."
       }
     ]
   }

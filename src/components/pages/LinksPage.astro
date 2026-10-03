@@ -2,8 +2,23 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../Breadcrumbs.astro';
 import { siteConfig } from '../../site.config';
-import linkGroups from '../../data/links.json';
+import linksData from '../../data/links.json';
 import { t, type Locale } from '../../lib/i18n';
+
+interface LinkEntry {
+  label: string;
+  url: string;
+  description: string;
+  descriptionEn?: string;
+}
+
+interface LinkGroupEntry {
+  group: string;
+  groupEn?: string;
+  links: LinkEntry[];
+}
+
+const linkGroups = linksData as LinkGroupEntry[];
 
 interface Props {
   lang?: Locale;
@@ -11,11 +26,11 @@ interface Props {
 
 const { lang = 'pt-br' } = Astro.props;
 const dict = t(lang);
-const homeHref = lang === 'en' ? '/en' : '/';
-const description =
-  lang === 'en'
-    ? `Links recommended by ${siteConfig.author.name}.`
-    : `Links recomendados por ${siteConfig.author.name}.`;
+const isEn = lang === 'en';
+const homeHref = isEn ? '/en' : '/';
+const description = isEn
+  ? `Links recommended by ${siteConfig.author.name}.`
+  : `Links recomendados por ${siteConfig.author.name}.`;
 
 const alternateUrls = { 'pt-br': '/links', en: '/en/links' };
 ---
@@ -27,15 +42,15 @@ const alternateUrls = { 'pt-br': '/links', en: '/en/links' };
         <Breadcrumbs lang={lang} items={[{ label: dict.article.breadcrumbHome, href: homeHref }, { label: dict.nav.links }]} />
         <h1>{lang === 'en' ? 'Recommended links' : 'Links recomendados'}</h1>
         <p class="links-intro meta">
-          {lang === 'en'
-            ? 'A selection of sites and resources I use or check often, organized by topic. (Some link descriptions below are still in Portuguese — full translation is planned.)'
+          {isEn
+            ? 'A selection of sites and resources I use or check often, organized by topic.'
             : 'Uma seleção de sites e recursos que uso ou consulto com frequência, organizados por tema.'}
         </p>
 
         {
           linkGroups.map((group) => (
             <section class="link-group">
-              <h2>{group.group}</h2>
+              <h2>{isEn ? (group.groupEn ?? group.group) : group.group}</h2>
               <ul class="link-list">
                 {group.links.map((link) => (
                   <li class="link-item">
@@ -62,9 +77,9 @@ const alternateUrls = { 'pt-br': '/links', en: '/en/links' };
                           stroke-linejoin="round"
                         />
                       </svg>
-                      <span class="visually-hidden">(abre em nova aba)</span>
+                      <span class="visually-hidden">{isEn ? '(opens in new tab)' : '(abre em nova aba)'}</span>
                     </a>
-                    <p class="link-item-desc">{link.description}</p>
+                    <p class="link-item-desc">{isEn ? (link.descriptionEn ?? link.description) : link.description}</p>
                   </li>
                 ))}
               </ul>
