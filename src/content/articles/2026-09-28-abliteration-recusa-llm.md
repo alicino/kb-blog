@@ -114,7 +114,7 @@ Essas três são as que escrevem no fluxo residual. As outras matrizes do transf
 
 ```mermaid
 flowchart LR
-    A[Prompt nocivo] --> B[Ativacoes por camada]
+    A[Prompt nocivo] --> B[Ativações por camada]
     C[Prompt inofensivo] --> B
     B --> D[Media dos dois grupos]
     D --> E[Vetor de recusa]
@@ -147,7 +147,7 @@ Os autores testaram várias formulações da mesma perda, incluindo desviar para
 flowchart LR
     A[Estado nocivo] --> B["Disjuntor detecta"]
     B --> C["Desvia para espaco ortogonal"]
-    C --> D[Geracao descarrilha]
+    C --> D[Geração descarrilha]
 ```
 
 **Por que essa abordagem interessa.** A representação que produz a saída nociva é independente do ataque específico que a eliciou. Isso torna o método agnóstico em relação ao ataque, ou seja, ele não precisa ter visto o ataque antes para resistir a ele. É a diferença fundamental entre tapar buracos conhecidos e tornar a produção do dano impossível. Os autores relatam resistência a uma variedade de ataques não vistos, com capacidades preservadas.

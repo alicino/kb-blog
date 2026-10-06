@@ -4,7 +4,7 @@ description: "Entenda o que são agentes de IA, quando usá-los, como evitar est
 publishDate: "2026-08-16"
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["agentes-ia", "loop-engineering", "LLM", "boas-praticas", "token-management"]
+tags: ["agentes-ia", "loop-engineering", "LLM", "boas práticas", "token-management"]
 draft: false
 ---
 
@@ -54,7 +54,7 @@ O loop básico de um agente é:
 ```mermaid
 flowchart TD
     A["Recebe o objetivo"] --> B["Analisa o estado atual"]
-    B --> C{"Decide a acao"}
+    B --> C{"Decide a ação"}
     C -->|"Chamar ferramenta"| D["Executa a ferramenta"]
     D --> E["Observa o resultado"]
     E --> B
@@ -77,12 +77,12 @@ context = [system_prompt, user_goal]
 
 for i in range(max_iterations):
     response = llm.call(context, tools=available_tools)
-    
+
     if response.has_tool_call:
         result = execute_tool(response.tool_call)
         context.append(result)
     else:
-        # O LLM respondeu diretamente (tarefa concluida)
+        # O LLM respondeu diretamente (tarefa concluída)
         print(response.text)
         break
 ```
@@ -106,7 +106,7 @@ Na prática:
 
 ```mermaid
 xychart-beta
-    title "Tokens no contexto a cada iteracao"
+    title "Tokens no contexto a cada iteração"
     x-axis ["1", "5", "10", "15", "20", "25", "30"]
     y-axis "Tokens (milhares)" 0 --> 100
     line [2, 10, 20, 30, 40, 50, 60]
@@ -174,17 +174,17 @@ Este padrão foi formalizado em 2026 por iniciativas como o Spec Kit e adotado p
 # SPEC.md
 
 ## Problema
-A pipeline de CI esta quebrando na etapa de lint apos o upgrade
-de eslint 8.x para 9.x. O erro e: "ESLint 9.x requires flat config
+A pipeline de CI está quebrando na etapa de lint após o upgrade
+de eslint 8.x para 9.x. O erro é: "ESLint 9.x requires flat config
 but eslintrc format was found".
 
-## Criterios de aceite
+## Critérios de aceite
 - Build passa no CI com eslint 9.x
-- Todas as regras existentes sao preservadas ou migradas
-- Nenhum warning novo e introduzido
+- Todas as regras existentes são preservadas ou migradas
+- Nenhum warning novo é introduzido
 
-## Restricoes
-- Nao pode desabilitar regras globalmente
+## Restrições
+- Não pode desabilitar regras globalmente
 - Deve usar o formato flat config (eslint.config.js)
 ```
 
@@ -193,18 +193,18 @@ but eslintrc format was found".
 ```markdown
 # PLAN.md
 
-## Estrategia
+## Estratégia
 Migrar de .eslintrc.json para eslint.config.js, convertendo as
-regras uma por uma e validando com o lint apos cada bloco.
+regras uma por uma e validando com o lint após cada bloco.
 
 ## Fases
-- [x] Fase 1: Ler configuracao atual (.eslintrc.json + plugins)
+- [x] Fase 1: Ler configuração atual (.eslintrc.json + plugins)
 - [ ] Fase 2: Criar eslint.config.js com as mesmas regras
-- [ ] Fase 3: Rodar lint e corrigir erros de migracao
+- [ ] Fase 3: Rodar lint e corrigir erros de migração
 - [ ] Fase 4: Remover .eslintrc.json e configs antigas
 - [ ] Fase 5: Rodar build completo para confirmar
 
-## Observacoes
+## Observações
 - Plugin @typescript-eslint precisa ser atualizado para v7
 - Regra "no-unused-vars" mudou de nome na v9
 ```
@@ -223,18 +223,18 @@ regras uma por uma e validando com o lint apos cada bloco.
 - [ ] Corrigir cada erro reportado
 - [ ] Rodar build completo
 
-## Concluidas
-- [x] Identificar versao do eslint e plugins instalados
+## Concluídas
+- [x] Identificar versão do eslint e plugins instalados
 - [x] Ler .eslintrc.json e documentar regras ativas
-- [x] Verificar documentacao de migracao eslint 8 -> 9
+- [x] Verificar documentação de migração eslint 8 -> 9
 ```
 
 O ciclo do agente fica:
 
 ```
-1. Le SPEC.md (fixo, nunca muda)
-2. Le PLAN.md para saber onde parou
-3. Le TASKS.md para saber qual a proxima acao atomica
+1. Lê SPEC.md (fixo, nunca muda)
+2. Lê PLAN.md para saber onde parou
+3. Lê TASKS.md para saber qual a próxima ação atômica
 4. Executa a ferramenta para aquela task
 5. Verifica o resultado
 6. Atualiza PLAN.md e TASKS.md com o progresso
@@ -250,7 +250,7 @@ Dentro do contexto do modelo, mantenha um registro compacto do que já foi tenta
 No fim de cada iteração, antes de montar o contexto da próxima, o agente escreve um resumo:
 
 ```markdown
-## Registro de decisoes (atualizado a cada passo)
+## Registro de decisões (atualizado a cada passo)
 
 [PASSO 1] Leu .eslintrc.json - 47 regras encontradas
 [PASSO 2] Criou eslint.config.js com parser base - SUCESSO
@@ -258,7 +258,7 @@ No fim de cada iteração, antes de montar o contexto da próxima, o agente escr
 [PASSO 4] Corrigiu sintaxe do eslint.config.js - SUCESSO
 [PASSO 5] Migrou regras uma por uma - EM ANDAMENTO (12/47)
 
-Proximo passo: continuar migracao das regras restantes (restam 35)
+Próximo passo: continuar migração das regras restantes (restam 35)
 ```
 
 Esse scratchpad é reinserido no prompt a cada iteração. Ele custa tokens, mas evita repetição. Em tarefas com mais de 5 passos, o custo do scratchpad é menor que o custo de uma ação repetida desnecessária.
@@ -273,25 +273,25 @@ A estrutura de cada chamada:
 
 ```python
 def build_prompt(spec, plan_file, task_file, scratchpad, last_result):
-    return f"""## Especificacao (imutavel)
+    return f"""## Especificação (imutável)
 {spec}
 
 ## Plano atual
 {plan_file}
 
-## Proxima tarefa
+## Próxima tarefa
 {task_file}
 
-## Ultimo resultado
+## Último resultado
 {last_result}
 
-## Decisoes ate agora
+## Decisões até agora
 {scratchpad}
 
-## Instrucao
-Com base na especificacao, no plano e no resultado acima, execute a
-proxima tarefa da lista. Se encontrar um obstaculo, registre no plano
-e tente uma abordagem alternativa. Se nao conseguir resolver, registre
+## Instrução
+Com base na especificação, no plano e no resultado acima, execute a
+próxima tarefa da lista. Se encontrar um obstáculo, registre no plano
+e tente uma abordagem alternativa. Se não conseguir resolver, registre
 o erro e pare."""
 ```
 
@@ -314,24 +314,24 @@ Existem dois momentos de validação, e eles têm propósitos diferentes.
 ```python
 def pre_validate(tool_call, attempted_actions, plan):
     erros = []
-    
-    # 1. O JSON do tool call e valido?
+
+    # 1. O JSON do tool call é válido?
     if not is_valid_schema(tool_call):
         erros.append("Tool call mal formatado")
-    
-    # 2. A acao e segura?
+
+    # 2. A ação é segura?
     if tool_call.name == "delete_file" and "production" in tool_call.args["path"]:
-        erros.append("Operacao de delecao em diretorio de producao")
-    
-    # 3. Ja foi tentada e falhou?
+        erros.append("Operação de deleção em diretório de produção")
+
+    # 3. Já foi tentada e falhou?
     action_key = f"{tool_call.name}:{hash(str(tool_call.args))}"
     if action_key in attempted_actions:
-        erros.append("Acao ja tentada anteriormente sem sucesso")
-    
-    # 4. Ainda esta dentro do plano?
+        erros.append("Ação já tentada anteriormente sem sucesso")
+
+    # 4. Ainda está dentro do plano?
     if not is_aligned_with_plan(tool_call, plan):
-        erros.append("Acao nao parece relevante para o plano atual")
-    
+        erros.append("Ação não parece relevante para o plano atual")
+
     return erros
 ```
 
@@ -340,35 +340,35 @@ def pre_validate(tool_call, attempted_actions, plan):
 ```python
 def post_validate(result, goal, plan):
     questoes = []
-    
-    # 1. O resultado e coerente?
+
+    # 1. O resultado é coerente?
     if result.is_error:
-        questoes.append(f"Falha na execucao: {result.error}")
+        questoes.append(f"Falha na execução: {result.error}")
     elif result.is_empty:
-        questoes.append("Resultado vazio ou sem saida")
-    
+        questoes.append("Resultado vazio ou sem saída")
+
     # 2. O resultado aproxima do goal?
     if not moves_toward_goal(result, goal):
-        questoes.append("Resultado nao aproxima do objetivo")
-    
+        questoes.append("Resultado não aproxima do objetivo")
+
     # 3. O plano precisa ser ajustado?
     if precisa_replanejar(result, plan):
-        questoes.append("Resultado inesperado - plano pode precisar de revisao")
-    
+        questoes.append("Resultado inesperado - plano pode precisar de revisão")
+
     return questoes
 ```
 
 O fluxo completo de cada iteração:
 
 ```
-1. Modelo decide a proxima ferramenta
-2. Guardiao valida (pre)
-3. Se invalido: pede para o modelo repensar (sem custo de API)
-4. Se valido: executa a ferramenta
+1. Modelo decide a próxima ferramenta
+2. Guardião valida (pre)
+3. Se inválido: pede para o modelo repensar (sem custo de API)
+4. Se válido: executa a ferramenta
 5. Validador examina o resultado (pos)
-6. Se valido: atualiza plan.md + tasks.md + scratchpad
-7. Se invalido: reverte a acao, registra falha, pede nova abordagem
-8. Monta contexto limpo para a proxima iteracao
+6. Se válido: atualiza plan.md + tasks.md + scratchpad
+7. Se inválido: reverte a ação, registra falha, pede nova abordagem
+8. Monta contexto limpo para a próxima iteração
 ```
 
 ### 7. Separe a observação da decisão (two-phase loop)
@@ -378,15 +378,15 @@ A Anthropic documenta este padrão no guia "Building Effective Agents" como uma 
 Na prática, são duas chamadas de modelo por iteração:
 
 ```
-Fase 1 - Observacao:
-  "Com base no resultado abaixo, qual e o estado atual do plano?"
+Fase 1 - Observação:
+  "Com base no resultado abaixo, qual é o estado atual do plano?"
   (entrada: resultado da ferramenta)
-  (saida: resumo do que mudou + se o goal foi atingido)
+  (saída: resumo do que mudou + se o goal foi atingido)
 
-Fase 2 - Decisao:
+Fase 2 - Decisão:
   "Dado o estado atual, qual ferramenta deve ser chamada agora?"
   (entrada: resumo da fase 1 + plano)
-  (saida: tool call ou resposta final)
+  (saída: tool call ou resposta final)
 ```
 
 Isso dobra o número de chamadas, mas cada chamada é mais curta e mais focada. A fase 1 processa o resultado sem a pressão de decidir o que fazer. A fase 2 decide sem o ruído do resultado bruto.
@@ -395,15 +395,15 @@ Em tarefas simples (2 a 4 passos), a chamada única é suficiente. Em tarefas co
 
 ### 8. Use modelos diferentes para tarefas diferentes (model routing)
 
-Este padrão é adotado por empresas que rodam agentes em produção para controlar custo sem sacrificar qualidade (Zylos Research, 2026). A lógica é simples: não use um modelo de 100 parametros para contar linhas de um arquivo.
+Este padrão é adotado por empresas que rodam agentes em produção para controlar custo sem sacrificar qualidade (Zylos Research, 2026). A lógica é simples: não use um modelo de 100 parâmetros para contar linhas de um arquivo.
 
 A alocação típica:
 
 ```python
 MODEL_ROUTING = {
-    "planejamento": "claude-sonnet-4",  # Raciocinio complexo
-    "execucao": "gpt-4o-mini",          # Tarefas mecanicas
-    "validacao": "deepseek-v4-flash",   # Rapido e barato
+    "planejamento": "claude-sonnet-4",  # Raciocínio complexo
+    "execucao": "gpt-4o-mini",          # Tarefas mecânicas
+    "validacao": "deepseek-v4-flash",   # Rápido e barato
     "resumo": "gemini-2-flash",         # Contexto grande mas barato
 }
 ```
@@ -412,7 +412,7 @@ O orquestrador decide qual modelo chamar baseado na tarefa:
 
 | Tipo de tarefa | Modelo | Custo relativo |
 |---|---|---|
-| Decidir o proximo passo (raciocínio) | Modelo grande (Claude, GPT-4) | Alto |
+| Decidir o próximo passo (raciocínio) | Modelo grande (Claude, GPT-4) | Alto |
 | Executar ferramenta e processar resultado | Modelo médio (DeepSeek, Gemini) | Médio |
 | Validar schema e segurança | Modelo pequeno (regras fixas + LLM leve) | Baixo |
 | Resumir progresso para o contexto | Modelo barato com janela grande | Muito baixo |
@@ -421,7 +421,7 @@ O segredo é que o modelo barato faz 70% das chamadas. O modelo caro só entra q
 
 ### 9. Implemente checkpoint e rollback
 
-Agentes cometem erros. As vezes o erro é silencioso: o código compila mas está errado. Outras vezes é destrutivo: um arquivo foi sobrescrito. Seu loop precisa se proteger contra ambos.
+Agentes cometem erros. Às vezes o erro é silencioso: o código compila mas está errado. Outras vezes é destrutivo: um arquivo foi sobrescrito. Seu loop precisa se proteger contra ambos.
 
 ```python
 undo_stack = []
@@ -430,13 +430,13 @@ for i in range(max_iterations):
     action = plan_next_action(context)
     snapshot = create_snapshot()  # git stash ou backup de arquivos
     result = execute(action)
-    
+
     if is_worse(result):
         rollback(snapshot)
         log_failure(action, result)
         context = rebuild_context(status="reverted")
         continue
-    
+
     confirm_progress(action, result)
     undo_stack.append(snapshot)
 ```
@@ -451,7 +451,7 @@ Um padrão simples é comparar métricas antes e depois:
 
 ```python
 def is_worse(before_metrics, after_metrics):
-    # Se o numero de erros aumentou, piorou
+    # Se o número de erros aumentou, piorou
     if after_metrics.get("errors", 0) > before_metrics.get("errors", 0):
         return True
     # Se algo que passava agora falha, piorou
@@ -509,38 +509,38 @@ class SafeAgent:
         self.history = []
         self.tokens_used = 0
         self.attempted_actions = set()
-    
+
     def run(self, goal):
         context = [self.system_prompt(), {"role": "user", "content": goal}]
-        
+
         for step in range(self.max_steps):
             if self.tokens_used >= self.max_tokens:
                 return {"status": "budget_exceeded", "partial": self.history}
-            
-            # Janela deslizante: ultimas 4 interacoes + resumo
+
+            # Janela deslizante: últimas 4 interações + resumo
             window = self.summarize_history() + self.history[-4:]
             response = self.llm.call(context + window, tools=self.tools)
-            
+
             self.tokens_used += response.tokens
-            
+
             if not response.has_tool_call:
                 return {"status": "success", "result": response.text}
-            
-            # Guardiao: acao ja tentada?
+
+            # Guardião: ação já tentada?
             action_key = f"{response.tool_call.name}:{hash(response.tool_call.args)}"
             if action_key in self.attempted_actions:
-                context.append("Acao ja tentada e falhou. Tente outra abordagem.")
+                context.append("Ação já tentada e falhou. Tente outra abordagem.")
                 continue
-            
+
             self.attempted_actions.add(action_key)
             result = self.execute_safely(response.tool_call)
             self.history.append({"action": action_key, "result": result})
-            
+
             if result.get("error"):
-                context.append(f"Erro: {result['error']}. Repense a estrategia.")
+                context.append(f"Erro: {result['error']}. Repense a estratégia.")
             else:
-                context.append(f"Acao concluida: {result}")
-        
+                context.append(f"Ação concluída: {result}")
+
         return {"status": "max_steps_exceeded", "history": self.history}
 ```
 
@@ -562,16 +562,16 @@ Agentes de IA não são mágica. São LLMs com ferramentas e um loop bem projeta
 
 As regras de ouro:
 
-1. **Workflow primeiro**: so use agente quando o caminho for imprevisivel. Nao force complexidade.
-2. **Teto duplo**: limite iteracoes e tokens. Orcamento de custo para APIs pagas.
-3. **Tríade de artefatos**: SPEC.md, PLAN.md, TASKS.md. O agente le e escreve neles a cada passo.
-4. **Scratchpad de decisoes**: o modelo precisa saber o que ja tentou para nao repetir.
-5. **Context reset**: monte o prompt do zero a cada iteracao. So o essencial (goal, resumo, ultima acao).
-6. **Validacao dupla**: guardiao antes de executar, verificacao de rumo depois.
-7. **Separe observacao de decisao**: duas fases por iteracao quando a tarefa for complexa.
+1. **Workflow primeiro**: só use agente quando o caminho for imprevisível. Não force complexidade.
+2. **Teto duplo**: limite iterações e tokens. Orçamento de custo para APIs pagas.
+3. **Tríade de artefatos**: SPEC.md, PLAN.md, TASKS.md. O agente lê e escreve neles a cada passo.
+4. **Scratchpad de decisões**: o modelo precisa saber o que já tentou para não repetir.
+5. **Context reset**: monte o prompt do zero a cada iteração. Só o essencial (goal, resumo, última ação).
+6. **Validação dupla**: guardião antes de executar, verificação de rumo depois.
+7. **Separe observação de decisão**: duas fases por iteração quando a tarefa for complexa.
 8. **Model routing**: modelo caro para decidir, modelo barato para executar e validar.
-9. **Checkpoint e rollback**: salve antes de agir, desfaca se piorar.
-10. **Human-in-the-loop**: pare em acoes irreversiveis (deletar, deploy, alterar dados).
+9. **Checkpoint e rollback**: salve antes de agir, desfaça se piorar.
+10. **Human-in-the-loop**: pare em ações irreversíveis (deletar, deploy, alterar dados).
 
 E acima de tudo: comece simples. Um loop de 5 iterações com 3 tools bem desenhadas entrega mais que um agente complexo de 30 steps que ninguém entende.
 

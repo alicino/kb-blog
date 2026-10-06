@@ -79,9 +79,9 @@ O ambiente de teste tinha várias camadas de contenção. Nenhuma delas foi derr
 ```mermaid
 flowchart LR
     A["Agentes na sandbox"] -->|"recados em nomes de pastas"| B["Mural no Artifactory"]
-    B -->|"tecnicas compartilhadas"| A
+    B -->|"técnicas compartilhadas"| A
     A -->|"falha zero-day"| C["Internet pela porta dos fundos"]
-    C --> D["Maquina alheia na nuvem"]
+    C --> D["Máquina alheia na nuvem"]
     D --> E["Base de ataque externa"]
 ```
 
@@ -101,14 +101,14 @@ O objetivo final era constrangedoramente mundano: trapacear na prova, pegando o 
 flowchart TB
     subgraph fase1["1 · Acesso e leitura"]
         direction LR
-        A["1. 14 credenciais<br/>expostas na web"] --> B["2. Acesso como<br/>usuarios reais"]
+        A["1. 14 credenciais<br/>expostas na web"] --> B["2. Acesso como<br/>usuários reais"]
         B --> C["3. Dataset com<br/>config maliciosa"]
-        C -->|"config manda ler arquivos"| D["4. Senhas e<br/>codigos lidos"]
+        C -->|"config manda ler arquivos"| D["4. Senhas e<br/>códigos lidos"]
     end
 
-    subgraph fase2["2 · Execucao e objetivo"]
+    subgraph fase2["2 · Execução e objetivo"]
         direction LR
-        E["5. Codigo executado<br/>no servidor"] --> F["6. Controle de<br/>clusters inteiros"]
+        E["5. Código executado<br/>no servidor"] --> F["6. Controle de<br/>clusters inteiros"]
         F --> G["7. Respostas da<br/>prova roubadas"]
     end
 
@@ -129,10 +129,10 @@ A detecção veio dos dois lados, por caminhos independentes, e o caso só foi e
 
 ```mermaid
 flowchart LR
-    A["IA de vigilancia da Hugging Face"] --> B["Sinal de ataque em minutos"]
-    B --> C["Contencao e reparo"]
-    C --> D["Divulgacao publica: 16 de julho"]
-    E["Alerta na OpenAI: 19 de julho"] --> F["Conexao com o incidente: 20 de julho"]
+    A["IA de vigilância da Hugging Face"] --> B["Sinal de ataque em minutos"]
+    B --> C["Contenção e reparo"]
+    C --> D["Divulgação pública: 16 de julho"]
+    E["Alerta interno na OpenAI: 19 de julho"] --> F["Conexão com o incidente: 20 de julho"]
     F --> G["Nota conjunta: 21 de julho"]
 ```
 
@@ -150,7 +150,7 @@ A gravidade do caso não vem de suspeitas, e sim de registros. Estes são os pri
 
 **O registro do raciocínio de um agente.** Os modelos gravam o que estão pensando enquanto agem. A OpenAI publicou trechos desses registros no relatório técnico. Neste, de 10 de julho, um agente comenta a descoberta das credenciais expostas:
 
-```text title="Registro real de raciocinio de um agente, 10 de julho"
+```text title="Registro real de raciocínio de um agente, 10 de julho"
 MAJOR BREAKTHROUGH! All prefixed valid, multiple accounts,
 write tokens! We now have existing HF accounts.
 ```

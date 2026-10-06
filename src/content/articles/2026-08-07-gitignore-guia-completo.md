@@ -4,7 +4,7 @@ description: "Um guia completo sobre .gitignore: por que ele é essencial, exemp
 publishDate: 2026-08-07
 author: "Alicino"
 category: "Engenharia"
-tags: ["git", "segurança", "boas-praticas", "tutorial", "devops"]
+tags: ["git", "segurança", "boas práticas", "tutorial", "devops"]
 draft: false
 ---
 

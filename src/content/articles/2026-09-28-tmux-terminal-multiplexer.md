@@ -44,8 +44,8 @@ Nas chamadas seguintes, o comando `tmux` é só um cliente leve conversando com 
 flowchart LR
     U["Seu terminal"] --> C["Cliente tmux"]
     C --> S["Servidor tmux"]
-    S --> S1["Sessao dev"]
-    S --> S2["Sessao agentes"]
+    S --> S1["Sessão dev"]
+    S --> S2["Sessão agentes"]
     S1 --> W1["Janela: editor"]
     S1 --> W2["Janela: logs"]
     W2 --> P1["Painel: servidor"]
@@ -69,20 +69,20 @@ A sessão é a peça central do tmux e onde mora a promessa do multiplexer: seu 
 O comando que vale a pena memorizar é um só:
 
 ```bash title="Criar ou reconectar em um passo"
-# Conecta se a sessao existe, cria se nao existe
+# Conecta se a sessão existe, cria se não existe
 tmux new -A -s dev
 ```
 
 A flag `-A` faz o comando funcionar nos dois cenários: sessão inexistente, ele cria. Sessão existente, ele conecta. É o comando perfeito para colocar como hábito no primeiro minuto depois de logar em um servidor.
 
-```bash title="O dia a dia das sessoes"
-# Listar sessoes vivas
+```bash title="O dia a dia das sessões"
+# Listar sessões vivas
 tmux ls
 
-# Criar uma sessao com nome
+# Criar uma sessão com nome
 tmux new -s build
 
-# Conectar a uma sessao especifica
+# Conectar a uma sessão específica
 tmux attach -t build
 
 # Conectar e expulsar outros clientes
@@ -99,11 +99,11 @@ Já fechar o painel com `exit` ou `Ctrl+d` termina o shell daquele painel. Quand
 
 ```mermaid
 flowchart LR
-    A["Voce conecta"] --> B["tmux attach"]
+    A["Você conecta via SSH"] --> B["tmux attach"]
     B --> C["Trabalho roda no painel"]
-    C --> D["Conexao cai"]
+    C --> D["Conexão cai"]
     D --> E["Cliente morre"]
-    E --> F["Sessao segue no servidor"]
+    E --> F["Sessão segue no servidor"]
     F --> G["Reconecta e volta"]
     G --> C
 ```
@@ -149,7 +149,7 @@ O uso cotidiano é teclas de atalho. A administração é um arquivo de texto e 
 
 Tudo que o tmux é, você encontrará em `~/.tmux.conf`. Um arquivo enxuto já cobre o essencial:
 
-```bash title="~/.tmux.conf basico"
+```bash title="~/.tmux.conf básico"
 # Histórico maior por painel
 set -g history-limit 100000
 
@@ -170,11 +170,11 @@ Muita gente troca o prefixo de `Ctrl+b` para `Ctrl+a`, herdando o hábito do Scr
 
 Nem tudo acontece dentro da sessão. Do lado de fora, os comandos de administração:
 
-```bash title="Administracao de sessoes"
-# Renomear uma sessao
+```bash title="Administração de sessões"
+# Renomear uma sessão
 tmux rename-session -t dev frontend
 
-# Encerrar uma sessao especifica
+# Encerrar uma sessão específica
 tmux kill-session -t dev
 
 # Encerrar todas de uma vez
@@ -200,7 +200,7 @@ set -g @plugin 'tmux-plugins/tmux-continuum'
 # Restaurar o ambiente sozinho quando o servidor iniciar
 set -g @continuum-restore 'on'
 
-# Inicializar o TPM (ultima linha do arquivo)
+# Inicializar o TPM (última linha do arquivo)
 run '~/.tmux/plugins/tpm/tpm'
 ```
 
@@ -246,7 +246,7 @@ A limitação que abre espaço para o Herdr é a que já conhecemos: o tmux trat
 
 Nas distribuições Debian e Ubuntu:
 
-```bash title="Instalacao no Debian ou Ubuntu"
+```bash title="Instalação no Debian ou Ubuntu"
 sudo apt update
 sudo apt install tmux
 tmux -V
@@ -254,7 +254,7 @@ tmux -V
 
 No macOS, com Homebrew:
 
-```bash title="Instalacao no macOS"
+```bash title="Instalação no macOS"
 brew install tmux
 ```
 
@@ -263,7 +263,7 @@ No OpenBSD, o tmux já vem de fábrica, desde 2009. Nada para instalar.
 O primeiro minuto, o roteiro completo:
 
 ```bash title="Roteiro do primeiro minuto"
-# Criar a sessao do projeto (ou reconectar, se ela ja existe)
+# Criar a sessão do projeto (ou reconectar, se ela já existe)
 tmux new -A -s dev
 
 # Dividir a tela em dois painéis
