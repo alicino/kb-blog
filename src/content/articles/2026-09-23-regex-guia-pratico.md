@@ -11,9 +11,9 @@ draft: false
 <style>
   /*
     Estilos locais do artigo de regex.
-    Motivo: o global.css nao estiliza <details>/<summary> nem prove um callout.
-    Tudo aqui e escopado por classes proprias para nao vazar para outros artigos.
-    Usa apenas os tokens de design ja existentes no global.css.
+    Motivo: o global.css não estiliza <details>/<summary> nem provê um callout.
+    Tudo aqui é escopado por classes próprias para não vazar para outros artigos.
+    Usa apenas os tokens de design já existentes no global.css.
   */
   .artigo-regex .nota {
     margin: var(--space-6) 0;
@@ -134,7 +134,7 @@ draft: false
     font-size: 0.92em;
   }
 
-  /* <details> para as respostas dos exercicios (global.css nao estiliza). */
+  /* <details> para as respostas dos exercícios (global.css não estiliza). */
   .artigo-regex details {
     margin: var(--space-4) 0;
     padding: var(--space-3) var(--space-4);

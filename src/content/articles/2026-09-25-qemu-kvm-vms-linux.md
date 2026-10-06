@@ -46,9 +46,9 @@ Junte os dois e você tem a combinação que tornou essa a forma padrão de virt
 
 ```mermaid
 flowchart LR
-    A[Guest: kernel e aplicacoes] --> B[QEMU: dispositivos emulados]
+    A[Guest: kernel e aplicações] --> B[QEMU: dispositivos emulados]
     B --> C["KVM: /dev/kvm no kernel"]
-    C --> D["CPU fisica com VT-x ou AMD-V"]
+    C --> D["CPU física com VT-x ou AMD-V"]
 ```
 
 **E quem é o libvirt nessa história?** O libvirt é uma camada de gerenciamento. Ele não virtualiza nada por conta própria. Ele conversa com o KVM através de uma interface padronizada e guarda a configuração de cada máquina em um arquivo XML. Isso permite que ferramentas diferentes controlem as mesmas VMs: o `virt-manager` pela interface gráfica, o `virsh` pela linha de comando.
@@ -120,7 +120,7 @@ Este passo não é opcional. É a diferença entre uma máquina que roda na velo
 ls -l /dev/kvm
 ```
 
-A saída esperada é algo como `crw-rw---- 1 root kvm 10, 232 ...`. Se o arquivo não existir, o módulo do KVM não carregou. As causas mais provaveis sao virtualização desligada na BIOS, ou virtualização aninhada desabilitada quando você está dentro de outra VM.
+A saída esperada é algo como `crw-rw---- 1 root kvm 10, 232 ...`. Se o arquivo não existir, o módulo do KVM não carregou. As causas mais prováveis são virtualização desligada na BIOS, ou virtualização aninhada desabilitada quando você está dentro de outra VM.
 
 Para ver qual módulo foi carregado, Intel ou AMD:
 
@@ -136,7 +136,7 @@ sudo modprobe kvm_intel
 
 **Não rode o QEMU como root.** O `/dev/kvm` pertence ao grupo `kvm`, então basta adicionar seu usuário a ele. Rodar como root cria arquivos de imagem pertencentes ao root e abre riscos desnecessários.
 
-```bash title="Adicionar seu usuario aos grupos kvm e libvirt"
+```bash title="Adicionar seu usuário aos grupos kvm e libvirt"
 sudo usermod -aG kvm,libvirt $USER
 ```
 
@@ -158,7 +158,7 @@ sudo systemctl enable --now libvirtd
 
 Agora a rede virtual. O libvirt cria por padrão uma rede chamada `default`, que dá acesso à internet aos convidados usando NAT, e atribui endereços na faixa 192.168.122.0/24.
 
-```bash title="Verificar a rede virtual padrao"
+```bash title="Verificar a rede virtual padrão"
 sudo virsh net-list --all
 ```
 
@@ -256,7 +256,7 @@ Se você inicializar a imagem sem configurar isso, a tela vai pedir um login que
 
 A primeira é injetar um usuário e uma senha no primeiro boot, com o cloud-init:
 
-```yaml title="Arquivo user-data com usuario e senha iniciais"
+```yaml title="Arquivo user-data com usuário e senha iniciais"
 #cloud-config
 users:
   - name: dev
@@ -301,7 +301,7 @@ Criar a máquina é a parte fácil. Estas são as operações que você vai usar
 
 **Ligar, desligar e conferir o estado:**
 
-```bash title="Operacoes do dia a dia com virsh"
+```bash title="Operações do dia a dia com virsh"
 virsh list --all                       # estado de todas as VMs
 virsh start debian-teste               # ligar
 virsh shutdown debian-teste            # desligar de forma limpa
@@ -313,7 +313,7 @@ virsh destroy debian-teste             # desligar a forca, so em ultimo caso
 
 **Ver o consumo real:**
 
-```bash title="Dominios em execucao e consumo"
+```bash title="Domínios em execução e consumo"
 virsh list
 virsh domstats debian-teste --state --block
 ```
