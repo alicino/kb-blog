@@ -1,7 +1,7 @@
 ---
 title: "Second Brain with AI — Part 2: Knowledge Is Not Stored, It Is Cultivated"
 description: "How to turn a repository of information into a living system of learning, reflection, and continuous evolution, with a seven-step cycle and the real role of AI."
-publishDate: 2026-10-29
+publishDate: 2026-11-01
 author: "Alicino"
 category: "Produtividade"
 tags: ["second brain", "PKM", "continuous learning", "RAG", "critical thinking", "productivity", "knowledge management"]
