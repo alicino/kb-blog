@@ -1,7 +1,7 @@
 ---
 title: "Segundo Cérebro com IA — Parte 2: o conhecimento não se acumula, se cultiva"
 description: "Como transformar um repositório de informações em um sistema vivo de aprendizagem, reflexão e evolução contínua, com um ciclo de sete etapas e o papel real da IA."
-publishDate: 2026-10-29
+publishDate: 2026-11-01
 author: "Alicino"
 category: "Produtividade"
 tags: ["segundo cérebro", "second brain", "PKM", "aprendizagem contínua", "RAG", "pensamento crítico", "produtividade"]
