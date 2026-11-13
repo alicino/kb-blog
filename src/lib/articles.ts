@@ -36,11 +36,101 @@ export async function getPublishedArticles(locale: Locale = defaultLocale): Prom
   return all.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 }
 
-/** Dado um artigo, procura a versão traduzida (mesmo slug) no outro locale. */
+/** Prefixo de data do nome do arquivo (`2026-11-13-<slug>`). O Content Layer
+ * não expõe a data do nome separadamente, então ela é extraída do slug. */
+function datePrefix(article: Article): string | null {
+  const match = articleSlug(article).match(/^(\d{4}-\d{2}-\d{2})-/);
+  return match ? match[1] : null;
+}
+
+/** Tokens do slug, usados para medir o parentesco entre dois arquivos. */
+function slugTokens(article: Article): Set<string> {
+  return new Set(
+    articleSlug(article)
+      .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+      .split('-')
+      .filter((token) => token.length > 2)
+  );
+}
+
+function overlap(a: Set<string>, b: Set<string>): number {
+  let shared = 0;
+  for (const token of a) if (b.has(token)) shared += 1;
+  return shared;
+}
+
+/** Palavras que aparecem em quase todo título ("guia completo", "complete
+ * guide", "com", "the") e por isso não provam nada sobre dois posts serem o
+ * mesmo. Ficam fora da pontuação para não desempatar por acidente. */
+const FILLER_TOKENS = new Set([
+  'com', 'sem', 'para', 'por', 'que', 'uma', 'dos', 'das',
+  'the', 'and', 'for', 'with', 'guide', 'complete', 'guia', 'completo', 'completa',
+]);
+
+/** Separa o prefixo numérico das variantes de slug: `2026-11-13` e `en/2026-11-13`. */
+function dateAndTokens(article: Article): { date: string | null; tokens: Set<string> } {
+  return { date: datePrefix(article), tokens: slugTokens(article) };
+}
+
+/**
+ * Dado um artigo, procura a versão traduzida no outro locale.
+ *
+ * Três sinais, nesta ordem, porque nenhum sozinho resolve:
+ *
+ * 1. **Slug idêntico** — o caso comum. Os dois locales usam o mesmo nome de
+ *    arquivo e não há o que decidir.
+ * 2. **Mesma data com vários candidatos** — vários posts saem no mesmo dia
+ *    (ex. dois em `2026-08-31`), então data sozinha liga um post à tradução do
+ *    vizinho. Aqui o desempate é tokens de slug em comum, ignorando palavras
+ *    de preenchimento; exigir ao menos um token evita casar por acidente.
+ * 3. **Posição na ordenação** — quando os slugs foram traduzidos por inteiro
+ *    (`segundo-cerebro-com-ia-guia-completo` / `second-brain-ai-complete-guide`,
+ *    zero tokens em comum), a data é o único vínculo real, e o desempate é a
+ *    ordem: a lista sai do mais recente para o mais antigo, então o n-ésimo
+ *    post de um dia em pt-BR corresponde ao n-ésimo do mesmo dia em inglês.
+ *    É o mesmo critério da tradução manual, e funciona porque os dois locales
+ *    mantêm o mesmo número de posts por dia.
+ *
+ * Se o dia tiver contagens diferentes nos dois locales, a posição não é
+ * confiável e o vínculo é abandonado (o aviso simplesmente não aparece).
+ */
 export async function findTranslation(article: Article, locale: Locale): Promise<Article | null> {
-  const slug = articleSlug(article);
   const candidates = await getPublishedArticles(locale);
-  return candidates.find((candidate) => articleSlug(candidate) === slug) ?? null;
+  const slug = articleSlug(article);
+
+  const exact = candidates.find((candidate) => articleSlug(candidate) === slug);
+  if (exact) return exact;
+
+  const { date } = dateAndTokens(article);
+  if (!date) return null;
+
+  const sameDate = candidates.filter((candidate) => datePrefix(candidate) === date);
+  if (sameDate.length === 0) return null;
+  if (sameDate.length === 1) return sameDate[0];
+
+  // Desempate 1: parentesco de slug, ignorando palavras de preenchimento.
+  const sourceTokens = [...slugTokens(article)].filter((token) => !FILLER_TOKENS.has(token));
+  let best: Article | null = null;
+  let bestScore = 0;
+  for (const candidate of sameDate) {
+    const candidateTokens = [...slugTokens(candidate)].filter((token) => !FILLER_TOKENS.has(token));
+    const score = overlap(new Set(sourceTokens), new Set(candidateTokens));
+    if (score > bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+  if (best) return best;
+
+  // Desempate 2: posição dentro do mesmo dia. Só vale se os dois locales
+  // tiverem a mesma quantidade de posts naquele dia.
+  const siblingsInSourceLocale = (await getPublishedArticles(articleLocale(article))).filter(
+    (candidate) => datePrefix(candidate) === date
+  );
+  if (siblingsInSourceLocale.length !== sameDate.length) return null;
+
+  const index = siblingsInSourceLocale.findIndex((candidate) => candidate.id === article.id);
+  return index >= 0 ? (sameDate[index] ?? null) : null;
 }
 
 /** Slug amigável a partir de um nome/categoria/tag (independe de locale — é a
@@ -61,12 +151,18 @@ export function articleHref(article: Article): string {
   return locale === 'en' ? `/en/articles/${slug}` : `/artigos/${slug}`;
 }
 
-/** O slug de categoria/tag é sempre derivado do nome canônico (pt-BR, como
- * gravado no frontmatter) em ambos os locales — só o rótulo exibido muda
- * (ver categoryDisplayName). Isso mantém `/categorias/x` e `/en/categories/x`
- * apontando para o mesmo `x`, sem precisar de uma tabela de tradução de slugs. */
+/** Slug de categoria/tag. Em pt-BR usa o nome canônico (como gravado no
+ * frontmatter). Em inglês usa o **nome traduzido**, para que a URL não fique
+ * em português numa página inglesa: `/en/categories/artificial-intelligence`
+ * em vez de `/en/categories/inteligencia-artificial`. As URLs antigas em
+ * pt-BR são redirecionadas em `astro.config.mjs`.
+ * Tags não têm tabela de tradução (são livres), então seguem o próprio texto. */
+export function categorySlug(category: string, locale: Locale = defaultLocale): string {
+  return slugify(categoryDisplayName(category, locale));
+}
+
 export function categoryHref(category: string, locale: Locale = defaultLocale): string {
-  const slug = slugify(category);
+  const slug = categorySlug(category, locale);
   return locale === 'en' ? `/en/categories/${slug}` : `/categorias/${slug}`;
 }
 
@@ -138,7 +234,7 @@ export async function getCategories(locale: Locale = defaultLocale): Promise<Cat
     .map(([name, count]) => ({
       name,
       displayName: categoryDisplayName(name, locale),
-      slug: slugify(name),
+      slug: categorySlug(name, locale),
       description: describeCategory(name, locale),
       count,
     }))

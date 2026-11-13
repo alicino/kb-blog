@@ -56,6 +56,14 @@ const alternateUrls = translation
   ? { [locale]: articleHref(article), [otherLocale]: articleHref(translation) }
   : undefined;
 
+// Aviso de versão no outro idioma. O texto vem no idioma do leitor (é ele quem
+// precisa ser avisado), mas o nome do idioma de destino e o verbo do link
+// aparecem no próprio idioma de destino, para o link ser reconhecível.
+// O nome do idioma de destino é escrito no idioma do LEITOR: quem lê em
+// inglês precisa ver "Portuguese", não "português".
+const otherLanguageLabel = otherLocale === 'en' ? 'English' : 'Portuguese';
+const otherLanguageAction = otherLocale === 'en' ? 'Read it in English' : 'Leia em português';
+
 const homeHref = locale === 'en' ? '/en' : '/';
 const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
 ---
@@ -124,6 +132,15 @@ const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
         }
       </header>
 
+      {
+        translation && (
+          <p class="article-translation" lang={otherLocale}>
+            {dict.article.translationNote(otherLanguageLabel)}{' '}
+            <a href={articleHref(translation)}>{otherLanguageAction}</a>
+          </p>
+        )
+      }
+
       <ShareLinks url={shareUrl} title={article.data.title} locale={locale} />
 
       <div class="prose">
@@ -189,6 +206,28 @@ const articlesHref = locale === 'en' ? '/en/articles' : '/artigos';
     display: flex;
     gap: var(--space-2);
     flex-wrap: wrap;
+  }
+
+  /* Aviso de versão no outro idioma: discreto, logo abaixo do cabeçalho e
+     antes do texto, para quem caiu no idioma errado ver sem rolar. */
+  .article-translation {
+    max-width: 90ch;
+    margin: 0 auto var(--space-6);
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-ui);
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface-alt, var(--color-bg-subtle));
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+  }
+
+  .article-translation a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .article-nav {

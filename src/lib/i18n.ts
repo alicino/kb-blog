@@ -59,6 +59,8 @@ interface Dictionary {
     shareCopy: string;
     shareCopied: string;
     shareNative: string;
+    /** Aviso de que o post existe no outro idioma. Recebe o rótulo do idioma. */
+    translationNote: (language: string) => string;
   };
   categories: {
     title: string;
@@ -164,6 +166,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       shareCopy: 'Copiar link',
       shareCopied: 'Link copiado',
       shareNative: 'Compartilhar…',
+    translationNote: (language) => `Este post também está disponível em ${language}.`,
     },
     categories: {
       title: 'Categorias',
@@ -265,6 +268,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       shareCopy: 'Copy link',
       shareCopied: 'Link copied',
       shareNative: 'Share…',
+    translationNote: (language) => `This post is also available in ${language}.`,
     },
     categories: {
       title: 'Categories',

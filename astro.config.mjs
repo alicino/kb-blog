@@ -18,6 +18,26 @@ export default defineConfig({
     locales: ['pt-br', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+  // As URLs de categoria em inglês eram geradas a partir do nome canônico
+  // pt-BR (`/en/categories/inteligencia-artificial`). Passaram a usar o nome
+  // traduzido (`/en/categories/artificial-intelligence`), que é o certo para
+  // quem lê em inglês. Estas entradas preservam as URLs antigas, que já estão
+  // no sitemap e podem estar indexadas. Só as categorias cujo nome muda no
+  // inglês aparecem aqui; design e devops são iguais nos dois idiomas.
+  //
+  // GitHub Pages é estático: o Astro emite uma página com <meta refresh> em
+  // vez de um 301 real. Funciona para o visitante; para buscadores é um sinal
+  // mais fraco que um 301, mas melhor que um 404.
+  redirects: {
+    '/en/categories/carreira': '/en/categories/career',
+    '/en/categories/engenharia': '/en/categories/engineering',
+    '/en/categories/ferramentas': '/en/categories/tools',
+    '/en/categories/infraestrutura-e-redes': '/en/categories/infrastructure-networking',
+    '/en/categories/inteligencia-artificial': '/en/categories/artificial-intelligence',
+    '/en/categories/produtividade': '/en/categories/productivity',
+    '/en/categories/redes': '/en/categories/networking',
+    '/en/categories/seguranca': '/en/categories/security',
+  },
   markdown: {
     // remark-math habilita $inline$ e $$bloco$$; rehype-katex converte em HTML
     // com MathML embutido, o que mantém a acessibilidade para leitor de tela.
