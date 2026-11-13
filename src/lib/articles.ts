@@ -43,6 +43,23 @@ function datePrefix(article: Article): string | null {
   return match ? match[1] : null;
 }
 
+/** Data efetiva do post em `YYYY-MM-DD`. Nem todo arquivo carrega a data no
+ * nome — os posts mais antigos (`tipografia-para-leitura-longa`,
+ * `custo-real-llm-local`) têm o nome só com o slug, e a data existe apenas no
+ * `publishDate` do frontmatter. Por isso o frontmatter é a fonte primária e o
+ * nome do arquivo é só o fallback. */
+function effectiveDate(article: Article): string {
+  const fromFrontmatter = article.data.publishDate;
+  if (fromFrontmatter instanceof Date && !Number.isNaN(fromFrontmatter.valueOf())) {
+    // getUTC* para não depender do fuso da máquina de build.
+    const year = fromFrontmatter.getUTCFullYear();
+    const month = String(fromFrontmatter.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(fromFrontmatter.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  return datePrefix(article) ?? '';
+}
+
 /** Tokens do slug, usados para medir o parentesco entre dois arquivos. */
 function slugTokens(article: Article): Set<string> {
   return new Set(
@@ -63,14 +80,10 @@ function overlap(a: Set<string>, b: Set<string>): number {
  * guide", "com", "the") e por isso não provam nada sobre dois posts serem o
  * mesmo. Ficam fora da pontuação para não desempatar por acidente. */
 const FILLER_TOKENS = new Set([
-  'com', 'sem', 'para', 'por', 'que', 'uma', 'dos', 'das',
-  'the', 'and', 'for', 'with', 'guide', 'complete', 'guia', 'completo', 'completa',
+  'com', 'sem', 'para', 'por', 'que', 'uma', 'dos', 'das', 'nos', 'nas',
+  'the', 'and', 'for', 'with', 'your', 'you', 'that', 'how',
+  'guide', 'complete', 'guia', 'completo', 'completa',
 ]);
-
-/** Separa o prefixo numérico das variantes de slug: `2026-11-13` e `en/2026-11-13`. */
-function dateAndTokens(article: Article): { date: string | null; tokens: Set<string> } {
-  return { date: datePrefix(article), tokens: slugTokens(article) };
-}
 
 /**
  * Dado um artigo, procura a versão traduzida no outro locale.
@@ -91,6 +104,9 @@ function dateAndTokens(article: Article): { date: string | null; tokens: Set<str
  *    É o mesmo critério da tradução manual, e funciona porque os dois locales
  *    mantêm o mesmo número de posts por dia.
  *
+ * A data vem do `publishDate` do frontmatter (fallback: prefixo do nome), porque
+ * os posts mais antigos não carregam a data no nome do arquivo.
+ *
  * Se o dia tiver contagens diferentes nos dois locales, a posição não é
  * confiável e o vínculo é abandonado (o aviso simplesmente não aparece).
  */
@@ -101,10 +117,10 @@ export async function findTranslation(article: Article, locale: Locale): Promise
   const exact = candidates.find((candidate) => articleSlug(candidate) === slug);
   if (exact) return exact;
 
-  const { date } = dateAndTokens(article);
+  const date = effectiveDate(article);
   if (!date) return null;
 
-  const sameDate = candidates.filter((candidate) => datePrefix(candidate) === date);
+  const sameDate = candidates.filter((candidate) => effectiveDate(candidate) === date);
   if (sameDate.length === 0) return null;
   if (sameDate.length === 1) return sameDate[0];
 
@@ -125,7 +141,7 @@ export async function findTranslation(article: Article, locale: Locale): Promise
   // Desempate 2: posição dentro do mesmo dia. Só vale se os dois locales
   // tiverem a mesma quantidade de posts naquele dia.
   const siblingsInSourceLocale = (await getPublishedArticles(articleLocale(article))).filter(
-    (candidate) => datePrefix(candidate) === date
+    (candidate) => effectiveDate(candidate) === date
   );
   if (siblingsInSourceLocale.length !== sameDate.length) return null;
 

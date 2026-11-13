@@ -240,4 +240,4 @@ Every number, dataset name, and date cited in this article comes from the refere
 - [Representation Engineering: A Top-Down Approach to AI Transparency](https://arxiv.org/abs/2310.01405): the work that established the field of representation engineering, the basis for both direction extraction and circuit breakers
 - [Steering Llama 2 via Contrastive Activation Addition](https://arxiv.org/abs/2312.06681): the contrastive activation addition technique, a direct precursor to the difference in means method
 
-If you work with local models and want to understand how to run and evaluate a model on your own hardware, the article on [the real cost of running a local LLM](/en/articles/custo-real-llm-local/) covers the practical decisions in that operation.
+If you work with local models and want to understand how to run and evaluate a model on your own hardware, the article on [the real cost of running a local LLM]/en/articles/real-cost-running-llms-locally-2026/ covers the practical decisions in that operation.
