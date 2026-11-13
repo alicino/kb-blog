@@ -7,6 +7,8 @@ category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "inteligência artificial", "produtividade", "processos", "aprender IA"]
 draft: false
 ---
+<img src="/assets/img/2026-11-12-ia-para-quem-nao-usa-parte-2-1.png" alt="Da tarefa solta ao processo: como a IA entra na sua semana de trabalho" style="width:80%;height:auto;display:block;margin:2rem auto" />
+
 
 Quem usa IA de vez em quando não ganha quase nada. O ganho vem da repetição, e repetição exige processo, não inspiração.
 

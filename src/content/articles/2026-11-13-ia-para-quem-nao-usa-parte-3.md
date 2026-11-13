@@ -1,12 +1,14 @@
 ---
 title: "Quem perde espaço com a IA, e quem não perde"
 description: "Os dados mostram que o risco não é igual para todo mundo: quem está começando corre mais risco do que quem tem experiência. Entenda por quê, com fontes verificáveis."
-publishDate: 2026-11-11
+publishDate: 2026-11-13
 author: "Alicino"
 category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "futuro do trabalho", "inteligência artificial", "carreira", "automação"]
 draft: false
 ---
+<img src="/assets/img/2026-11-13-ia-para-quem-nao-usa-parte-3-1.png" alt="Quem perde espaço com a IA, e quem não perde" style="width:80%;height:auto;display:block;margin:2rem auto" />
+
 
 A IA não vai roubar o seu emprego é a frase mais repetida e a menos útil sobre o assunto.
 
@@ -20,7 +22,7 @@ Duas pesquisas, de naturezas diferentes. Vale entender a diferença antes de olh
 
 ### O que os empregadores esperam
 
-O relatório **Future of Jobs 2025**, do Fórum Econômico Mundial (publicado em janeiro de 2025), projeta que, até 2030, a transformação do mercado deve criar cerca de 170 milhões de vagas e deslocar 92 milhões, um saldo positivo de 78 milhões.
+O relatório [**Future of Jobs 2025**](https://www.weforum.org/publications/the-future-of-jobs-report-2025/), do Fórum Econômico Mundial (publicado em janeiro de 2025), projeta que, até 2030, a transformação do mercado deve criar cerca de 170 milhões de vagas e deslocar 92 milhões, um saldo positivo de 78 milhões.
 
 Mas o mesmo relatório aponta quais funções devem **encolher** mais rápido, e a lista é incômoda: assistentes administrativos, secretárias executivas, caixas e bilheteiros, auxiliares de escritório, contadores e auditores. São justamente as funções de apoio administrativo.
 
@@ -28,7 +30,7 @@ Isso é uma previsão, baseada no que executivos responderam em pesquisa. Previs
 
 ### O que já aconteceu
 
-Aqui o dado é outro. Um estudo da **Stanford Digital Economy Lab**, intitulado *Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence* (Erik Brynjolfsson, Bharat Chandar e Ruyu Chen, revisado em agosto de 2026), usa registros reais de folha de pagamento da ADP, cobrindo milhões de trabalhadores nos Estados Unidos, e encontrou algo que não estava nas previsões:
+Aqui o dado é outro. Um estudo da [**Stanford Digital Economy Lab**](https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/), intitulado *Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence* (Erik Brynjolfsson, Bharat Chandar e Ruyu Chen, revisado em agosto de 2026), usa registros reais de folha de pagamento da ADP, cobrindo milhões de trabalhadores nos Estados Unidos, e encontrou algo que não estava nas previsões:
 
 > O emprego de trabalhadores jovens, de 22 a 25 anos, em ocupações expostas à IA está **19% abaixo** do que estaria se tivesse acompanhado o ritmo dos colegas menos expostos. Trabalhadores experientes não mostram lacuna comparável.
 
@@ -45,7 +47,7 @@ O estudo não encontrou a IA acabando com empregos de forma generalizada. Encont
 1. Onde a IA **automatiza** a tarefa, ou seja, substitui o trabalho humano, o emprego de iniciantes caiu.
 2. Onde a IA **aumenta** a capacidade humana, ou seja, trabalha junto com a pessoa, o emprego ficou estável ou **cresceu**.
 
-O **Anthropic Economic Index**, que analisou cerca de um milhão de conversas reais, encontrou essa mesma divisão no uso cotidiano: **57% dos usos são de aumento** (a IA colabora com a pessoa) e **43% são de automação** (a IA faz a tarefa no lugar dela).
+O [**Anthropic Economic Index**](https://www.anthropic.com/research/the-anthropic-economic-index), que analisou cerca de um milhão de conversas reais, encontrou essa mesma divisão no uso cotidiano: **57% dos usos são de aumento** (a IA colabora com a pessoa) e **43% são de automação** (a IA faz a tarefa no lugar dela).
 
 Traduzindo: a pergunta não é se a IA vai me substituir. É **eu estou usando a IA para fazer o meu trabalho, ou para fazer melhor o meu trabalho?**
 
