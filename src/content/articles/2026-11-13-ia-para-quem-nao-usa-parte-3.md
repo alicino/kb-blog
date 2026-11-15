@@ -102,4 +102,4 @@ Se você está começando, seu risco é maior do que te contaram. A saída não 
 
 Nos dois casos, a resposta é a mesma: **migrar para o trabalho que exige julgamento**. É o único lugar onde a IA aumenta em vez de substituir.
 
-O [próximo post da série](/artigos/2026-11-01-ia-para-quem-nao-usa-parte-4/) trata do outro lado disso: se você vai usar IA para trabalhar melhor, precisa saber quando ela erra. E ela erra com uma confiança que engana.
+O [próximo post da série](/artigos/2026-11-15-ia-para-quem-nao-usa-parte-4/) trata do outro lado disso: se você vai usar IA para trabalhar melhor, precisa saber quando ela erra. E ela erra com uma confiança que engana.

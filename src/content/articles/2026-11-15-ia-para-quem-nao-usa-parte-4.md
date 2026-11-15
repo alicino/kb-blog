@@ -1,14 +1,14 @@
 ---
 title: "Quando a IA erra: como usar sem ser enganado"
 description: "A IA não erra como um estagiário erra, ela erra com confiança. Veja os erros mais comuns, o dado que mostra a frequência e uma regra prática de conferência por consequência."
-publishDate: 2026-11-01
+publishDate: 2026-11-15
 author: "Alicino"
 category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "inteligência artificial", "pensamento crítico", "verificação", "aprender IA"]
 draft: false
 ---
 
-<img src="/assets/img/2026-11-01-ia-para-quem-nao-usa-parte-4-1.png" alt="Capa sobre quando a IA erra: os erros mais comuns e como conferir por consequência" width="1200" height="333" />
+<img src="/assets/img/2026-11-15-ia-para-quem-nao-usa-parte-4-1.png" alt="Capa sobre quando a IA erra: os erros mais comuns e como conferir por consequência" width="1200" height="333" />
 
 A IA não erra como um estagiário erra. O estagiário hesita, pergunta, pede desculpa. A IA escreve errado com a mesma confiança com que escreve certo, e é isso que a torna perigosa.
 
