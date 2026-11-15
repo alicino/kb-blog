@@ -12,19 +12,19 @@ draft: true
 
 You put together a server at home, plugged in the network cable and left it in a corner. Now you need to reach it and you hit the problem: no monitor, no keyboard, no idea which address to use.
 
-This is the most common situation for anyone with an idle computer running something. A Raspberry Pi with Pi-hole, a mini PC holding files, a container running Home Assistant, a Mac Mini that became a server. All with the same issue: you do not want to walk over to it.
+This is the most common situation for anyone with an idle computer running something. A Raspberry Pi with Pi-hole, a mini PC holding files, a container running Home Assistant, an old machine that became a server. All with the same issue: you do not want to walk over to it.
 
 The good news is that only two things need solving. A name so you do not memorise numbers, and a port published the right way. The bad news is that each has a specific trap, and this post is about those traps.
 
 ## The trouble with IP addresses
 
-The path almost everyone tries first is using the IP directly. Something like `192.168.50.198`. It works, and that is exactly what makes it misleading.
+The path almost everyone tries first is using the IP directly. Something like `192.168.1.198`. It works, and that is exactly what makes it misleading.
 
 Three reasons it stops being useful:
 
 1. **You have to remember it.** One server is manageable, but with two or three nobody remembers which is which.
 2. **The IP can change.** Even with a router reservation, swapping equipment or resetting gives the address back to the dynamic pool.
-3. **Nobody else can use it.** When someone in the house wants to reach it, "type 192.168.50.198" is not a reasonable instruction.
+3. **Nobody else can use it.** When someone in the house wants to reach it, "type 192.168.1.198" is not a reasonable instruction.
 
 The cleaner path is to give the machine a name and let the network resolve it. That is where the part almost nobody explains properly begins.
 
@@ -35,11 +35,11 @@ You will find people online recommending `.local`, `.lan`, `.home`, `.intranet`,
 I tested this on my own network, and the result is clear. From the Mac I write on, with the network working normally:
 
 ```
-mac-mini-m4.local       -> 192.168.50.198   ok
-mac-mini-m4.lan         -> does not resolve
-mac-mini-m4.intranet    -> does not resolve
-mac-mini-m4.rede        -> does not resolve
-mac-mini-m4.home        -> does not resolve
+mac-mini-server.local       -> 192.168.1.198   ok
+mac-mini-server.lan         -> does not resolve
+mac-mini-server.intranet    -> does not resolve
+mac-mini-server.rede        -> does not resolve
+mac-mini-server.home        -> does not resolve
 ```
 
 Only `.local` worked **without me configuring anything**. The other four do not resolve because nothing on the network knows how to answer for them.
@@ -61,7 +61,7 @@ scutil --get LocalHostName
 ```
 
 ```text
-Mac-Mini-M4
+mac-mini-server
 ```
 
 ### Why .lan and .home do not work on their own
@@ -80,7 +80,7 @@ If the name does not resolve and you do not want to configure anything, there is
 
 ```bash
 sudo tee -a /etc/hosts <<'EOF'
-192.168.50.198   servidor.home
+192.168.1.198   servidor.home
 EOF
 ```
 
@@ -117,12 +117,12 @@ I tested connections to both, the same way. The result:
 
 ```text
 127.0.0.1:8081          connected  (loopback, pinned to the host)
-192.168.50.198:8081     REFUSED    (LAN IP reaching loopback)
-mac-mini-m4.local:8081  REFUSED    (by name, same destination)
+192.168.1.198:8081     REFUSED    (LAN IP reaching loopback)
+mac-mini-server.local:8081  REFUSED    (by name, same destination)
 
 127.0.0.1:8082          connected  (all interfaces)
-192.168.50.198:8082     connected  (LAN IP)
-mac-mini-m4.local:8082  connected  (by name)
+192.168.1.198:8082     connected  (LAN IP)
+mac-mini-server.local:8082  connected  (by name)
 ```
 
 Read the second line carefully. The machine's address on the network **refused** a connection on port 8081, even though the container was running and answering on `127.0.0.1:8081`.

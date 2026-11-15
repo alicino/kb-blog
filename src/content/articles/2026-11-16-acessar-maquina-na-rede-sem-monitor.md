@@ -12,19 +12,19 @@ draft: true
 
 Você montou um servidor em casa, ligou o cabo de rede e colocou ele num canto. Agora precisa acessar e descobre o problema: sem monitor, sem teclado, sem ideia de qual endereço usar.
 
-Esse é o cenário mais comum de quem tem um computador parado rodando alguma coisa. Um Raspberry Pi com o Pi-hole, um mini PC com arquivos, um container com o Home Assistant, um Mac Mini que ficou de servidor. Todos com o mesmo problema: você não quer ir até ele.
+Esse é o cenário mais comum de quem tem um computador parado rodando alguma coisa. Um Raspberry Pi com o Pi-hole, um mini PC com arquivos, um container com o Home Assistant, uma máquina antiga que ficou de servidor. Todos com o mesmo problema: você não quer ir até ele.
 
 A boa notícia é que só precisa resolver duas coisas. Um nome para não decorar número, e uma porta publicada do jeito certo. A má notícia é que cada uma tem uma armadilha específica, e é sobre elas que este post trata.
 
 ## O problema com endereços IP
 
-O caminho que quase todo mundo tenta primeiro é usar o IP direto. Algo como `192.168.50.198`. Funciona, e é por isso que engana.
+O caminho que quase todo mundo tenta primeiro é usar o IP direto. Algo como `192.168.1.198`. Funciona, e é por isso que engana.
 
 Três motivos pelos quais ele para de servir:
 
 1. **Você precisa lembrar.** Um servidor ainda vai, mas quando são dois ou três, ninguém lembra qual é qual.
 2. **O IP pode mudar.** Mesmo com reserva no roteador, uma troca de equipamento ou um reset devolve o endereço para a faixa dinâmica.
-3. **Ninguém mais consegue usar.** Quando alguém da casa quer acessar, "digita 192.168.50.198" não é uma instrução razoável.
+3. **Ninguém mais consegue usar.** Quando alguém da casa quer acessar, "digita 192.168.1.198" não é uma instrução razoável.
 
 O caminho mais elegante é dar um nome à máquina e deixar a rede resolver. E aqui entra a parte que quase ninguém explica direito.
 
@@ -35,11 +35,11 @@ Você vai encontrar na internet gente recomendando `.local`, `.lan`, `.home`, `.
 Testei na minha própria rede, e o resultado é claro. Do Mac onde escrevo, com a rede funcionando normalmente:
 
 ```
-mac-mini-m4.local       -> 192.168.50.198   ok
-mac-mini-m4.lan         -> não resolve
-mac-mini-m4.intranet    -> não resolve
-mac-mini-m4.rede        -> não resolve
-mac-mini-m4.home        -> não resolve
+mac-mini-server.local       -> 192.168.1.198   ok
+mac-mini-server.lan         -> não resolve
+mac-mini-server.intranet    -> não resolve
+mac-mini-server.rede        -> não resolve
+mac-mini-server.home        -> não resolve
 ```
 
 Só o `.local` funcionou **sem eu configurar nada**. Os outros quatro não resolvem porque ninguém na rede sabe responder por eles.
@@ -61,7 +61,7 @@ scutil --get LocalHostName
 ```
 
 ```text
-Mac-Mini-M4
+mac-mini-server
 ```
 
 ### Por que .lan e .home não funcionam sozinhos
@@ -80,7 +80,7 @@ Se o nome não resolve e você não quer configurar nada, tem uma saída no pró
 
 ```bash
 sudo tee -a /etc/hosts <<'EOF'
-192.168.50.198   servidor.home
+192.168.1.198   servidor.home
 EOF
 ```
 
@@ -117,12 +117,12 @@ Testei conexão nos dois, do mesmo jeito. O resultado:
 
 ```text
 127.0.0.1:8081          conectou    (loopback, preso no host)
-192.168.50.198:8081     RECUSOU     (IP da LAN chegando no loopback)
-mac-mini-m4.local:8081  RECUSOU     (via nome, mesmo destino)
+192.168.1.198:8081     RECUSOU     (IP da LAN chegando no loopback)
+mac-mini-server.local:8081  RECUSOU     (via nome, mesmo destino)
 
 127.0.0.1:8082          conectou    (all-interfaces)
-192.168.50.198:8082     conectou    (IP da LAN)
-mac-mini-m4.local:8082  conectou    (via nome)
+192.168.1.198:8082     conectou    (IP da LAN)
+mac-mini-server.local:8082  conectou    (via nome)
 ```
 
 Leia a segunda linha com atenção. O endereço da máquina na rede **recusou** conexão para a porta 8081, mesmo com o container rodando e respondendo em `127.0.0.1:8081`.
