@@ -1,6 +1,6 @@
 ---
 import CategoryPage from '../../../components/pages/CategoryPage.astro';
-import { getPublishedArticles, getCategories, slugify } from '../../../lib/articles';
+import { getPublishedArticles, getCategories, categorySlug } from '../../../lib/articles';
 
 export async function getStaticPaths() {
   const categories = await getCategories('en');
@@ -10,7 +10,7 @@ export async function getStaticPaths() {
     params: { category: category.slug },
     props: {
       category,
-      articles: articles.filter((article) => slugify(article.data.category) === category.slug),
+      articles: articles.filter((article) => categorySlug(article.data.category, 'en') === category.slug),
     },
   }));
 }

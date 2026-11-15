@@ -1173,6 +1173,6 @@ To go deeper, these are the best starting points, all with real specifications, 
 - [regex101](https://regex101.com/): a tester that shows the match step by step and warns about backtracking risk. Pick the flavor in the left menu before pasting
 - [regexcrossword](https://regexcrossword.com/): a crossword puzzle game with regex. It looks like a toy and it is, but it trains pattern reading in a way no tutorial does
 
-If you deal with logs and infrastructure every day, I also suggest the article on [the tools I actually use every day](/en/articles/ferramentas-que-uso-todo-dia/), where `grep` and `sed` show up in real context.
+If you deal with logs and infrastructure every day, I also suggest the article on [the tools I actually use every day]/en/articles/tools-i-use-every-day/, where `grep` and `sed` show up in real context.
 
 </div>
