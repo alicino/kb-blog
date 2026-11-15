@@ -8,6 +8,8 @@ tags: ["agentes-ia", "loop-engineering", "LLM", "boas práticas", "token-managem
 draft: false
 ---
 
+<img src="/assets/img/agentes-ia-e-loop-engineering-1.png" alt="Capa sobre Loop Engineering: construir agentes de IA que funcionam de verdade em ciclo" width="1200" height="333" />
+
 Se você já tentou construir um agente de IA que vai além do "faça isso e pare", sabe que o negócio desanda rápido. O modelo começa a alucinar, o contexto cresce sem controle, o custo explode, e no fim você não sabe se ele terminou ou se está rodando em círculos.
 
 Este artigo mostra como evitar esse ciclo vicioso. Vamos direto ao ponto: o que é um agente, quando usar um loop, como controlar tokens, e as práticas que separam um agent que funciona de um que queima crédito da API.

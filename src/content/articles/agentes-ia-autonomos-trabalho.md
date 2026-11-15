@@ -9,6 +9,8 @@ tags: ["ia", "agentes-autônomos", "automação", "produtividade", "tutorial"]
 draft: false
 ---
 
+<img src="/assets/img/agentes-ia-autonomos-trabalho-1.png" alt="Capa sobre agentes de IA autônomos: como criá-los para trabalhar a seu favor" width="1200" height="333" />
+
 ## O que são agentes de IA autônomos
 
 Imagine que você pudesse contratar um assistente que nunca dorme, não pede férias e executa tarefas repetitivas sem supervisão constante. Um agente de IA autônomo é exatamente isso: um programa que usa modelos de linguagem (LLMs) para raciocinar, planejar e agir sem depender de comandos humanos a cada passo.

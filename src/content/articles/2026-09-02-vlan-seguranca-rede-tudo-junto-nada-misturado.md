@@ -8,6 +8,8 @@ tags: ["VLAN", "subnet", "VNet", "rede", "switches", "802.1Q", "tagged", "trunk"
 draft: false
 ---
 
+<img src="/assets/img/2026-09-02-vlan-seguranca-rede-tudo-junto-nada-misturado-1.png" alt="Capa sobre VLAN: segmentação de rede, tudo junto e nada misturado" width="1200" height="333" />
+
 Imagine um prédio de escritórios com três empresas diferentes. Elas compartilham o mesmo espaço físico, mas cada uma tem suas próprias salas, seus próprios funcionários e seus próprios arquivos. Um funcionário da empresa A não pode simplesmente entrar na sala da empresa B e pegar um documento.
 
 Agora imagine que esse prédio é sua rede de computadores. Todos os dispositivos estão conectados aos mesmos cabos e switches. Mas você quer que o servidor de arquivos financeiros não seja acessível pela câmera de segurança da portaria. Que o notebook do estagiário não alcance o banco de dados de produção. Que a TV da sala de reunião, que vive pedindo atualização, não converse com nada além da internet.

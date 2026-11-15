@@ -8,6 +8,8 @@ tags: ["AI-agents", "loop-engineering", "LLM", "best-practices", "token-manageme
 draft: false
 ---
 
+<img src="/assets/img/ai-agents-loop-engineering-guide-1.png" alt="Cover about Loop Engineering: building AI agents that actually work in a loop" width="1200" height="333" />
+
 If you have ever tried to build an AI agent that goes beyond "do this and stop", you know things go off the rails fast. The model starts hallucinating, the context grows out of control, costs explode, and in the end you are not sure if it finished or if it is running in circles.
 
 This article shows how to avoid that vicious cycle. Let us get straight to the point: what an agent is, when to use a loop, how to control tokens, and the practices that separate an agent that works from one that burns through API credits.

@@ -8,6 +8,8 @@ tags: ["Cloudflare", "ia", "agentes", "automação", "open source", "produtivida
 draft: false
 ---
 
+<img src="/assets/img/cloudflare-os-sistema-operacional-aberto-1.png" alt="Capa sobre o Cloudflare OS: o sistema operacional aberto da nuvem" width="1200" height="333" />
+
 Imagine um mundo onde cada pessoa na sua empresa tem um assistente de IA que realmente entende como o negócio funciona. Não um chatbot genérico que responde com informações da internet, mas um agente que conhece a terminologia da sua empresa, os sistemas internos, os processos e as regras. Este mundo acaba de se tornar realidade com o lançamento do [Cloudflare OS](https://os.cloudflare.app), e poucas pessoas percebem o tamanho desta revolução.
 
 ## O que você vai aprender
