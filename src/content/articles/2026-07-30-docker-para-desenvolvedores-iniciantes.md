@@ -8,6 +8,8 @@ tags: ["docker", "containers", "devops", "tutorial", "infraestrutura"]
 draft: false
 ---
 
+<img src="/assets/img/2026-07-30-docker-para-desenvolvedores-iniciantes-1.png" alt="Capa do guia de Docker para iniciantes: containers, imagens, volumes e redes com exemplos práticos" width="1200" height="333" />
+
 # Docker para Desenvolvedores Iniciantes: Conceitos e Comandos Essenciais
 
 Docker transformou como desenvolvedores constroem, empacotam e executam aplicações. Em vez de instalar servidores web, bancos de dados e bibliotecas diretamente na máquina, você define tudo em um arquivo e executa em ambientes isolados chamados containers. Este artigo explica os conceitos fundamentais e os comandos que você usará no dia a dia.

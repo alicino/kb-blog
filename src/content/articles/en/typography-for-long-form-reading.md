@@ -8,6 +8,8 @@ tags: ["typography", "design-system", "accessibility"]
 draft: false
 ---
 
+<img src="/assets/img/typography-for-long-form-reading-en-1.png" alt="Typography guide cover: line height, column width and font choices for long-form reading" width="1200" height="333" />
+
 Good typography is not noticed when it is right. It is noticed when it is
 wrong, usually as a vague tiredness that appears after a few paragraphs.
 

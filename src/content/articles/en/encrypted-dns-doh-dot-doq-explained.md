@@ -3,10 +3,12 @@ title: "Encrypted DNS: DoH, DoT, DoQ, DoH3, ODoH, OHTTP, DNSCrypt and DNSSEC Exp
 description: "A complete guide to encrypted and authenticated DNS protocols: how they work, ports, RFCs, when to use each one, advantages and limitations, with practical Cloudflare examples."
 publishDate: "2026-08-16"
 author: "Alicino"
-category: "Redes"
+category: "Infraestrutura e Redes"
 tags: ["DNS", "doh", "dot", "doq", "doh3", "odoh", "dnscrypt", "dnssec", "security", "Cloudflare"]
 draft: false
 ---
+
+<img src="/assets/img/encrypted-dns-doh-dot-doq-explained-en-1.png" alt="Cover about encrypted DNS: DoH, DoT, DoQ and the other protocols, with ports, RFCs and comparison" width="1200" height="333" />
 
 DNS was created in the 1980s with no concern for security. Queries travel in plain text. Anyone between you and the resolver can see which sites you are visiting, modify responses, or redirect your traffic.
 

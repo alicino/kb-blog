@@ -8,6 +8,8 @@ tags: ["terminal", "ferramentas-cli", "produtividade"]
 draft: false
 ---
 
+<img src="/assets/img/terminal-produtivo-em-2026-1.png" alt="Capa sobre terminal produtivo em 2026: emulador, multiplexador e atalhos essenciais" width="1200" height="333" />
+
 Configurar terminal é um dos hobbies disfarçados de produtividade mais comuns
 entre quem programa. Este é o ponto em que parei de mexer.
 
@@ -16,7 +18,7 @@ entre quem programa. Este é o ponto em que parei de mexer.
 - Um shell com histórico compartilhado entre sessões.
 - Atalhos para os três ou quatro comandos usados o dia inteiro.
 - Um prompt que mostra branch, status do git e código de saída do último
-  comando — nada além disso.
+  comando, nada além disso.
 
 ## O que eu decidi não usar
 

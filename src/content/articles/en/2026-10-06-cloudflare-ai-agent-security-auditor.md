@@ -8,7 +8,7 @@ tags: ["security", "code audit", "Cloudflare", "AI agents", "skill"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-06-cloudflare-security-audit-skill-en-1.png" alt="The Cloudflare skill that turns your AI agent into a security auditor" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-06-cloudflare-security-audit-skill-en-1.png" alt="The Cloudflare skill that turns your AI agent into a security auditor" width="1200" height="333" />
 
 Your coding agent writes hundreds of lines a day. It creates routes, queries databases, receives user requests, and handles credentials. Who audits all that? Security review is the task nobody gets to do calmly, and the AI agent itself is terrible at judging its own work: when you ask it to review the code it just wrote, it approves almost everything.
 

@@ -29,3 +29,18 @@ npm-debug.log*
 # macOS
 .DS_Store
 ai_assistant.md
+
+# scripts de diagnostico/verificacao (nao fazem parte do blog)
+verif-*.mjs
+shot*.mjs
+test-mlw.mjs
+tmp-*.mmd
+
+# geradores de capa (ferramenta local, nao versionada)
+scripts/gen-covers-*.py
+
+# validador de paridade (ferramenta local)
+scripts/kb-parity-validator.py
+shot*.js
+docs/plano-*.md
+scripts/dev-server-keepalive.sh

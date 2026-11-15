@@ -8,7 +8,7 @@ tags: ["SSH", "chave pública", "ed25519", "RSA", "servidor", "segurança", "Lin
 draft: false
 ---
 
-<img src="/assets/img/2026-09-21-ssh-chaves-servidor-seguro-1.png" alt="SSH e chaves: a segurança essencial para servidores" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-21-ssh-chaves-servidor-seguro-1.png" alt="SSH e chaves: a segurança essencial para servidores" width="1200" height="333" />
 
 Manter um servidor acessível pela internet sem abrir mão da segurança é um dos primeiros desafios de quem administra infraestrutura. A senha do usuário root, por mais forte que seja, é um vetor de ataque conhecido. Botnets varrem a internet o tempo todo tentando combinações comuns de usuário e senha.
 

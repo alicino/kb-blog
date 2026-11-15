@@ -8,7 +8,7 @@ tags: ["SSH", "public key", "ed25519", "RSA", "server", "security", "Linux", "Op
 draft: false
 ---
 
-<img src="/assets/img/2026-09-21-ssh-chaves-servidor-seguro-1.png" alt="SSH e chaves: a segurança essencial para servidores" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-21-ssh-public-key-authentication-en-1.png" alt="Cover about SSH public key authentication: ed25519, ssh-keygen and secure server access" width="1200" height="333" />
 
 Keeping a server accessible over the internet without compromising security is one of the first challenges anyone managing infrastructure faces. The root user password, no matter how strong, is a known attack vector. Botnets scan the internet constantly, trying common username and password combinations.
 

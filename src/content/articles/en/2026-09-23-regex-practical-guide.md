@@ -109,7 +109,7 @@ draft: false
 
 <div class="artigo-regex">
 
-<img src="/assets/img/2026-09-23-regex-practical-guide-1.png" alt="Understanding regex the simple way" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-23-regex-practical-guide-1.png" alt="Understanding regex the simple way" width="1200" height="333" />
 
 The first time you face a regular expression, it looks like someone fell asleep on the keyboard. A soup of backslashes, braces, parentheses, and asterisks with no obvious entry point.
 

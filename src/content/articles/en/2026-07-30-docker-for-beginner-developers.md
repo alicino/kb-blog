@@ -8,6 +8,8 @@ tags: ["docker", "containers", "devops", "tutorial", "infrastructure"]
 draft: false
 ---
 
+<img src="/assets/img/2026-07-30-docker-for-beginner-developers-en-1.png" alt="Docker for beginners cover: containers, images, volumes and networks with practical examples" width="1200" height="333" />
+
 Docker changed how developers build, package, and run applications. Instead of installing web servers, databases, and libraries directly on your machine, you define everything in a file and run it in isolated environments called containers. This article explains the fundamental concepts and commands you will use daily.
 
 ## What is Docker

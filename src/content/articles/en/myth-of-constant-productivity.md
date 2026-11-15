@@ -8,6 +8,8 @@ tags: ["productivity", "habits"]
 draft: false
 ---
 
+<img src="/assets/img/myth-of-constant-productivity-en-1.png" alt="Cover about the myth of constant productivity: non-linear energy and what actually helps" width="1200" height="333" />
+
 The idea that a good professional performs equally every day doesn't survive
 two weeks of honest observation of your own routine.
 

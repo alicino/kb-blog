@@ -9,6 +9,8 @@ tags: ["testing", "security", "observability"]
 draft: false
 ---
 
+<img src="/assets/img/testing-changes-in-production-safely-en-1.png" alt="Cover about testing changes in production safely: feature flags, gradual rollout and observability" width="1200" height="333" />
+
 Staging is never a perfect copy of production. At some point, the change needs
 to meet real traffic. The question is how to do that with the least risk
 possible.

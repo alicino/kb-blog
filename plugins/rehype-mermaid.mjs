@@ -80,6 +80,15 @@ const mermaidFontsCss = `data:text/css;base64,${Buffer.from(
 const lightConfig = {
   theme: 'neutral',
   fontFamily,
+  // `flowchart.wrappingWidth` é o limite, em px, que o Mermaid usa para decidir
+  // se um rótulo cabe numa linha. O default é 200; quando o texto passa disso,
+  // o nó vira `white-space: break-spaces` com largura fixa de 200px e o
+  // excedente é CORTADO na borda — o texto não quebra, ele some. Casos reais
+  // deste repo: "Curiosity and reliable sources" (211px) e "Patterns and
+  // contradictions" (193px) no post do Segundo Cérebro, parte 2.
+  // Com 520px nenhum rótulo cai nesse modo e o diagrama só fica um pouco mais
+  // largo (472 → 481px), que é o comportamento desejado.
+  flowchart: { wrappingWidth: 520 },
   themeVariables: {
     // Verde de destaque do site (--color-accent em global.css).
     noteBkgColor: 'hsl(156, 45%, 94%)',
@@ -92,6 +101,8 @@ const lightConfig = {
 const darkConfig = {
   theme: 'dark',
   fontFamily,
+  // Mesmo motivo do lightConfig acima.
+  flowchart: { wrappingWidth: 520 },
   themeVariables: {
     noteBkgColor: 'hsl(156, 30%, 18%)',
     noteBorderColor: 'hsl(156, 45%, 62%)',

@@ -8,7 +8,7 @@ tags: ["VPN", "ASN", "Segurança", "redes", "IP"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-10-deteccao-vpn-hosting-asn-1.png" alt="Detecção de VPN: hosting, ASN e reputação" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-10-deteccao-vpn-hosting-asn-1.png" alt="Detecção de VPN: hosting, ASN e reputação" width="1200" height="333" />
 
 Na [parte 1](/artigos/2026-10-09-ip-pais-asn-bgp/) montamos a cadeia: um IP cai em um prefixo, o prefixo é anunciado por um ASN, o ASN está associado a uma organização, e o registro guarda o país. "Pertence" virou três perguntas separadas, registro, rota e localização.
 

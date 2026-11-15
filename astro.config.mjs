@@ -18,6 +18,18 @@ export default defineConfig({
     locales: ['pt-br', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+  // O dev server roda com --host 0.0.0.0 para o celular/outro computador da LAN
+  // abrir o preview. O Vite barra por padrão todo Host header que não seja
+  // localhost, e a recusa é um 403 "Blocked request. This host is not allowed":
+  // funciona por IP (192.168.x.x) mas falha pelo nome (.local, mDNS), que é o
+  // que o navegador de outro dispositivo tende a tentar primeiro. Liberar os
+  // dois evita o "servidor fora do ar" que na verdade é o dev server recusando.
+  vite: {
+    server: {
+      host: true,
+      allowedHosts: ['localhost', '127.0.0.1', '.local', '.lan', '192.168.50.198'],
+    },
+  },
   // As URLs de categoria em inglês eram geradas a partir do nome canônico
   // pt-BR (`/en/categories/inteligencia-artificial`). Passaram a usar o nome
   // traduzido (`/en/categories/artificial-intelligence`), que é o certo para

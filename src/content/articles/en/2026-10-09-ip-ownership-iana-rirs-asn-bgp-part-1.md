@@ -8,7 +8,7 @@ tags: ["IP", "ASN", "BGP", "networking", "RIPEstat"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-09-ip-pais-asn-bgp-en-1.png" alt="Who owns an IP address: IANA, RIRs, ASNs and BGP" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-09-ip-pais-asn-bgp-en-1.png" alt="Who owns an IP address: IANA, RIRs, ASNs and BGP" width="1200" height="333" />
 
 Every web security service makes the same promise: "this IP comes from Brazil", "this login came from another country". Blocking by geography, VPN detection and fraud prevention all depend on that information. But where does it come from? Who decides that an address belongs to a country? And how do you find out which company operates any given IP?
 

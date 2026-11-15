@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["AI for beginners", "future of work", "artificial intelligence", "career", "automation"]
 draft: false
 ---
-<img src="/assets/img/2026-11-13-ia-para-quem-nao-usa-parte-3-en-1.png" alt="Who loses ground to AI, and who doesn't" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-11-13-ia-para-quem-nao-usa-parte-3-en-1.png" alt="Who loses ground to AI, and who doesn't" width="1200" height="333" />
 
 
 "AI isn't going to take your job" is the most repeated and least useful sentence on the subject.

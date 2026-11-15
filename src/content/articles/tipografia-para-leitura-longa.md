@@ -8,6 +8,8 @@ tags: ["tipografia", "design-system", "acessibilidade"]
 draft: false
 ---
 
+<img src="/assets/img/tipografia-para-leitura-longa-1.png" alt="Capa do guia de tipografia: altura de linha, largura de coluna e escolha de fontes para leitura longa" width="1200" height="333" />
+
 Tipografia boa não se percebe quando está certa. Percebe-se quando está
 errada, geralmente como um cansaço vago que aparece depois de alguns
 parágrafos.
@@ -21,7 +23,7 @@ fragmentam o ritmo de leitura.
 ## Altura de linha generosa em textos longos
 
 Para corpo de texto, algo entre 1.5 e 1.7 costuma equilibrar bem densidade e
-conforto. Títulos podem — e devem — ser mais compactos.
+conforto. Títulos podem, e devem, ser mais compactos.
 
 ```css
 article {
@@ -32,12 +34,11 @@ article {
 
 ## Hierarquia sem excesso de variação
 
-Três famílias tipográficas bem escolhidas — uma para título, uma para corpo,
-uma para interface — já cobrem praticamente qualquer necessidade. Mais do que
-isso tende a parecer ruído em vez de hierarquia.
+Três famílias tipográficas bem escolhidas (uma para título, uma para corpo,
+uma para interface) já cobrem praticamente qualquer necessidade. Mais do que
 
 ### Contraste também é tipografia
 
 Cor de texto sobre fundo, tamanho mínimo de fonte e espaçamento entre letras
 em maiúsculas fazem parte da mesma conversa. Tipografia acessível não é uma
-etapa separada do design — é o design.
+etapa separada do design: é o design.

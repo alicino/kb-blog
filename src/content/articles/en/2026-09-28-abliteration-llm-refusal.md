@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["abliteration", "LLM", "security", "interpretability", "alignment", "guardrails", "refusal", "circuit breakers", "open weights"]
 draft: false
 ---
-<img src="/assets/img/2026-09-28-abliteration-recusa-llm-en-1.png" alt="LLM refusal and abliteration: how it works" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-28-abliteration-recusa-llm-en-1.png" alt="LLM refusal and abliteration: how it works" width="1200" height="333" />
 
 
 Everyone who uses a language model has hit this behavior: you make a request, and the model replies that it cannot help with that. Then you rephrase the question a different way, and it answers. The same information, denied once and delivered the next time.

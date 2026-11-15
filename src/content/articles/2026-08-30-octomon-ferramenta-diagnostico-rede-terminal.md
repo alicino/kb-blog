@@ -8,6 +8,8 @@ tags: ["rede", "terminal", "diagnóstico", "Octomon", "monitoramento", "macOS", 
 draft: false
 ---
 
+<img src="/assets/img/2026-08-30-octomon-ferramenta-diagnostico-rede-terminal-1.png" alt="Capa do Octomon: painel de diagnóstico de rede no terminal com latência, banda, Wi-Fi e DNS em uma única tela" width="1200" height="333" />
+
 Todo mundo que mexe com tecnologia conhece o ritual. A internet começa a ficar
 lenta, uma página não carrega, uma chamada de vídeo trava. Então você abre o
 ping para ver se o gateway responde. Depois abre um traceroute para ver onde

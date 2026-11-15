@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "inteligência artificial", "produtividade", "trabalho", "aprender IA"]
 draft: false
 ---
-<img src="/assets/img/2026-11-11-ia-para-quem-nao-usa-parte-1-1.png" alt="Você já usa IA e não percebeu: por onde começar sem virar programador" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-11-11-ia-para-quem-nao-usa-parte-1-1.png" alt="Você já usa IA e não percebeu: por onde começar sem virar programador" width="1200" height="333" />
 
 
 A maioria das pessoas que diz "eu não uso IA" já usou. Já pediu para o corretor sugerir uma resposta, já deixou o celular completar a frase, já aceitou o resumo automático de uma reunião.

@@ -8,7 +8,7 @@ tags: ["Tor", "anonimato", "Segurança", "redes"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-16-como-funciona-a-rede-tor-1.png" alt="Como funciona a rede Tor: relays, pontes e onion routing" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-16-como-funciona-a-rede-tor-1.png" alt="Como funciona a rede Tor: relays, pontes e onion routing" width="1200" height="333" />
 
 Você aperta "conectar" no Tor Browser e, em alguns segundos, a sua conexão sai do outro lado do mundo atravessada por três computadores de estranhos voluntários. Nenhuma empresa controla esses computadores, nenhum governo os cadastra, e mesmo assim milhares deles funcionam em rede há duas décadas.
 
@@ -34,8 +34,8 @@ flowchart LR
     G -->|"2. remove a 1ª camada"| M["Intermediário"]
     M -->|"3. remove a 2ª"| S["Saída"]
     S -->|"4. entrega ao destino"| A["Site A"]
-    A -.->|"resposta, sem saber quem é você"| S
-    S -.->|"reembrulha com a sua camada"| M
+    A -.->|"resposta anônima ao site"| S
+    S -.->|"reembrulha a sua camada"| M
     M -.->|"reembrulha com a sua"| G
     G -.->|"reembrulha e entrega"| V
 ```

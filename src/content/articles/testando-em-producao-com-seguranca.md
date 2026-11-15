@@ -9,8 +9,10 @@ tags: ["testes", "segurança", "observabilidade"]
 draft: false
 ---
 
+<img src="/assets/img/testando-em-producao-com-seguranca-1.png" alt="Capa sobre testar mudanças em produção com segurança: feature flags, rollout gradual e observabilidade" width="1200" height="333" />
+
 Staging nunca é uma cópia perfeita de produção. Em algum momento, a mudança
-precisa encontrar tráfego real — a questão é como fazer isso com o menor risco
+precisa encontrar tráfego real. A questão é como fazer isso com o menor risco
 possível.
 
 ## Feature flags como rede de segurança

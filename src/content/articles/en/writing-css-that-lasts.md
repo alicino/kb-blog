@@ -9,6 +9,8 @@ draft: false
 coverAlt: "Illustration of overlapping style layers"
 ---
 
+<img src="/assets/img/writing-css-that-lasts-en-1.png" alt="Cover about writing CSS that lasts: design tokens, layers and rules that age well" width="1200" height="333" />
+
 CSS rarely becomes bad all at once. It gets worse gradually, one `!important`
 at a time, until nobody knows for sure what can be safely removed.
 

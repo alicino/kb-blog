@@ -8,6 +8,8 @@ tags: ["git", "segurança", "boas práticas", "tutorial", "devops"]
 draft: false
 ---
 
+<img src="/assets/img/2026-08-07-gitignore-guia-completo-1.png" alt="Capa do guia de .gitignore: do básico da sintaxe até a remoção de um .env commitado do histórico do Git" width="1200" height="333" />
+
 Você já parou para pensar no que acontece quando roda `git add .` e depois `git commit`? O Git pega tudo que está na pasta do projeto. Tudo mesmo. Arquivos de configuração com senhas, pastas de dependências, arquivos temporários do seu sistema operacional, e até anotações pessoais. Sem um bom `.gitignore`, o seu repositório vira um depósito de arquivos que não deveriam estar ali. E o pior: uma vez que algo sensível entra no histórico do Git, simplesmente deletar o arquivo não resolve. Ele continua lá, acessível para qualquer um que olhar os commits antigos.
 
 Neste artigo, você vai entender por que o `.gitignore` é uma das primeiras linhas de defesa da segurança do seu projeto. Vamos ver exemplos práticos para diferentes linguagens, aprender a evitar arquivos de ferramentas de IA, e descobrir como limpar o histórico quando um deslize acontece.

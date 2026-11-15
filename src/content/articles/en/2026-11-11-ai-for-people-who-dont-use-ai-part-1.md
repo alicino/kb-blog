@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["AI for beginners", "artificial intelligence", "productivity", "work", "learning AI"]
 draft: false
 ---
-<img src="/assets/img/2026-11-11-ia-para-quem-nao-usa-parte-1-en-1.png" alt="You already use AI and didn't notice: where to start without becoming a programmer" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-11-11-ia-para-quem-nao-usa-parte-1-en-1.png" alt="You already use AI and didn't notice: where to start without becoming a programmer" width="1200" height="333" />
 
 
 Most people who say "I don't use AI" already have. They've asked their email client to suggest a reply, let their phone finish a sentence, accepted an automatic meeting summary.

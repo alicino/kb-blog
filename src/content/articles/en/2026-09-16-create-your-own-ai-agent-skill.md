@@ -8,6 +8,8 @@ tags: ["skills", "Claude Code", "agents", "automation", "SKILL.md", "beginners"]
 draft: false
 ---
 
+<img src="/assets/img/2026-09-16-create-your-own-ai-agent-skill-en-1.png" alt="Cover about creating your own skill for AI agents: three practical step-by-step examples" width="1200" height="333" />
+
 In the previous article about NVIDIA's SkillSpector, I showed that 26% of pre-built skills in marketplaces contain vulnerabilities. The most important conclusion was this: whenever possible, create your own skill.
 
 Creating a skill is not complicated. It is a text file with instructions in natural language. You write what you want the agent to do, it reads and executes. No programming required. No API key needed. No permission from anyone.
@@ -336,7 +338,7 @@ This cycle of conversation, testing, and adjustment is what makes a skill evolve
 - [SkillSpector: security scanner for skills](https://github.com/NVIDIA/SkillSpector)
 - [Tutorial: How to Build Custom Claude Code Skills (DEV Community)](https://dev.to/alanwest/how-to-build-custom-claude-code-skills-that-actually-work-2e1f)
 - [Tutorial: Building custom skills (Blake Crosby)](https://blakecrosley.com/blog/building-custom-skills)
-- [Guide: Adding skills to agents (Codegen)](https://codegen.com/guides/adding-skills-to-agent/)
+- [Tutorial: Creating a skill in Claude Code step by step (Hora de Codar)](https://horadecodar.com.br/criar-skill-claude-code/)
 
 ## Conclusion
 

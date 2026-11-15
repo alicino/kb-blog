@@ -8,7 +8,7 @@ tags: ["Tor", "privacy", "security", "networking"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-16-como-funciona-a-rede-tor-en-1.png" alt="How the Tor network works: relays, bridges and onion routing" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-16-como-funciona-a-rede-tor-en-1.png" alt="How the Tor network works: relays, bridges and onion routing" width="1200" height="333" />
 
 You press "connect" in Tor Browser and, within seconds, your connection exits on the other side of the world after crossing three computers run by volunteer strangers. No company controls those computers, no government registers them, and yet thousands of them have been running as a network for two decades.
 
@@ -34,7 +34,7 @@ flowchart LR
     G -->|"2. removes the 1st layer"| M["Middle"]
     M -->|"3. removes the 2nd"| S["Exit"]
     S -->|"4. hands it over"| A["Site A"]
-    A -.->|"reply, without knowing who you are"| S
+    A -.->|"reply anonymously"| S
     S -.->|"re-wraps with its layer"| M
     M -.->|"re-wraps with its own"| G
     G -.->|"re-wraps and delivers"| V

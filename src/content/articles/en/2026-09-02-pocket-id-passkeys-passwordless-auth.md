@@ -1,250 +1,336 @@
 ---
-title: "Pocket ID: Passwordless Authentication with Passkeys"
-description: "Learn how to implement passwordless authentication with passkeys using Pocket ID. Installation, configuration, and integration patterns for secure auth without passwords."
+title: "Pocket ID: your own passkey authentication provider, from scratch to production"
+description: "A complete guide to Pocket ID, the self-hosted OpenID Connect provider that replaces passwords with passkeys, including integration with Cloudflare Zero Trust."
 publishDate: 2026-09-02
 author: "Alicino"
 category: "Segurança"
-tags: ["authentication", "passkeys", "pocket-id", "security", "passwordless", "webauthn"]
+tags: ["Pocket ID", "authentication", "passkey", "OIDC", "OAuth", "Cloudflare", "Zero Trust", "self-hosted", "docker", "WebAuthn"]
 draft: false
 ---
 
-Passwords have been the standard for authentication since the internet started. And they're fundamentally broken. Users reuse the same password everywhere. They forget them. Attackers steal them. Phishing campaigns succeed because people still fall for the "click here to reset your password" email.
+<img src="/assets/img/2026-09-02-pocket-id-passkeys-passwordless-auth-en-1.png" alt="Cover image: Pocket ID, your own passkey authentication provider, from scratch to production" width="1200" height="333" />
 
-In 2023, the FIDO Alliance, Google, Apple, and Microsoft announced they were coordinating on passkeys. A passwordless authentication method based on public key cryptography, built into every operating system, and basically immune to phishing.
+Picture a handful of services running at home or on a cloud server. An admin panel, a media server, a project management tool, a network monitor. Each one with its own login and password. Some you reach from home, some from outside, some only through a mobile app.
 
-The catch: implementing passkeys properly requires either integrating with the big tech companies (Google, Apple, Microsoft) or running your own authentication server. That's where Pocket ID comes in.
+Managing that is a nightmare. You end up reusing passwords, writing them down somewhere unsafe, or simply giving up on protecting a few services.
 
-Pocket ID is an open source authentication server written in Go that supports passkeys out of the box. You run it on your infrastructure. You integrate it with your app. Your users authenticate without passwords.
+Pocket ID was built to solve that problem. It is an authentication provider you install on your own server, and it lets you and other people reach every service with a single digital identity, without passwords.
 
-## Understanding Pocket ID
+## What Pocket ID is
 
-Pocket ID is an open source authentication server designed for passkey-based authentication. The key features you actually care about: it's self-hosted, supports passkeys natively, can fall back to passwords if needed, lets users register multiple passkeys across different devices, has a clean API, speaks OAuth 2.0 and OIDC, and it's lightweight.
+Pocket ID is a certified OpenID Connect (OIDC) and OAuth 2.0 provider designed to be self-hosted. It was created by the developer known as stonith404 and released in August 2024 on GitHub under the BSD-2 license.
 
-Find it at github.com/nhardy/pocket-id, available under AGPL-3.0.
+The official page is [pocket-id.org](https://pocket-id.org/). The source code lives at [github.com/pocket-id/pocket-id](https://github.com/pocket-id/pocket-id).
 
-## How passkeys actually work
+What sets Pocket ID apart from alternatives like Keycloak or ORY Hydra is simplicity. Those tools are powerful but complex, while Pocket ID was made for a home administrator or a small team to put into production in minutes.
 
-Before you integrate Pocket ID, understand what's happening under the hood.
+And its most striking trait: it only accepts authentication through passkeys. No passwords.
 
-A passkey is a cryptographic key pair stored securely on your device. Think of it like your fingerprint but digital. The private key never leaves the device. The public key gets shared. Here's the flow:
+## What passkeys are and why that matters
 
-You try to log in. The server sends you a random challenge. Your device signs that challenge with your private key. Your device sends back the signature. The server verifies the signature using your public key. You're logged in.
+A passkey is an authentication standard that replaces passwords with cryptographic keys. Instead of typing a password, you use:
 
-No password ever traveled over the network. Nothing to steal. Nothing to guess.
+- The fingerprint or face recognition on your phone
+- A physical security chip, such as a Yubikey
+- The face or fingerprint reader on your laptop
+- A PIN code tied to a trusted device
 
-This is the WebAuthn standard. Every major browser supports it. Every major operating system supports it.
+Technically, passkeys use the WebAuthn standard (Web Authentication), maintained by the FIDO Alliance and the W3C. When you register a passkey, your device generates a key pair: one public key that stays on the Pocket ID server, and one private key that never leaves your device.
 
-Why is it secure? Your private key never leaves the device. The signature can't be forged. Each website gets a unique key, so passkeys don't work for cross-site phishing. There's no password to brute force. It works with biometrics like fingerprints and face recognition.
+When you log in, the server challenges your device to prove it holds the private key. Your device answers using biometrics or a PIN to authorize the use of that key. The password is never typed, never transmitted, and can never leak.
 
-## Getting Pocket ID running
+That removes the most common problems in digital security: weak passwords, password reuse, phishing, since nobody can trick you into typing a password on a fake site when there is no password to type, and credential database breaches.
 
-If you're using Docker:
+## How Pocket ID works
+
+Pocket ID implements two web standards you have probably used without knowing: OpenID Connect and OAuth 2.0.
+
+**OpenID Connect (OIDC)** is the protocol that lets a service, such as your admin panel, delegate authentication to another service, Pocket ID. When you try to reach the panel, it redirects you to Pocket ID. You authenticate there with your passkey, and Pocket ID returns a token stating who you are. The panel trusts that token.
+
+**OAuth 2.0** is the protocol that lets a service ask for permission to access resources on the user's behalf. A third-party application might ask only to see your profile, for instance, and Pocket ID issues a token scoped to exactly that permission.
+
+The full flow is:
+
+```mermaid
+sequenceDiagram
+    participant U as You (user)
+    participant S as Service<br>(e.g. admin panel)
+    participant P as Pocket ID
+
+    U->>S: Tries to reach the service
+    S->>U: Redirects to Pocket ID
+    U->>P: Lands on the Pocket ID login page
+    P->>U: Challenge: present your passkey
+    U->>U: Uses biometrics, Yubikey or PIN
+    U->>P: Signed cryptographic response
+    P->>P: Verifies the signature<br>with the public key
+    P->>U: Authentication token (ID token)
+    U->>S: Presents the token to the service
+    S->>S: Verifies the token with<br>the Pocket ID keys
+    S->>U: Access granted
+```
+
+### What if you are on another device that does not have your passkey?
+
+This point matters. A passkey is bound to the device where it was registered. If you are on a public computer and need to reach a service, Pocket ID lets you use passkeys from other devices through a QR code or a link. You scan the QR code with your phone, which holds the passkey, approve the login on the phone, and the computer gets access.
+
+That works because WebAuthn supports a flow called cross-device authentication (CA), also known as the hybrid flow. Pocket ID implements that flow.
+
+## Step by step installation
+
+The simplest and recommended method is Docker. You need:
+
+- A Linux server, or any machine with Docker installed
+- A domain pointing to that server, for example auth.yourdomain.com
+- HTTPS access through Cloudflare, Caddy, Nginx or Traefik
+- A device with a passkey, such as a phone, a Yubikey or a laptop with biometrics
+
+### Step 1: Prepare the environment
+
+Create a folder for Pocket ID on your server:
 
 ```bash
-docker run -d \
-  --name pocket-id \
-  -p 3333:3333 \
-  -e POCKET_ID_DOMAIN=auth.example.com \
-  -e POCKET_ID_ISSUER_URL=https://auth.example.com \
-  -v pocket-id-data:/app/data \
-  nhardy/pocket-id:latest
+mkdir ~/pocket-id
+cd ~/pocket-id
 ```
 
-Or download the binary directly from releases and run it:
+Download the configuration files:
 
 ```bash
-wget https://github.com/nhardy/pocket-id/releases/download/v0.4.1/pocket-id-linux-amd64
-chmod +x pocket-id-linux-amd64
-./pocket-id-linux-amd64
+curl -o docker-compose.yml https://raw.githubusercontent.com/pocket-id/pocket-id/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/pocket-id/pocket-id/main/.env.example
 ```
 
-You need to set some environment variables:
+### Step 2: Configure the environment variables
+
+Edit the `.env` file with a text editor. The most important variables are:
+
+```
+APP_URL=https://auth.yourdomain.com
+ENCRYPTION_KEY=a-random-32-character-key
+TRUST_PROXY=true
+```
+
+`APP_URL` is the address where Pocket ID will be reachable. It must be HTTPS.
+
+`ENCRYPTION_KEY` is the key used to encrypt sensitive data, including the private keys that sign tokens. Generate one with:
 
 ```bash
-POCKET_ID_DOMAIN=auth.example.com
-POCKET_ID_ISSUER_URL=https://auth.example.com
-POCKET_ID_JWT_SECRET=some-secret-key-here
-POCKET_ID_DATABASE_URL=sqlite:///app/data.db
-POCKET_ID_LISTEN_ADDR=0.0.0.0:3333
-POCKET_ID_PORT=3333
+openssl rand -base64 32
 ```
 
-For production use PostgreSQL and HTTPS:
+`TRUST_PROXY` should be `true` if you are behind a reverse proxy such as Caddy, Nginx or Cloudflare Tunnel. Only use `true` if Pocket ID cannot be reached directly without the proxy.
+
+### Step 3: Start the container
 
 ```bash
-export POCKET_ID_DATABASE_URL=postgresql://user:pass@localhost/pocket_id
-export POCKET_ID_ISSUER_URL=https://auth.example.com
-export POCKET_ID_TLS_CERT=/path/to/cert.pem
-export POCKET_ID_TLS_KEY=/path/to/key.pem
+docker compose up -d
 ```
 
-## Integrating with your web app
+Pocket ID runs on port 1411 inside the container.
 
-Your login page has a button or link:
+### Step 4: Configure the reverse proxy
 
-```html
-<a href="https://auth.example.com/authorize?
-  response_type=code&
-  client_id=my-app&
-  redirect_uri=https://myapp.example.com/callback&
-  scope=openid%20profile%20email">
-  Sign in with Passkey
-</a>
+You need a reverse proxy to serve Pocket ID over HTTPS. Here are two options.
+
+**With Caddy, recommended for simplicity:**
+
+Create a `Caddyfile`:
+
 ```
-
-When users click it, they're sent to Pocket ID. They authenticate. Pocket ID redirects back to your callback URL with a code:
-
-```javascript
-app.get('/callback', async (req, res) => {
-  const { code } = req.query;
-
-  const response = await fetch('https://auth.example.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      client_id: 'my-app',
-      client_secret: 'your-client-secret',
-      redirect_uri: 'https://myapp.example.com/callback',
-    }),
-  });
-
-  const { access_token, id_token } = await response.json();
-  const user = jwt_decode(id_token);
-
-  req.session.userId = user.sub;
-  res.redirect('/dashboard');
-});
-```
-
-Protect your routes:
-
-```javascript
-app.get('/dashboard', (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect('/login');
-  }
-  res.render('dashboard');
-});
-```
-
-## Mobile apps
-
-For iOS and Android, use native libraries. With React Native:
-
-```javascript
-import * as SecureStore from 'expo-secure-store';
-import * as WebBrowser from 'expo-web-browser';
-
-async function loginWithPasskey() {
-  const redirectUrl = await WebBrowser.openAuthSessionAsync(
-    `https://auth.example.com/authorize?response_type=code&client_id=my-mobile-app&redirect_uri=${encodeURIComponent(redirectUrl)}&scope=openid+profile`,
-    redirectUrl
-  );
-
-  const code = new URL(redirectUrl.url).searchParams.get('code');
-
-  const response = await fetch('https://auth.example.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      client_id: 'my-mobile-app',
-      client_secret: 'your-client-secret',
-      redirect_uri: redirectUrl,
-    }),
-  });
-
-  const { access_token } = await response.json();
-  await SecureStore.setItemAsync('access_token', access_token);
+auth.yourdomain.com {
+    reverse_proxy localhost:1411
 }
 ```
 
-## Security matters
+Start Caddy with `caddy run`.
 
-HTTPS is mandatory. Passkeys simply don't work over HTTP. Browsers won't allow it for security reasons.
+**With Cloudflare Tunnel, if you already use Cloudflare:**
 
-Configure CORS properly:
+Create a tunnel in the Zero Trust Dashboard pointing to `localhost:1411`. See the Cloudflare integration section below.
+
+### Step 5: Create the administrator account
+
+Go to `https://auth.yourdomain.com/setup`. You will see a screen to create the first administrator account. Pocket ID will ask you to create your passkey. On a phone, use fingerprint or face recognition. On a computer, use the biometric reader or a Yubikey.
+
+Done. You have an authentication provider running.
+
+## Managing users
+
+The Pocket ID admin panel lives at `https://auth.yourdomain.com/settings/admin`.
+
+### Inviting users
+
+To add a new user, go to "Users" and click "Invite User". Pocket ID generates an invite link. That link takes the user to a page where they create their own passkey. The invite can be configured to expire after a number of days or uses.
+
+Each user manages their own passkey. If they lose the device, the administrator can revoke the old passkey and the user creates a new one.
+
+### Groups
+
+Groups are how you organize users and control access to applications. You create a group, such as "admin", "dev" or "viewer", add users to it, and then define which applications each group can reach.
+
+For example, you might create:
+
+- Group "admins" with access to every service
+- Group "devs" with access only to GitLab and the monitor
+- Group "viewers" with access only to the status page
+
+### Audit logs
+
+Pocket ID records every login attempt, token creation and configuration change. The log includes date, user, action, IP address and approximate geographic location, if configured with MaxMind's GeoLite2 database. That is useful for spotting suspicious access.
+
+## Connecting applications to Pocket ID
+
+For a service to use Pocket ID as its authenticator, it has to be registered as an OIDC client.
+
+### Registering a client
+
+In the admin panel, go to "OIDC Clients" and click "Add Client". You need:
+
+- **Name:** a name to identify the client, for example "Admin Panel"
+- **Callback URLs:** the URL Pocket ID redirects to after authentication, for example `https://mypanel.com/oauth2/callback`
+- **Access type:** "Confidential" for services that can keep a secret, "Public" for client-side applications
+
+After creating it, Pocket ID shows a Client ID and a Client Secret. Store the secret safely.
+
+### Configuring the service
+
+Every service has its own way of configuring OIDC, but the parameters are always the same:
+
+- **Discovery URL / Issuer URL:** `https://auth.yourdomain.com`
+- **Client ID:** the ID generated by Pocket ID
+- **Client Secret:** the secret generated by Pocket ID
+- **Scopes:** `openid profile email`
+- **Authorization Endpoint:** `https://auth.yourdomain.com/authorize`
+- **Token Endpoint:** `https://auth.yourdomain.com/api/oidc/token`
+- **JWKS URL:** `https://auth.yourdomain.com/.well-known/jwks.json`
+
+Many modern services support OIDC natively, among them Authelia, Grafana, Nextcloud, Home Assistant, authentik, Portainer and Traefik. Filling in those fields in the authentication settings is all it takes.
+
+### Services that do not support OIDC
+
+If a service does not support OIDC, you can put [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/) in front of it. It works like a doorman: it stands in front of the service, intercepts unauthenticated requests, redirects to Pocket ID, and only lets the request through when the token is valid.
+
+## Cloudflare Zero Trust integration
+
+Cloudflare offers a product called Zero Trust, formerly Cloudflare for Teams, which includes Access, Gateway, Tunnel and other components. Pocket ID can serve as an identity provider inside that ecosystem.
+
+### Why integrate
+
+Cloudflare Zero Trust lets you publish internal services without exposing IP addresses. The user reaches a domain, Cloudflare verifies identity, and only then forwards traffic to your server through a Tunnel. The server is never directly exposed to the internet.
+
+Cloudflare Access supports several identity providers: Google, GitHub, Okta, Azure AD, and also generic OIDC providers. Pocket ID joins as a generic OIDC provider.
+
+### Configuring Pocket ID as a provider in Cloudflare Zero Trust
+
+**Step 1:** In the Pocket ID admin panel, create a new OIDC client with:
+
+- Name: "Cloudflare Zero Trust"
+- Callback URL: `https://<your-team>.cloudflareaccess.com/cdn-cgi/access/callback`
+
+Replace `<your-team>` with your team name in Cloudflare Zero Trust.
+
+**Step 2:** In the Cloudflare Zero Trust Dashboard, go to Settings, then Authentication, then Add new, then OpenID Connect.
+
+Fill in:
+
+- Name: "Pocket ID"
+- Issuer URL: `https://auth.yourdomain.com`
+- Client ID copied from Pocket ID
+- Client Secret copied from Pocket ID
+- OIDC Scopes: `openid profile email`
+- Claims: `email`, `sub`, `name`
+
+**Step 3:** Save. Pocket ID now shows up as an identity provider option in Cloudflare access policies.
+
+### Creating an access policy
+
+In Cloudflare Zero Trust, go to Access, then Applications, then Add an application.
+
+Choose the application type: Self-hosted for internal services, SaaS for external ones.
+
+In the policy configuration, under "Identity provider", select "Pocket ID". Define the rules:
+
+- The user belongs to the "admins" group in Pocket ID, so allow access
+- The location is Brazil, so allow access
+- The device is managed, so allow access
+
+When a user tries to reach the service, Cloudflare redirects to Pocket ID, which asks for the passkey, and only then grants access.
+
+### Using Cloudflare Tunnel instead of exposing a port
+
+Instead of exposing port 1411 of Pocket ID directly, you can use Cloudflare Tunnel, through the cloudflared client:
 
 ```bash
-export POCKET_ID_CORS_ORIGINS=https://myapp.example.com,https://another-app.com
+cloudflared tunnel create pocket-id
+cloudflared tunnel route dns pocket-id auth.yourdomain.com
 ```
 
-Enable rate limiting to prevent brute force attempts:
+And in the tunnel configuration file at `~/.cloudflared/config.yml`:
 
-```bash
-export POCKET_ID_RATE_LIMIT_REQUESTS=10
-export POCKET_ID_RATE_LIMIT_WINDOW=60s
+```yaml
+tunnel: pocket-id
+credentials-file: /home/user/.cloudflared/pocket-id.json
+ingress:
+  - hostname: auth.yourdomain.com
+    service: http://localhost:1411
+  - service: http_status:404
 ```
 
-For users who lose access to their passkey, generate backup codes:
+That way Pocket ID never exposes a port to the internet. All traffic arrives through Cloudflare.
 
-```bash
-curl -X POST https://auth.example.com/api/users/{userId}/backup-codes \
-  -H "Authorization: Bearer $ADMIN_TOKEN"
-```
+## Practical use cases
 
-## Troubleshooting
+### The homelab with multiple services
 
-Check system health:
+You have a server at home running Portainer, Grafana, Home Assistant, a media server and a GitLab. Each one used to have its own login and password. You installed Pocket ID and configured each service as an OIDC client. Now you reach any service with one click and your Yubikey. If a friend needs access to the network monitor, you create an invite, they register their passkey, and you define that they see only that service.
 
-```bash
-curl https://auth.example.com/health
-```
+### The small company with third-party access
 
-List users:
+A software company has a server with GitLab, a deploy panel and an infrastructure monitor. Employees reach everything with the passkey on their phone. External consultants receive invites with access limited to GitLab and the monitor, but not to the deploy panel. When the contract ends, the administrator deactivates the user and every session is blocked immediately.
 
-```bash
-curl -H "Authorization: Bearer $ADMIN_TOKEN" \
-  https://auth.example.com/api/users
-```
+### Authentication for applications on Cloudflare
 
-Enable debug logging:
+A startup uses Cloudflare Zero Trust to protect its staging environments. Pocket ID is the identity provider. Developers reach the staging environments with the passkey on their laptop. When a developer leaves the company, the administrator removes the user from Pocket ID and every Cloudflare policy immediately stops accepting tokens from that user.
 
-```bash
-export POCKET_ID_LOG_LEVEL=debug
-```
+## Comparison with alternatives
 
-## Migrating from passwords
+| Characteristic | Pocket ID | Keycloak | Authelia | ORY Hydra |
+|---|---|---|---|---|
+| Complexity | Very low | High | Medium | High |
+| Authentication | Passkeys only | Password + MFA | Password + 2FA | Customizable |
+| Certified OIDC | Yes | Yes | Partial | Yes |
+| Docker | Native | Native | Native | Native |
+| Database | SQLite / PostgreSQL | PostgreSQL | SQLite / MySQL | PostgreSQL |
+| User management | Web UI | Web UI | Web UI | API |
+| Best for | Homelab / small teams | Large organizations | Homelab | Developers |
 
-If you already have password-based authentication, migration is gradual:
+## Limitations and considerations
 
-First, let users register a passkey alongside their password. Then on login, prompt them to set up a passkey. Make passkey required for new signups. Finally after a year or so, deprecate passwords.
+Pocket ID is intentionally simple, and that means some features common in larger providers do not exist:
 
-The phased approach looks like:
+- **There is no fallback password.** If you lose every device holding the passkey, recovery depends on an administrator revoking the old passkey so you can register a new one.
+- **There is no LDAP or Active Directory.** The user base is managed exclusively by Pocket ID.
+- **There is no federation with other providers**, such as logging in with Google or GitHub. Pocket ID is the single source of identity.
+- **There is no progressive MFA.** Since authentication already happens through a passkey, which is inherently multi-factor because it combines possession of the device with biometrics or a PIN, there is no separate second layer.
 
-```javascript
-app.post('/api/register-passkey', async (req, res) => {
-  const userId = req.session.userId;
-  const user = await db.getUser(userId);
-  
-  if (user.passkey_registered) {
-    return res.status(400).json({ error: 'Already registered' });
-  }
+For many scenarios, especially homelabs and small teams, those limitations are acceptable in exchange for simplicity.
 
-  const challenge = crypto.randomBytes(32);
-  await db.saveChallenge(userId, challenge);
+## Useful links
 
-  res.json({
-    challenge: challenge.toString('base64'),
-    userId: userId,
-    userName: user.email,
-  });
-});
-```
+- **Official page:** [pocket-id.org](https://pocket-id.org/)
+- **GitHub repository:** [github.com/pocket-id/pocket-id](https://github.com/pocket-id/pocket-id)
+- **Official documentation:** [docs.pocket-id.org](https://docs.pocket-id.org/)
+- **Interactive demo:** [demo.pocket-id.org](https://demo.pocket-id.org)
+- **OAuth2 Proxy (for services without OIDC):** [oauth2-proxy.github.io](https://oauth2-proxy.github.io/oauth2-proxy/)
+- **Cloudflare Zero Trust:** [cloudflare.com/products/zero-trust](https://www.cloudflare.com/products/zero-trust/)
+- **Passkeys (official explanation):** [passkeys.io](https://www.passkeys.io/)
+- **WebAuthn (W3C specification):** [w3.org/TR/webauthn](https://www.w3.org/TR/webauthn/)
 
-## Real talk about limitations
+## Conclusion
 
-Passkeys aren't synced across browsers yet. A passkey you set up in Chrome doesn't work in Firefox. Users need to register passkeys on each device or browser they use.
+Pocket ID solves a real problem elegantly: centralized authentication without passwords. It does not try to be everything to everyone, and that is its greatest strength. For anyone running a few services who wants a unified, secure and modern login experience, it is hard to find an option that is simpler to configure and maintain.
 
-If users lose their phone, they can't log in unless they have backup codes. This is actually more secure than passwords (where password recovery is a whole mess) but it's something to explain to users upfront.
+With the Cloudflare Zero Trust integration, you gain an extra layer of security: traffic passes through Cloudflare, authentication happens with a passkey, and your server is never directly exposed to the internet.
 
-Older browsers don't support WebAuthn. If you need to support IE 11 or something, fall back to passwords for those browsers.
-
-## Putting it all together
-
-Pocket ID makes passwordless authentication accessible for teams that want to self-host. Passkeys eliminate phishing, eliminate password reuse problems, and improve security without making the login experience worse.
-
-If you're managing passwords and tired of the operational burden, Pocket ID is worth exploring.
+The project is open source, OpenID Connect certified, and has an active community on GitHub. It is worth trying the demo before installing. Five minutes is enough to see the value.

@@ -8,6 +8,8 @@ tags: ["DNS", "doh", "dot", "doq", "doh3", "odoh", "dnscrypt", "dnssec", "segura
 draft: false
 ---
 
+<img src="/assets/img/dns-criptografado-doh-dot-doq-doh3-odoh-1.png" alt="Capa sobre DNS criptografado: DoH, DoT, DoQ e demais protocolos, com portas, RFCs e comparativo" width="1200" height="333" />
+
 O DNS foi criado nos anos 80 sem nenhuma preocupação com segurança. As consultas viajam em texto puro. Qualquer um no caminho entre você e o resolvedor pode ver quais sites você está visitando, modificar respostas, ou redirecionar seu tráfego.
 
 Resolver isso não é trivial. Cada protocolo de DNS seguro resolve um problema diferente e tem seus próprios trade-offs. Este artigo explica os 8 principais: como funcionam, em que portas rodam, quais RFCs os definem, quando usar cada um, e onde a Cloudflare se encaixa nesse ecossistema.
