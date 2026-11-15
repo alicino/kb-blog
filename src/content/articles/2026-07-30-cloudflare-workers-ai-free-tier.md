@@ -8,6 +8,8 @@ tags: ["Cloudflare", "LLM", "workers-ai", "tutorial", "ia-generativa"]
 draft: false
 ---
 
+<img src="/assets/img/2026-07-30-cloudflare-workers-ai-free-tier-1.png" alt="Capa sobre usar LLMs gratuitos na Cloudflare Workers AI: modelos rodando na borda da rede" width="1200" height="333" />
+
 A Cloudflare oferece acesso gratuito a modelos de linguagem de grande porte através do Workers AI. Esta plataforma serverless permite executar inferências de IA sem gerenciar GPUs ou infraestrutura complexa. Este artigo explica como começar, quais modelos estão disponíveis, as limitações do plano gratuito e exemplos práticos de uso.
 
 ## O que é o Workers AI

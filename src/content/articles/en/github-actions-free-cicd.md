@@ -8,6 +8,8 @@ tags: ["github", "ci-cd", "automation", "devops", "tutorial"]
 draft: false
 ---
 
+<img src="/assets/img/github-actions-free-cicd-1.png" alt="Cover about free CI/CD with GitHub Actions: automated pipelines at no cost" width="1200" height="333" />
+
 Did you know that one of the most powerful software automation tools in the world is available for free on the platform you already use? Millions of developers host code on GitHub, but few know the benefits and use of GitHub Actions, the integrated CI/CD (Continuous Integration and Continuous Delivery) platform that can transform how you build, test, and deploy applications. This article is a complete guide for beginners who want to understand and start using this essential tool.
 
 ## What you will learn

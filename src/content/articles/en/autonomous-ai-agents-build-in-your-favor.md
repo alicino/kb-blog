@@ -9,6 +9,8 @@ tags: ["AI", "autonomous-agents", "automation", "productivity", "tutorial"]
 draft: false
 ---
 
+<img src="/assets/img/autonomous-ai-agents-build-in-your-favor-1.png" alt="Cover about autonomous AI agents: how to build them to work in your favor" width="1200" height="333" />
+
 ## What are autonomous AI agents
 
 Imagine you could hire an assistant that never sleeps, never takes vacation, and handles repetitive tasks without constant supervision. An autonomous AI agent is exactly that: a program that uses language models (LLMs) to reason, plan, and act without depending on human commands at every step.

@@ -8,6 +8,8 @@ tags: ["Cloudflare", "AI", "agents", "automation", "open source", "productivity"
 draft: false
 ---
 
+<img src="/assets/img/cloudflare-os-open-source-1.png" alt="Cover about Cloudflare OS: the open source operating system for the cloud" width="1200" height="333" />
+
 Imagine a world where every person in your company has an AI assistant that truly understands how the business works. Not a generic chatbot that answers with information from the internet, but an agent that knows your company's terminology, internal systems, processes, and rules. This world just became a reality with the launch of [Cloudflare OS](https://os.cloudflare.app), and few people realize the scale of this revolution.
 
 ## What you will learn

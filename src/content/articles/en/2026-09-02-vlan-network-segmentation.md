@@ -8,6 +8,8 @@ tags: ["VLAN", "subnet", "VNet", "networking", "switches", "802.1Q", "tagged", "
 draft: false
 ---
 
+<img src="/assets/img/2026-09-02-vlan-network-segmentation-1.png" alt="Cover about VLAN network segmentation: everything together, nothing mixed" width="1200" height="333" />
+
 Imagine an office building with three different companies. They share the same physical space, but each has its own rooms, employees, and files. An employee from company A cannot simply walk into company B's room and grab a document.
 
 Now imagine that building is your computer network. All devices are connected to the same cables and switches. But you want the financial file server to be unreachable from the security camera at the entrance. You want the intern's laptop to have no access to the production database. And you want the conference room TV, which keeps asking for updates, to talk to nothing but the internet.

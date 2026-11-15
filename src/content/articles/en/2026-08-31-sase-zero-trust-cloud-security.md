@@ -8,6 +8,8 @@ tags: ["SASE", "ZTNA", "Zero Trust", "VPN", "security", "network", "cloud", "Gar
 draft: false
 ---
 
+<img src="/assets/img/2026-08-31-sase-zero-trust-cloud-security-1.png" alt="Cover about SASE and Zero Trust: network security for the hybrid and cloud world" width="1200" height="333" />
+
 The way people work has changed. So have the applications they use. But the network security of many companies still works as if it were 2010: a fixed perimeter, a central datacenter, and every employee inside the same building.
 
 That disconnect between how work happens and how the network is protected created a serious problem. Tools that used to work, such as corporate VPNs, are today one of the main entry points for attacks. In 2025, compromised VPN credentials were the initial vector in 48% of ransomware attacks, according to industry data.

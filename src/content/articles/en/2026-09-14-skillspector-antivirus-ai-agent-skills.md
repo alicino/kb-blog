@@ -8,6 +8,8 @@ tags: ["NVIDIA", "SkillSpector", "security", "agents", "antivirus", "skill injec
 draft: false
 ---
 
+<img src="/assets/img/2026-09-14-skillspector-antivirus-ai-agent-skills-1.png" alt="Cover about SkillSpector: the antivirus for AI agent skills" width="1200" height="333" />
+
 You install a skill for your AI agent. A Markdown file that promises to automate a task, with a Python script beside it. The agent reads the file and follows the instructions. The problem: that skill might contain hidden instructions to steal your AWS credentials, send your files to a remote server, or open a reverse shell.
 
 Researchers analyzed 42,447 published skills across major agent marketplaces. **26.1% contained vulnerabilities.** **5.2% showed clear malicious intent.** Skills with executable scripts were 2.12x more likely to be vulnerable.

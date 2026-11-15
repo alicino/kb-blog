@@ -8,6 +8,8 @@ tags: ["SASE", "ZTNA", "Zero Trust", "VPN", "segurança", "rede", "cloud", "Gart
 draft: false
 ---
 
+<img src="/assets/img/2026-08-31-sase-seguranca-rede-nuvem-zero-trust-1.png" alt="Capa sobre SASE e Zero Trust: segurança de rede para o mundo híbrido e na nuvem" width="1200" height="333" />
+
 A forma como as pessoas trabalham mudou. Os aplicativos que elas usam também. Mas a segurança de rede de muitas empresas ainda funciona como se fosse 2010: um perímetro fixo, um datacenter central e todos os funcionários dentro do mesmo prédio.
 
 Essa desconexão entre como o trabalho acontece e como a rede é protegida criou um problema grave. As ferramentas que antes funcionavam, como as VPNs corporativas, hoje são um dos principais pontos de entrada para ataques. Em 2025, credenciais de VPN comprometidas foram o vetor inicial em 48% dos ataques de ransomware, segundo dados do setor.
