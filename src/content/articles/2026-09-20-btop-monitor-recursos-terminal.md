@@ -20,7 +20,7 @@ Se você também usa o [Octomon](/artigos/octomon-ferramenta-diagnostico-rede-te
 
 ## O que o btop mostra
 
-<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="Tela do btop mostrando CPU, memória, discos, rede e processos em tempo real" width="1200" height="333" />
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="Tela do btop mostrando CPU, memória, discos, rede e processos em tempo real" width="1280" height="829" />
 
 O btop divide a tela em painéis que você pode reorganizar. Cada painel mostra uma categoria de recurso.
 
