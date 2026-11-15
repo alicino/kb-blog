@@ -8,6 +8,8 @@ tags: ["AI", "LLM", "cost", "hardware", "automation"]
 draft: false
 ---
 
+<img src="/assets/img/real-cost-running-llms-locally-2026-en-1.png" alt="Cover about the real cost of running local LLMs: power, GPU and comparison with APIs" width="1200" height="333" />
+
 ## The promise and the reality of local LLMs
 
 Running language models locally has a strong appeal. You do not pay per token, you do not rely on internet access, you do not send your data to third parties, and you have complete freedom to use whatever model you want. Companies that handle sensitive data see it as a solution for keeping information within their own environment.
@@ -239,8 +241,8 @@ For most people and companies, the ideal combination is to use APIs for complex 
 
 - [OpenAI API Pricing](https://openai.com/api/pricing/)
 - [Anthropic API Pricing](https://www.anthropic.com/pricing)
-- [DeepSeek API Pricing](https://api-docs.deepsek.com/quick_start/pricing)
-- [PromptQuorum - Local LLM Power Consumption 2026](https://www.promptquorum.com/local-lms/local-lm-power-consumption)
-- [Geo Toolbox - How to Run an LLM Locally (2026 Guide)](https://geotolbox.ai/blog/run-lm-locally)
+- [DeepSeek API Pricing](https://api-docs.deepseek.com/quick_start/pricing)
+- [PromptQuorum - Local LLM Power Consumption 2026](https://www.promptquorum.com/local-llms/local-llm-power-consumption)
+- [Geo Toolbox - How to Run an LLM Locally (2026 Guide)](https://geotoolbox.ai/blog/run-llm-locally)
 - [GetDeploying - Cloud GPU Price Comparison](https://getdeploying.com/)
 - US average electricity price: EIA 2026 (residential average $0.12/kWh)

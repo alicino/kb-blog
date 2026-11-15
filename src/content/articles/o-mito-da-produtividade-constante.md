@@ -8,6 +8,8 @@ tags: ["produtividade", "habitos"]
 draft: false
 ---
 
+<img src="/assets/img/o-mito-da-produtividade-constante-1.png" alt="Capa sobre o mito da produtividade constante: energia não linear e o que ajuda de verdade" width="1200" height="333" />
+
 A ideia de que um bom profissional rende igual todos os dias não resiste a
 duas semanas de observação honesta da própria rotina.
 
@@ -29,5 +31,5 @@ cancela por completo.
 ## Aceitar variação é uma habilidade
 
 Da mesma forma que se aprende a planejar, também se aprende a não se punir
-por dias de rendimento menor — e isso, com o tempo, rende mais do que forçar
+por dias de rendimento menor, e isso, com o tempo, rende mais do que forçar
 uma constância que nunca existiu de verdade.

@@ -1,238 +1,301 @@
 ---
-title: "AI Fine-Tuning for Beginners: a glossary of every term you will come across"
-description: "A complete glossary of fine-tuning terms explained for beginners: LLM, LoRA, VRAM, GPU, quantization, dataset, SFT, DPO, hyperparameters, YAML, GGUF, and layer streaming."
+title: "AI fine-tuning for beginners: what every term you see out there actually means"
+description: "A simple, direct guide to the terms used in AI model fine-tuning: LLM, LoRA, quantization, GPU, VRAM, dataset, SFT, DPO and much more."
 publishDate: 2026-09-12
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["fine-tuning", "LLM", "LoRA", "glossary", "beginners", "machine learning", "AI"]
+tags: ["fine-tuning", "beginners", "LLM", "LoRA", "quantization", "GPU", "glossary", "AI", "learning"]
 draft: false
 ---
 
-If you have been following the world of AI lately, you have probably heard terms like fine-tuning, LoRA, quantization, and SFT. They sound technical, and they are. But understanding them is not as hard as it seems.
+<img src="/assets/img/2026-09-12-ai-fine-tuning-glossary-beginners-en-1.png" alt="AI fine-tuning glossary cover: the terms of AI model tuning explained without jargon" width="1200" height="333" />
 
-This glossary explains each term in plain language, with examples and context, so you can follow conversations about AI training without feeling lost.
+If you are starting to explore the world of artificial intelligence models,
+you have probably run into sentences like this:
 
-## A
+> "With a YAML file you define the base model, the SFT or DPO task, the
+> hyperparameters, apply quantization and start training."
 
-### Alignment
-The process of making an AI model behave according to human values and intentions. An aligned model refuses harmful requests, avoids bias, and follows instructions as intended. Techniques like RLHF (Reinforcement Learning from Human Feedback) and DPO are alignment methods.
+If you read that and thought "I understood nothing", this article is for you.
 
-### Architecture
-The structural design of a neural network. Different architectures (Transformer, Mixture of Experts, State Space Models) process information in different ways. The Transformer architecture is the basis for most modern LLMs.
+We will explain each of those terms simply, as if we were just talking. By the
+end you will understand what each piece means and why it matters.
 
-## B
+## What an AI model (or LLM) is
 
-### Backpropagation
-The algorithm that trains neural networks. It calculates how much each parameter contributed to the error and adjusts them to reduce it. Backpropagation is what makes learning possible, but it requires storing intermediate values in memory, which is why VRAM usage is high during training.
+An AI model is a computer program that was trained on an immense amount of text
+to learn patterns of human language. It does not "think" like a person, but it
+learned the probability of one word coming after another.
 
-### Base model
-An untrained or pre-trained model before fine-tuning. It has learned general patterns from large amounts of data but has not been adapted to a specific task. Examples: Llama-3.1-8B, Mistral-7B, Qwen2.5-3B.
+LLM stands for Large Language Model. They are models with billions of
+parameters. A parameter is like an internal "adjustment knob" of the model. The
+more parameters, the more complex the model tends to be.
 
-### Batch size
-The number of samples processed together before the model updates its parameters. A larger batch size means more stable training but requires more VRAM. A smaller batch size fits in less memory but can make training noisier.
+To give you an idea:
 
-### Benchmark
-A standardized test used to compare model performance. Examples: MMLU (knowledge), GSM8K (math), HumanEval (code), MT-Bench (conversation). Benchmarks help you choose between models, but they do not measure everything that matters.
+- A small model: 500 million parameters (0.5B)
+- A medium model: 3 billion parameters (3B)
+- A large model: 8 billion parameters (8B)
+- A very large model: 70 billion parameters (70B)
 
-### BF16 (Brain Float 16)
-A 16-bit floating point format used in modern GPUs. It offers better numerical stability than FP16 while using less memory than FP32. Most fine-tuning today uses BF16 by default.
+Each parameter takes up space in the computer's memory. That is why large
+models need powerful video cards.
 
-## C
+Examples of famous LLMs: Llama (Meta), Qwen (Alibaba), Mistral, Gemma (Google),
+GPT (OpenAI).
 
-### Checkpoint
-A saved copy of the model's weights at a specific point during training. Checkpoints let you resume training if something fails, or go back to an earlier version if the model starts to degrade.
+## What fine-tuning is
 
-### Cold start
-Starting a model from scratch with random weights. This requires enormous amounts of data and compute. Almost nobody does cold start training anymore. Instead, you start from a pre-trained model and fine-tune.
+Fine-tuning is the process of taking a model that has already been trained and
+"adjusting" it for a specific task.
 
-### Continuous batching
-A technique where the inference server groups requests as they arrive, rather than waiting for a full batch. This increases throughput and reduces latency. Used by TGI, vLLM, and TensorRT-LLM.
+Imagine you hired a chef who knows how to cook everything (that is the base
+model). Fine-tuning would be like giving them an intensive course in Italian
+cuisine. They still know how to cook everything, but now they understand pasta
+and sauces far better.
 
-### Convergence
-The point during training where the model stops improving significantly. The loss curve flattens. Training past convergence can lead to overfitting.
+In practice, fine-tuning is when you take a generic model and train it on your
+own data so it specializes in your subject.
 
-## D
+## What LoRA is
 
-### Dataset
-The collection of examples used to train or fine-tune a model. For supervised fine-tuning, each example has an input (instruction) and an expected output (response). Dataset quality matters more than dataset size.
+LoRA (Low-Rank Adaptation) is a technique that makes fine-tuning much lighter.
 
-### DPO (Direct Preference Optimization)
-A training method that aligns a model using pairs of preferred and rejected responses, without needing a separate reward model. It is simpler than RLHF and has become popular in 2025-2026 for preference alignment.
+Back to the chef example: instead of teaching everything again (which would be
+expensive and slow), you give them a small Italian recipe notebook. The chef
+stays the same, but now has a complement that helps with Italian cooking.
 
-### Dropout
-A regularization technique that randomly ignores a fraction of neurons during training. This prevents the model from becoming too dependent on specific neurons and helps generalization.
+Technically, LoRA creates small adapters that are trained while the original
+base model stays frozen. That drastically reduces the amount of memory needed
+and the training time.
 
-## E
+Without LoRA, training a model with 8 billion parameters would require a video
+card with more than 60 GB of VRAM. With LoRA, you can do the same fine-tuning
+on an 8 GB card.
 
-### Embedding
-A numerical representation of text (or images, audio) as a vector of floating point numbers. Embeddings capture semantic meaning: similar texts have similar vectors. They are used for search, classification, and as input to neural networks.
+At the end of training, LoRA produces a small file (the adapter) you can share
+or apply to the base model when you use it.
 
-### Epoch
-One complete pass through the entire training dataset. If you train for 3 epochs, the model sees each example three times. More epochs can improve performance but increase the risk of overfitting.
+## What VRAM is and why it matters
 
-## F
+VRAM is the memory of the video card (GPU). It is different from your
+computer's RAM.
 
-### Fine-tuning
-The process of taking a pre-trained model and continuing its training on a smaller, task-specific dataset. Instead of training a model from scratch (which costs millions of dollars), you adapt an existing model for your use case. Fine-tuning changes the model's weights to make it better at your specific task.
+When you train or use an AI model, it has to be loaded into the GPU's VRAM.
+That is where the calculations happen. The more VRAM your card has, the larger
+the models you can run.
 
-### Forward pass
-When data flows through the neural network from input to output, generating a prediction. The forward pass produces the loss, which measures how wrong the prediction was.
+- 4 GB of VRAM: very small models, or large models with special techniques
+- 8 GB of VRAM: models up to 3B parameters without tricks, or 8B with LoRA
+- 12 GB of VRAM: 7B models comfortably
+- 24 GB of VRAM (RTX 3090/4090): models from 13B to 30B with quantization
 
-### FP16 (16-bit Floating Point)
-A half-precision floating point format. Uses half the memory of FP32 but can suffer from numerical instability during training. BF16 is generally preferred.
+If the model does not fit in your VRAM, you cannot train. That is why
+techniques like LoRA and layer streaming exist.
 
-### FP32 (32-bit Floating Point)
-Full precision floating point. Used as the reference for numerical accuracy. Training in FP32 is stable but requires twice the memory of BF16 or FP16.
+## What quantization is
 
-## G
+Quantization is a technique to reduce the size of a model without losing much
+quality.
 
-### GGUF
-A file format for storing quantized models, created by the llama.cpp project. GGUF files contain the model weights in a compact format that runs efficiently on consumer hardware. Models in GGUF format are what you download to run locally with tools like Ollama or llama.cpp.
+Think of a photo. A high quality RAW photo takes up a lot of space. A
+compressed JPEG photo takes up less, but is still nice to look at. Quantization
+is like converting the model from RAW to JPEG.
 
-### GPTQ (GPT Post-Training Quantization)
-A quantization technique that compresses model weights to 4 or 3 bits. GPTQ models run faster than FP16 versions on GPUs with minimal quality loss. Common in text generation inference.
+The numbers that make up the model's parameters can be stored with different
+levels of precision:
 
-### GPU (Graphics Processing Unit)
-The specialized hardware that trains and runs neural networks. GPUs are designed for parallel computation, which is exactly what neural networks need. Key specifications for AI work: VRAM amount, memory bandwidth, and compute capability.
+- **bf16** (16 bits): high precision, takes up more space. The standard for
+  training.
+- **8 bits:** medium precision, takes up half the space.
+- **4 bits (NF4):** reduced precision, takes up a quarter of the space. Enough
+  for many tasks.
 
-### Gradient
-The mathematical value that tells the optimizer how much to adjust each parameter during training. Gradients are calculated during backpropagation and represent the direction and magnitude of change needed.
+A model with 8B parameters in bf16 takes up about 16 GB. In 4 bits, it takes up
+about 5 GB. The difference is enormous.
 
-### Gradient accumulation
-A technique that simulates a larger batch size by accumulating gradients over several smaller batches before updating the model. Useful when your GPU does not have enough VRAM for the desired batch size.
+4-bit quantization (NF4) is what allows a Llama-8B to run on a 4 GB video card
+using layer streaming. Without it, the same model would require at least 16 GB
+of VRAM.
 
-### Gradient checkpointing
-A memory-saving technique that discards intermediate activations during the forward pass and recomputes them during backpropagation. This reduces VRAM usage by 30-50% at the cost of slower training.
+## What a GPU is and why not just any card will do
 
-## H
+GPU (Graphics Processing Unit) is the video card. Originally created for games,
+it is excellent for the mathematical calculations that AI training requires.
 
-### Hallucination
-When a model generates false information that sounds plausible. The model is not lying intentionally: it is generating text that statistically matches the patterns it learned, even when those patterns do not correspond to reality.
+Not every GPU is good for AI. What matters:
 
-### Hyperparameters
-Configuration values that control how training happens, set before training begins. Examples: learning rate, batch size, number of epochs, LoRA rank. Hyperparameters are not learned by the model; you choose them based on experimentation.
+- **VRAM:** we already covered it. More is better.
+- **CUDA cores:** these are the processors inside NVIDIA's GPU that do the
+  calculations. More cores = more speed.
+- **Generations:** newer cards have better technology. An RTX 4090 is much
+  faster than an RTX 2060.
 
-## I
+If you have a Mac with Apple Silicon (M1, M2, M3, M4), the story is different.
+The memory is unified: CPU and GPU share the same RAM. You do not have a
+separate video card, but the 32 GB of memory in the Mac Mini M4 work as if they
+were VRAM and RAM at the same time.
 
-### Inference
-Using a trained model to generate predictions. When you chat with an LLM, you are running inference. Inference requires less memory than training because you do not need to store gradients or optimizer states.
+## What a dataset is
 
-### Instruction tuning
-Fine-tuning a model on a dataset of instructions and expected responses. This is what turns a base model into a useful assistant. The model learns to follow instructions rather than just complete text.
+A dataset is the set of data you use to train the model. It is the "study
+material" of fine-tuning.
 
-## L
+A dataset for fine-tuning is a list of examples in a "question and answer"
+format. Each line contains an instruction and the expected answer. For example:
 
-### Layer streaming
-A technique that keeps the frozen base model in system RAM and copies only one decoder layer at a time to VRAM during training. This allows fine-tuning models that would not fit entirely in VRAM. Used by NVIDIA's SkillSpector's sibling tool, Soup CLI.
+```
+Question: What is LoRA?
+Answer: LoRA is a technique that allows fine-tuning large models with less memory.
+```
 
-### Learning rate
-A hyperparameter that controls how much the model's parameters are adjusted in each training step. Too high: training diverges. Too low: training takes forever or gets stuck. Typical values range from 1e-4 to 5e-5 for fine-tuning.
+The quality of the dataset matters more than the quantity. A thousand good
+examples are worth more than a hundred thousand badly written ones.
 
-### LLM (Large Language Model)
-A neural network trained on massive amounts of text to understand and generate human language. Examples: GPT-4, Llama 3, Mistral, Qwen, Gemma. LLMs are measured by the number of parameters (7 billion, 70 billion, etc.) and the amount of data they were trained on.
+## What SFT is
 
-### LoRA (Low-Rank Adaptation)
-A fine-tuning technique that adds small, trainable matrices to the existing model instead of updating all parameters. LoRA reduces the number of trainable parameters by 99% or more, making fine-tuning possible on consumer GPUs. A LoRA adapter is typically a few megabytes, compared to gigabytes for the full model.
+SFT stands for Supervised Fine-Tuning. It is the most basic and common method.
 
-### Loss
-A numerical value that measures how wrong the model's predictions are. Lower loss means better predictions. The loss decreases during training as the model learns.
+You show examples to the model (question and answer pairs) and it learns to
+reproduce that pattern. It is like giving answer keys for the model to study.
 
-## M
+If you have a knowledge base from your company with frequently asked questions
+and answers, you use SFT to teach the model to answer like a specialist in your
+field.
 
-### Model
-A neural network with its learned parameters (weights). In the context of AI, "model" usually refers to a complete system that can generate text, answer questions, or perform other tasks. Examples: Llama-3.1-8B, GPT-4o, Claude 4.
+## What DPO is
 
-### Multi-modal
-A model that can process multiple types of data: text, images, audio, and video. Examples: GPT-4o (text + images + audio), Gemini (text + images + audio + video), Llama 4 (text + images).
+DPO stands for Direct Preference Optimization. It is a more advanced method
+than SFT.
 
-## N
+Instead of showing the right answer, you show two answers: a good one and a bad
+one. The model learns to prefer the good one and reject the bad one.
 
-### NF4 (NormalFloat4)
-A 4-bit quantization format that preserves more accuracy than standard 4-bit quantization. NF4 is used by the Soup CLI's layer streaming to reduce model storage by approximately 4x.
+It is like telling the chef: "this pasta turned out good, that other one was
+too salty. Figure out the difference and get it right next time."
 
-### NPU (Neural Processing Unit)
-Specialized hardware designed specifically for neural network inference. Found in modern smartphones (Apple Neural Engine, Qualcomm AI Engine) and some laptops (Intel NPU). More efficient than GPUs for inference but less flexible.
+DPO is used to align the model with human preferences: more useful, more
+polite, safer answers.
 
-## O
+Other similar methods: ORPO, SimPO, KTO. They are variations of the same idea
+with small technical differences.
 
-### Overfitting
-When a model memorizes the training data instead of learning general patterns. An overfitted model performs well on training data but poorly on new, unseen data. Symptoms: training loss keeps decreasing but validation loss starts increasing.
+## What hyperparameters are
 
-### Optimizer
-The algorithm that updates model parameters based on gradients. Adam and AdamW are the most common optimizers for LLM training. The optimizer maintains state (like momentum) that also consumes VRAM.
+Hyperparameters are the settings you adjust before starting training. They
+control how the model learns.
 
-## P
+The main ones:
 
-### Parameter
-A numerical value inside the neural network that is learned during training. In LLMs, parameters are the weights of the connections between neurons. Model size is measured in parameters: a 7B model has 7 billion parameters.
+- **Epochs:** how many times the model will see the complete dataset. More
+  epochs = more training time.
+- **Learning rate (lr):** the speed at which the model learns. Too high and it
+  does not retain the knowledge. Too low and it takes forever.
+- **Batch size:** how many examples the model processes at once. Larger batch =
+  more memory, but more stable training.
+- **Sequence length (max_length):** the maximum size of each text the model
+  processes.
 
-### Pre-training
-The initial phase of training where a model learns general language patterns from massive datasets (often terabytes of text). Pre-training costs millions of dollars in compute. The result is a base model that understands language but has not been adapted to specific tasks.
+Tuning hyperparameters is more art than science. Tools like Soup do it
+automatically in most cases.
 
-### PEFT (Parameter-Efficient Fine-Tuning)
-A family of techniques that fine-tune models by updating only a small fraction of parameters. LoRA and QLoRA are PEFT methods. PEFT makes fine-tuning accessible on consumer hardware.
+## What YAML is
 
-## Q
+YAML is a configuration file format. Instead of writing complex commands in the
+terminal, you write a simple file with organized options.
 
-### QLoRA (Quantized LoRA)
-A combination of quantization and LoRA. The base model is loaded in 4-bit (quantized), reducing memory usage by 4x, while LoRA adapters are trained in full precision. This allows fine-tuning a 70B model on a single 48 GB GPU.
+A YAML file looks like this:
 
-### Quantization
-A technique that reduces the precision of model weights, trading some accuracy for lower memory usage and faster inference. A model stored in 4-bit uses 4x less memory than the same model in 16-bit. Common formats: NF4, GPTQ, AWQ, GGUF Q4_K_M.
+```yaml
+model: Llama-8B
+task: SFT
+epochs: 3
+learning_rate: 0.00002
+quantization: 4bits
+```
 
-## R
+It is a way of telling the program what you want in an organized form, without
+having to memorize commands.
 
-### RAG (Retrieval-Augmented Generation)
-A technique that combines a model with an external knowledge base. When asked a question, the system first searches the knowledge base for relevant information and then feeds that information to the model as context. RAG does not require fine-tuning.
+## What GGUF is
 
-### RLHF (Reinforcement Learning from Human Feedback)
-A three-stage alignment process: supervised fine-tuning, reward model training, and reinforcement learning optimization. RLHF is what made ChatGPT behave like a helpful assistant. DPO is a simpler alternative that achieves similar results.
+GGUF is a file format for saving AI models in an optimized way. It was created
+by the llama.cpp project.
 
-### Rope (Rotary Position Embedding)
-A technique used in modern LLMs (Llama, Mistral, Qwen) to encode the position of tokens in a sequence. It allows the model to understand word order and relative distances between words.
+When you finish fine-tuning and want to use the model in tools like Ollama or
+LM Studio, you need to export the model to GGUF. It is like saving a file as
+PDF instead of leaving it in the word processor's original format.
 
-## S
+GGUF supports different quantization levels (q4_k_m, q5_k_m, q8_0, etc.), which
+indicate the balance between size and quality.
 
-### SFT (Supervised Fine-Tuning)
-The simplest form of fine-tuning: training a model on pairs of inputs and expected outputs using supervised learning. You show the model examples of good responses, and it learns to reproduce them. SFT is the first step in most training pipelines.
+## What layer streaming is
 
-### Sharding
-Splitting a model across multiple GPUs or machines. Each GPU holds a portion of the model parameters. Techniques: tensor parallelism (splitting individual layers) and pipeline parallelism (splitting layers across devices).
+Layer streaming is a relatively new technique that lets you train models that do
+not fit in your video card.
 
-### Slop
-Low-quality, repetitive, or overly generic content generated by AI models. Slop is not technically incorrect, but it adds no value. Reducing slop is one reason to fine-tune a model for your specific use case.
+Normally the whole model needs to be in VRAM to be trained. Layer streaming
+keeps the model in the computer's RAM and copies only a small part at a time
+into VRAM. It is like reading a big book page by page instead of trying to hold
+the whole book open on your desk.
 
-## T
+The Soup CLI implements this technique and it is the reason you can fine-tune a
+Llama-8B on a 4 GB card.
 
-### Temperature
-A hyperparameter that controls the randomness of model outputs. Low temperature (0.1): more deterministic, repetitive. High temperature (0.8): more creative, varied. For factual tasks, use low temperature. For creative writing, use higher temperature.
+## And how does it all fit together?
 
-### Tensor
-A multi-dimensional array of numbers. In deep learning, everything is a tensor: inputs, outputs, weights, gradients. Tensors flow through the neural network during forward and backward passes.
+Here is the complete fine-tuning flow, from start to finish, with the terms we
+learned:
 
-### Token
-The basic unit of text that a language model processes. A token is not a word. It can be a word fragment, a whole word, or a punctuation mark. For example, "unbelievable" might be split into ["un", "believe", "able"]. An average English word is about 1.3 tokens.
+1. You choose a **base model** (e.g. Llama-3.1-8B) that was already pre-trained
+   on billions of texts
+2. You prepare a **dataset** with examples of what you want to teach (question
+   and answer format)
+3. You create a **YAML** file with the settings: which model, which task (**SFT**
+   or **DPO**), the **hyperparameters** and the level of **quantization**
+4. You apply **LoRA** so only a small part of the model is trained, saving
+   memory
+5. If the model does not fit in your **VRAM**, you enable **layer streaming**
+6. The training runs on your **GPU**, and the result is a small **LoRA** file
+   (adapter)
+7. You can **merge** the adapter into the base model and **export** to **GGUF**
+   to use in Ollama
 
-### Tokenizer
-The component that converts text into tokens (for input) and tokens back into text (for output). Different models use different tokenizers. Llama uses a BPE tokenizer with a 128K vocabulary. Qwen uses a tokenizer optimized for multilingual text.
+All of that fits into a single command with tools like Soup. But behind that
+command, each of those terms represents an engineering decision that makes
+fine-tuning possible on hardware you already have at home.
 
-### Training
-The process of adjusting model parameters to minimize the loss function. Training requires: a dataset, a model architecture, a loss function, an optimizer, and hardware (GPU) to run the computations.
+## A quick summary
 
-## V
+| Term | What it is (simply put) |
+|---|---|
+| **LLM** | An AI model that understands and generates text |
+| **Fine-tuning** | Teaching a new skill to an already trained model |
+| **LoRA** | A technique that allows fine-tuning using much less memory |
+| **VRAM** | The video card's memory, where the model does its work |
+| **GPU** | The video card, which does the heavy calculations |
+| **Quantization** | Reducing the model's size with little quality loss |
+| **Dataset** | The set of examples used for training |
+| **SFT** | Fine-tuning with question and correct answer examples |
+| **DPO** | Fine-tuning with pairs of good and bad answers |
+| **Hyperparameters** | Settings that control how training happens |
+| **YAML** | A simple, organized configuration file |
+| **GGUF** | File format to use models in tools like Ollama |
+| **Layer streaming** | A technique that trains large models on cards with little VRAM |
+| **Batch size** | How many examples the model processes at a time |
+| **Epoch** | How many times the model sees the complete dataset |
 
-### Validation
-Evaluating the model on data it has not seen during training. Validation loss tells you if the model is overfitting. Always split your dataset into training and validation sets.
+## Conclusion
 
-### VRAM (Video RAM)
-The memory on a graphics card. VRAM is the most critical resource for training and running LLMs. Model weights, gradients, optimizer states, and activations all need to fit in VRAM. A 7B model in 16-bit needs about 14 GB of VRAM just for the weights.
+The world of AI fine-tuning looks full of acronyms and complicated terms, but
+each of them solves a specific problem. LoRA exists because VRAM is expensive.
+Quantization exists because models are too big. Layer streaming exists because
+not everyone has a server GPU.
 
-## Y
+Understanding these terms is not necessary to use tools like Soup, which
+automate almost everything. But it helps you know what is happening when
+something goes wrong, or when you need to decide between one configuration and
+another.
 
-### YAML
-A human-readable data format used for configuration files. In tools like Soup CLI, you define the model, dataset, hyperparameters, and training method in a YAML file. YAML uses indentation for structure, similar to Python.
-
-## Z
-
-### Zero-shot
-The ability of a model to perform a task without any specific training examples. For example, asking a model to translate English to French without ever showing it translation pairs. Fine-tuning improves performance on tasks where zero-shot is not good enough.
+Start with SFT and a small dataset. After a few fine-tunings, the terms that
+seem confusing today will make perfect sense.

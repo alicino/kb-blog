@@ -8,7 +8,7 @@ tags: ["VPN", "ASN", "security", "networking", "IP"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-10-deteccao-vpn-hosting-asn-en-1.png" alt="VPN detection: hosting, ASNs and reputation" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-10-deteccao-vpn-hosting-asn-en-1.png" alt="VPN detection: hosting, ASNs and reputation" width="1200" height="333" />
 
 In [part 1](/en/articles/2026-10-09-ip-pais-asn-bgp/) we assembled the chain: an IP falls into a prefix, the prefix is announced by an ASN, the ASN is associated with an organization, and the registry holds the country. "Ownership" became three separate questions, registration, route and location.
 

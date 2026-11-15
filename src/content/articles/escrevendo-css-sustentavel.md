@@ -9,6 +9,8 @@ draft: false
 coverAlt: "Ilustração de camadas de estilo se sobrepondo"
 ---
 
+<img src="/assets/img/escrevendo-css-sustentavel-1.png" alt="Capa sobre escrever CSS sustentável: design tokens, camadas e regras que envelhecem bem" width="1200" height="333" />
+
 CSS raramente fica ruim de uma vez. Ele piora aos poucos, um `!important` de
 cada vez, até ninguém mais saber com segurança o que pode ser removido.
 
@@ -25,7 +27,7 @@ Antes de estilizar qualquer coisa, defina um pequeno conjunto de variáveis:
 ```
 
 Isso cria um vocabulário compartilhado. Em vez de "essa borda tem 11px ou 12px
-de raio?", a pergunta vira "isso usa `--radius-md` ou `--radius-lg`?" — muito
+de raio?", a pergunta vira "isso usa `--radius-md` ou `--radius-lg`?", muito
 mais fácil de revisar.
 
 ## Nomeie pelo que o elemento é, não pelo que parece

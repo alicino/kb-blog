@@ -14,7 +14,7 @@ That scene is old, and so is the solution. Unix has had a program for this since
 
 If you read the post about [Herdr](/en/articles/2026-09-17-herdr-agent-multiplexer-terminal/), the multiplexer designed for AI agents, you already know the role tmux plays in that story: it is the foundation the newer tools were built on. In this post, the subject is tmux itself: what it does, how to use it, how to manage it, and why it remains essential.
 
-<img src="/assets/img/2026-09-28-tmux-terminal-multiplexer-en-1.png" alt="Tmux: the terminal that never dies, persistent sessions and panes" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-28-tmux-terminal-multiplexer-en-1.png" alt="Tmux: the terminal that never dies, persistent sessions and panes" width="1200" height="333" />
 
 ## What a terminal multiplexer is
 

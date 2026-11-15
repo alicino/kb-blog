@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["abliteration", "LLM", "segurança", "interpretabilidade", "alinhamento", "guardrails", "recusa", "circuit breakers", "open-weights"]
 draft: false
 ---
-<img src="/assets/img/2026-09-28-abliteration-recusa-llm-1.png" alt="Recusa em LLMs e abliteration: como funciona" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-28-abliteration-recusa-llm-1.png" alt="Recusa em LLMs e abliteration: como funciona" width="1200" height="333" />
 
 
 Todo mundo que usa um modelo de linguagem já bateu neste comportamento: você faz um pedido, e o modelo responde que não pode ajudar com isso. Depois você reformula a pergunta de outro jeito, e ele responde. A mesma informação, negada uma vez e entregue na outra.

@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["AI for beginners", "artificial intelligence", "productivity", "processes", "learning AI"]
 draft: false
 ---
-<img src="/assets/img/2026-11-12-ia-para-quem-nao-usa-parte-2-en-1.png" alt="From loose task to process: how AI fits into your work week" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-11-12-ia-para-quem-nao-usa-parte-2-en-1.png" alt="From loose task to process: how AI fits into your work week" width="1200" height="333" />
 
 
 People who use AI every now and then gain almost nothing. The gain comes from repetition, and repetition requires process, not inspiration.

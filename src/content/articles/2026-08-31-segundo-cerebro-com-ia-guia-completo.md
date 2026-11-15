@@ -8,6 +8,8 @@ tags: ["segundo cérebro", "second brain", "Obsidian", "PKM", "RAG", "produtivid
 draft: false
 ---
 
+<img src="/assets/img/2026-08-31-segundo-cerebro-com-ia-guia-completo-1.png" alt="Capa do guia de Segundo Cérebro com IA: notas conectadas que respondem perguntas usando busca semântica" width="1200" height="333" />
+
 Você já passou por isso: leu um artigo importante, teve uma ideia brilhante, participou de uma reunião com decisões claras. Dias depois, quando precisou daquela informação, ela tinha sumido. Você sabia que tinha visto algo sobre o assunto, mas não lembrava onde, nem o que dizia.
 
 Esse é o problema mais comum do conhecimento humano. Nossa memória biológica é excelente para conectar ideias e ter insights, mas péssima para armazenar informações com precisão. Tudo o que não está no nosso alcance imediato simplesmente desaparece.

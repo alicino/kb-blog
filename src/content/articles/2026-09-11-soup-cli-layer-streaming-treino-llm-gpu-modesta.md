@@ -8,6 +8,8 @@ tags: ["Soup", "layer streaming", "fine-tuning", "LLM", "LoRA", "treinamento", "
 draft: false
 ---
 
+<img src="/assets/img/2026-09-11-soup-cli-layer-streaming-treino-llm-gpu-modesta-1.png" alt="Capa do Soup CLI: camadas de um modelo de IA sendo transmitidas para uma GPU modesta durante o treinamento" width="1200" height="333" />
+
 Você tem uma placa de vídeo com 4, 6 ou 8 GB de VRAM. Um notebook gamer, um desktop com uma RTX 2060 Super, ou um Mac Mini M4 com 32 GB de memória unificada. Você quer treinar ou ajustar um modelo de linguagem grande, mas descobre que o modelo não cabe na sua GPU.
 
 A resposta usual para esse problema tem três opções: quantizar mais (e perder qualidade), alugar uma GPU na nuvem (e pagar por hora), ou desistir.

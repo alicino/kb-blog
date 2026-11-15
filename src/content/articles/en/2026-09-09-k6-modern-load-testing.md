@@ -1,6 +1,6 @@
 ---
 title: "Modern Load Testing with k6: Lightweight Scripts, Serious Results"
-description: "Discover k6, Grafana's open source load testing tool that uses JavaScript, integrates with CI/CD, and monitors performance with granular metrics."
+description: "Get to know k6, Grafana's open source load testing tool that uses JavaScript, integrates with CI/CD and monitors performance with granular metrics."
 publishDate: 2026-09-09
 author: "Alicino"
 category: "Ferramentas"
@@ -8,316 +8,396 @@ tags: ["k6", "load-testing", "performance", "grafana", "devops", "javascript"]
 draft: false
 ---
 
-Load testing has always felt like something only specialists do. Heavy tools, interfaces full of buttons you don't understand, reports that make no sense. But things have changed. When you're running microservices, exposing public APIs, and deploying continuously, knowing how your application behaves under load isn't optional anymore. It's part of the job.
+<img src="/assets/img/2026-09-09-k6-modern-load-testing-en-1.png" alt="Cover image: modern load testing with k6, lightweight scripts and serious results" width="1200" height="333" />
 
-That's where k6 comes in. Now called Grafana k6, it's an open source load testing tool that treats tests like code, writes scenarios in JavaScript, and fits in a single binary. No dependencies, no JVM, no IDE needed.
+Load testing has always been seen as an area "only for specialists": heavy tools, interfaces full of buttons, reports nobody knew how to interpret. But times have changed. Today, with microservices based architectures, public APIs and continuous deploys, knowing how your application behaves under pressure is no longer a luxury: it is part of the development cycle.
 
-If you've used JMeter and felt like you needed a semester of training just to understand the UI, or tried Locust and found Python too heavy for a quick test, k6 will feel refreshing.
+That is where **k6** (now **Grafana k6**) comes in: an open source load testing tool that treats tests as code, writes scenarios in JavaScript, and fits in a single binary, with no dependencies, no JVM and no IDE.
 
-## What is k6
+If you have used JMeter and felt you needed a course just to understand the interface, or tried Locust and found the Python ecosystem heavy for a quick test, k6 will surprise you.
 
-k6 is a load testing tool created by the k6 company (which Grafana Labs bought in 2021) and has been open source since 2016.
+> This article is a complete guide, from installation to advanced scenarios, with practical examples and references so you can dig deeper.
 
-The core idea is straightforward: you write a script in JavaScript or TypeScript, tell it how many virtual users should hit your application, and k6 runs the test and generates reports. Response times, error rates, throughput. All the metrics that matter.
+The core idea is simple: you write a script in JavaScript (or TypeScript), define how many virtual users will hit your application, and k6 runs the test producing reports with metrics such as response time, error rate and throughput.
 
-The real power is in the simplicity. Your tests are code. They live in git. They run in your CI/CD pipeline just like your unit tests. A load test that used to take an hour to set up now takes 15 minutes.
+## What is k6?
 
-## k6 versus the alternatives
+At its core, k6 is a command line tool that runs a script you write. There is no graphical interface and no project to set up: a single file is enough to describe the entire test.
 
-| What | k6 | JMeter | Locust |
-|---|---|---|---|
-| You write it in | JavaScript/Go | Point and click | Python |
-| How long to learn | 30 minutes | 2 weeks | 1 week |
-| Works in CI/CD | Yes, natively | Awkward | Possible |
-| Custom logic | Easy | Hard | Medium |
-| Single executable | Yes | Nope, needs Java | Nope, needs Python |
-| Cloud testing | Yes via k6 Cloud | Need third party | Need third party |
+What makes k6 special is its **architecture**: it is written in Go, and each virtual user runs as a goroutine, a lightweight concurrency mechanism. That means a single machine can simulate **thousands of simultaneous users** without consuming the resources that JMeter, for example, would need.
 
-## Install it
+> **Official source:** [k6.io — Load testing for engineering teams](https://k6.io/)
+>
+> **GitHub repository:** [github.com/grafana/k6](https://github.com/grafana/k6), with more than 30 thousand stars
 
-k6 runs on Windows, macOS, and Linux. Installation is fast:
+## What is k6 for? (Use cases)
+
+k6 can be used in several situations, all of them related to understanding the limits of your application:
+
+### API performance testing
+The most common use. You simulate HTTP requests (GET, POST, PUT, DELETE) against your API endpoints and measure how they behave under load. k6 supports HTTP/1.1 and HTTP/2 natively.
+
+### Stress and breakpoint testing
+Want to know how far your application holds before it goes down? k6 lets you gradually increase the number of users until the system starts failing, the famous "breakpoint test".
+
+### Spike testing
+Simulate events such as Black Friday, a product launch or an email campaign that triggers thousands of simultaneous visits in seconds.
+
+### Soak testing
+Apply moderate load for hours (or days) to detect memory leaks, gradual performance degradation and problems that only show up with prolonged runtime.
+
+### Testing in CI/CD pipelines
+Integrate k6 directly into GitHub Actions, GitLab CI or any other pipeline. Define thresholds such as "p95 under 500ms" and the test fails automatically if the system does not meet the goal.
+
+### WebSocket and gRPC testing
+Beyond HTTP, k6 supports testing with WebSockets (persistent connections) and gRPC (modern RPC calls), two protocols that are increasingly common in reactive applications and microservices.
+
+> **Official source:** [Grafana k6 — Testing guides](https://grafana.com/docs/k6/latest/testing-guides/)
+
+## How to install k6
+
+Installation is trivial on any system. k6 is a single binary, with no external dependencies.
+
+### Linux (Debian/Ubuntu)
 
 ```bash
-# macOS
+curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+sudo apt-get update
+sudo apt-get install k6
+```
+
+### macOS (Homebrew)
+
+```bash
 brew install k6
-
-# Linux
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6-stable.list
-sudo apt-get update && sudo apt-get install k6
-
-# Windows
-choco install k6
-
-# Or grab it directly from https://github.com/grafana/k6/releases
 ```
 
-Verify it works:
+### Windows (Chocolatey)
+
+```powershell
+choco install k6
+```
+
+### Docker
 
 ```bash
-k6 version
+docker pull grafana/k6
 ```
 
-## Your first test in 5 minutes
+After installing, confirm with `k6 version` in the terminal.
 
-Here's a minimal test that hits a website 10 times with 5 concurrent users over 30 seconds:
+> **Official source:** [Grafana k6 — Install k6](https://grafana.com/docs/k6/latest/set-up/install-k6/)
+
+## Your first load test
+
+Let us start with something simple: a script that makes GET requests to a URL and measures the response time.
 
 ```javascript
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { sleep } from 'k6';
 
 export const options = {
-  stages: [
-    { duration: '10s', target: 5 },
-    { duration: '20s', target: 5 },
-    { duration: '10s', target: 0 },
-  ],
+  vus: 10,
+  duration: '30s',
+};
+
+export default function () {
+  http.get('https://test-api.k6.io');
+  sleep(1);
+}
+```
+
+The code below is generated by the model. You do not need to write it.
+
+```javascript
+// Code generated by the model, not by you
+import http from 'k6/http';
+import { sleep, check } from 'k6';
+
+export const options = {
+  vus: 10,           // 10 simultaneous virtual users
+  duration: '30s',   // for 30 seconds
   thresholds: {
-    http_req_duration: ['p(95)<200'],
+    http_req_duration: ['p(95)<500'],  // 95% of requests under 500ms
+    http_req_failed: ['rate<0.01'],    // less than 1% errors
   },
 };
 
 export default function () {
-  const res = http.get('https://example.com');
+  const res = http.get('https://test-api.k6.io');
+
   check(res, {
     'status is 200': (r) => r.status === 200,
-    'response time under 200ms': (r) => r.timings.duration < 200,
   });
+
   sleep(1);
 }
 ```
 
-Run it:
+### How this works in practice
 
-```bash
-k6 run test.js
+When you run `k6 run script.js`, k6:
+
+1. Starts 10 simultaneous virtual users (VUs)
+2. Each VU runs the `default` function in a loop
+3. On every iteration, it makes a GET request and waits 1 second (simulating the "thinking time" of a real user)
+4. At the end, it prints a complete report in the terminal
+
+### Expected result
+
+The report shows metrics such as:
+
+- `http_req_duration`: total request time (average, median, p90, p95, p99)
+- `http_req_failed`: the percentage of requests that failed
+- `http_reqs`: requests per second, or throughput
+- `vus`: the number of virtual users over time
+
+```
+    http_req_duration..............: avg=145ms   p(95)=320ms  p(99)=580ms
+    http_req_failed...............: 0.00%
+    http_reqs......................: 284   9.47/s
+    vus............................: 10    min=10  max=10
 ```
 
-What just happened: the test ramped up to 5 users over 10 seconds, kept them for 20 seconds, then ramped down. Each request checked the status code and response time. If 95% of requests beat 200ms, the test passed.
+## Thresholds: turning metrics into decisions
 
-The output shows you the essentials:
-
-```
-checks............... 100.00% ✓
-data_received........ 12 MB
-data_sent............ 2.3 MB
-http_reqs............ 50
-http_req_duration... avg=45ms   p(95)=89ms    p(99)=120ms
-http_req_failed..... 0.00%
-iterations.......... 50
-vus................. 0
-vus_max............. 5
-```
-
-## A more realistic example with authentication
-
-Now something closer to what you'd actually test. A REST API that needs authentication:
+One of the most useful features of k6 are the **thresholds**: limits you define in the script itself. If the metric crosses the limit, k6 returns a non zero exit code, making the CI pipeline fail.
 
 ```javascript
-import http from 'k6/http';
-import { check, sleep, group } from 'k6';
-import encoding from 'k6/encoding';
-
 export const options = {
-  stages: [
-    { duration: '30s', target: 10 },
-    { duration: '1m30s', target: 10 },
-    { duration: '20s', target: 0 },
-  ],
   thresholds: {
-    http_req_duration: ['p(99)<500', 'p(95)<250'],
-    http_req_failed: ['rate<0.1'],
+    http_req_duration: ['p(95)<500', 'p(99)<1000'],
+    http_req_failed: ['rate<0.01'],
+    http_req_connecting: ['p(95)<100'],
+  },
+}
+```
+
+That means:
+- 95% of requests must respond in under 500ms
+- 99% in under 1000ms
+- Less than 1% failure
+- Connection time must stay under 100ms for 95% of cases
+
+> **Official source:** [Grafana k6 — Thresholds](https://grafana.com/docs/k6/latest/using-k6/thresholds/)
+
+## Scenarios and executors: simulating real traffic
+
+k6 lets you configure **scenarios** with different **executors**, ways of increasing or decreasing load. You can simulate anything from a smooth growth in users to an abrupt spike.
+
+### Ramping VUs
+
+```javascript
+export const options = {
+  scenarios: {
+    gradual_load: {
+      executor: 'ramping-vus',
+      stages: [
+        { duration: '2m', target: 50 },   // ramp up to 50 users in 2 min
+        { duration: '5m', target: 50 },   // hold for 5 min
+        { duration: '2m', target: 100 },  // ramp up to 100
+        { duration: '5m', target: 100 },  // hold
+        { duration: '2m', target: 0 },    // ramp down
+      ],
+    },
   },
 };
+```
+
+### Sudden spike
+
+```javascript
+export const options = {
+  scenarios: {
+    spike: {
+      executor: 'ramping-vus',
+      stages: [
+        { duration: '10s', target: 5 },    // baseline
+        { duration: '5s', target: 500 },   // SPIKE! 500 users in 5 seconds
+        { duration: '30s', target: 500 },  // sustain
+        { duration: '30s', target: 0 },    // recover
+      ],
+    },
+  },
+};
+```
+
+> **Official source:** [Grafana k6 — Scenarios](https://grafana.com/docs/k6/latest/using-k6/scenarios/)
+
+### Load test types
+
+The official k6 documentation defines six main test types:
+
+| Type | Goal | Load profile |
+|------|----------|-----------------|
+| **Smoke test** | Verify the script works | 1 to 5 VUs, few iterations |
+| **Average-load** | Behavior under typical traffic | Expected production load |
+| **Stress** | Behavior above normal | 50 to 100% above average |
+| **Spike** | Sudden traffic peaks | Abrupt rise, no plateau |
+| **Breakpoint** | Find the breaking point | Continuous ramp until failure |
+| **Soak** | Degradation over time | Average load for hours or days |
+
+> **Official source:** [Grafana k6 — Test types](https://grafana.com/docs/k6/latest/testing-guides/test-types/)
+
+## Beyond HTTP: WebSocket, gRPC and Browser
+
+k6 is not only for REST APIs. It supports other protocols natively:
+
+### WebSocket
+
+```javascript
+import ws from 'k6/ws';
+import { check } from 'k6';
 
 export default function () {
-  group('authentication', () => {
-    const payload = JSON.stringify({
-      email: 'user@example.com',
-      password: 'pass123',
-    });
-    const res = http.post('https://api.example.com/auth/login', payload, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    check(res, {
-      'login works': (r) => r.status === 200,
-      'got a token': (r) => r.json('token') !== '',
-    });
-
-    const token = res.json('token');
-    
-    group('fetch users', () => {
-      const res = http.get('https://api.example.com/users', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      check(res, {
-        'user list loads': (r) => r.status === 200,
-        'has users': (r) => r.json('data').length > 0,
-      });
-    });
-
-    group('create new user', () => {
-      const newUser = {
-        name: `User ${Math.random()}`,
-        email: `user${Math.random()}@example.com`,
-      };
-      const res = http.post('https://api.example.com/users', JSON.stringify(newUser), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      check(res, {
-        'user created': (r) => r.status === 201,
-        'has new id': (r) => r.json('id') !== null,
-      });
-    });
-  });
-
-  sleep(1);
-}
-```
-
-## The concepts that matter
-
-**Stages.** You define ramp-up, sustain, and ramp-down phases:
-
-```javascript
-stages: [
-  { duration: '1m', target: 10 },   // Build up to 10 users
-  { duration: '3m', target: 10 },   // Hold at 10
-  { duration: '1m', target: 0 },    // Drop to zero
-]
-```
-
-**Checks.** Assertions that don't fail the test if they're wrong, just report the result:
-
-```javascript
-check(res, {
-  'got 200': (r) => r.status === 200,
-  'body is big enough': (r) => r.body.length > 100,
-});
-```
-
-If a check fails, the test keeps going. Use `throw` if you want to actually fail the test:
-
-```javascript
-if (res.status !== 200) throw new Error('Bad status');
-```
-
-**Thresholds.** These actually fail the test:
-
-```javascript
-thresholds: {
-  http_req_duration: ['p(95)<200', 'p(99)<500'],
-  http_req_failed: ['rate<0.05'],
-}
-```
-
-This fails if 95% of requests exceed 200ms, or if 99% exceed 500ms, or if failure rate goes above 5%.
-
-**Groups.** Organize related requests and get metrics grouped:
-
-```javascript
-group('login flow', () => {
-  // Multiple requests here
-});
-
-group('user operations', () => {
-  // Other requests
-});
-```
-
-Each group gets its own metrics in the report.
-
-## Running in CI/CD
-
-Here's a GitHub Actions workflow to run k6 on every push:
-
-```yaml
-name: Load Test
-
-on: [push]
-
-jobs:
-  k6_load_test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Run k6 test
-        uses: grafana/k6-action@v0.3.1
-        with:
-          filename: tests/load.js
-          cloud: true
-          token: ${{ secrets.K6_CLOUD_TOKEN }}
-```
-
-Results get uploaded to k6 Cloud where you see trends over time.
-
-## Common patterns you'll actually use
-
-**Data-driven tests.** Use different data from a CSV file:
-
-```javascript
-import { SharedArray } from 'k6/data';
-import papaparse from 'https://jslib.k6.io/papaparse/5.1.1/index.js';
-import http from 'k6/http';
-
-const data = new SharedArray('data', () => {
-  const f = open('../data/users.csv');
-  return papaparse.parse(f, { header: true }).data;
-});
-
-export default function () {
-  const user = data[Math.floor(Math.random() * data.length)];
-  http.post('https://api.example.com/login', {
-    email: user.email,
-    password: user.password,
+  const url = 'ws://localhost:8080/chat';
+  const response = ws.connect(url, function (socket) {
+    socket.on('open', () => console.log('connected'));
+    socket.on('message', (data) => console.log('received:', data));
+    socket.send('Hello server!');
+    socket.close();
   });
 }
 ```
 
-**Backoff patterns.** Simulate real user behavior:
+### gRPC
 
 ```javascript
+import grpc from 'k6/net/grpc';
+
+const client = new grpc.Client();
+client.load(['definitions'], 'hello.proto');
+
 export default function () {
-  if (__VU > 50) {
-    sleep(Math.random() * 5);  // Busier users wait more
+  client.connect('localhost:50051', {});
+  const response = client.invoke('hello.HelloService/SayHello', {
+    greeting: 'world',
+  });
+  check(response, {
+    'status OK': (r) => r.status === grpc.StatusOK,
+  });
+  client.close();
+}
+```
+
+### Browser testing (e2e)
+
+With the `k6/browser` module, you can simulate real user interactions in the browser, with clicks, navigation and forms, while measuring frontend metrics such as First Contentful Paint (FCP) and Cumulative Layout Shift (CLS).
+
+```javascript
+import { browser } from 'k6/browser';
+
+export default async function () {
+  const page = await browser.newPage();
+  await page.goto('https://test.k6.io');
+  await page.locator('a[href="/my_messages.php"]').click();
+  await page.close();
+}
+```
+
+> **Official source:** [Grafana k6 — Using k6 browser](https://grafana.com/docs/k6/latest/using-k6-browser/)
+
+## Metrics and observability
+
+k6 generates metrics automatically for every test. The main ones are:
+
+- `http_req_duration`: total duration (connection + TLS + sending + waiting + receiving)
+- `http_req_failed`: proportion of requests that failed, whether from an error response or a timeout
+- `http_reqs`: rate of requests per second
+- `vus`: number of active virtual users
+- `iteration_duration`: total time of each script iteration
+
+You can create **custom metrics** to monitor specific aspects of your business:
+
+```javascript
+import { Counter } from 'k6/metrics';
+
+const failedLogins = new Counter('failed_logins');
+
+export default function () {
+  const res = http.post('https://api.example.com/login', {
+    user: 'test', password: 'wrong',
+  });
+
+  if (res.status !== 200) {
+    failedLogins.add(1);
   }
-
-  http.get('https://api.example.com/resource');
 }
 ```
 
-**Custom business metrics.** Track what actually matters:
+Results can be exported to JSON, InfluxDB, Prometheus or directly to **Grafana Cloud**, a native integration that requires no extra configuration.
 
-```javascript
-import { Trend, Rate } from 'k6/metrics';
+> **Official source:** [Grafana k6 — Metrics](https://grafana.com/docs/k6/latest/using-k6/metrics/)
 
-const loginTime = new Trend('login_time');
-const paymentSuccess = new Rate('payment_success');
+## k6 versus other tools
 
-export default function () {
-  const start = Date.now();
-  const res = http.post('https://api.example.com/auth/login', {...});
-  loginTime.add(Date.now() - start);
+How does k6 compare to the popular alternatives in 2026? Here is a summary based on recent technical analyses:
 
-  const paymentRes = http.post('https://api.example.com/payment', {...});
-  paymentSuccess.add(paymentRes.status === 200);
-}
-```
+| Characteristic | k6 | JMeter | Gatling | Locust |
+|---|---|---|---|---|
+| **Language** | JavaScript/TypeScript | Java (GUI + XML) | Scala/Java/Kotlin | Python |
+| **Concurrency model** | Goroutines (lightweight) | Thread per VU (heavy) | Async (Akka/Netty) | Greenlets (gevent) |
+| **Native protocols** | HTTP, gRPC, WS, Browser | HTTP, JDBC, JMS, LDAP, FTP, SMTP | HTTP, WS, SSE | HTTP (extensible) |
+| **CI/CD** | Excellent (native) | Average (requires setup) | Good | Good |
+| **Performance per machine** | Very high | Average | High | High |
+| **License** | AGPL-3.0 | Apache 2.0 | Apache 2.0 | MIT |
 
-## Best practices that actually work
+k6 stands out when:
 
-Start small and scale up gradually. Use stages. Define clear thresholds before you run. Test from multiple locations if you can. Most importantly, watch the system you're testing while the load test runs. Watch CPU, memory, database queries. All of it.
+- Your team already writes JavaScript
+- You want to integrate load tests into the CI/CD pipeline
+- You need high user density (thousands) on a single machine
+- You value developer experience (versioned scripts, declarative thresholds)
 
-Treat load tests like production code. Version control them. Document assumptions. Run them regularly so you catch performance regressions before they hit production.
+JMeter is still a reference for protocols beyond HTTP (JDBC, JMS, LDAP) and for QA teams that prefer a graphical interface. Locust is the best choice if your team already works with Python and needs distributed testing with no cloud cost.
 
-## Where to go from here
+> **Sources:**
+>
+> - [QAInsights — JMeter vs k6 vs Locust in 2026](https://qainsights.com/jmeter-vs-k6-vs-locust-in-2026-which-load-testing-tool-should-you-pick/)
+> - [Tech Insider — Load Testing Tools 2026: k6 vs JMeter vs Gatling](https://tech-insider.org/k6-vs-jmeter-vs-gatling-2026/)
+> - [YoungJu.dev — Load Testing Tools 2026 — Deep Dive](https://www.youngju.dev/blog/culture/2026-05-14-load-testing-tools-2026-k6-locust-vegeta-gatling-artillery-jmeter-comparison-deep-dive.en)
+> - [Ranorex — Load Testing Tools Compared](https://www.ranorex.com/blog/load-testing-tools/)
 
-Read the docs at k6.io/docs. Try k6 Cloud at cloud.k6.io if you want to run distributed tests. Check out the community forum at community.k6.io.
+## k6 in practice: company examples
 
-## The bottom line
+Organizations such as **Cloudflare**, **Citibank**, **Informatica**, **MIT** and many others use k6 in production. The most emblematic case is perhaps **Grafana Labs** itself, which offers **Grafana Cloud k6**, a SaaS platform for running tests at scale, with integrated dashboards and support for millions of geographically distributed virtual users.
 
-k6 removes the barrier to entry for load testing. If you've been putting it off because traditional tools seemed too heavy, try k6. You'll have a realistic load test running in under an hour. Add it to CI/CD and never ship a performance regression again.
+With k6, it is possible to:
+
+- Run smoke tests on every pull request (seconds)
+- Run complete load tests on every merge to main (minutes)
+- Schedule soak tests that last hours to detect degradation
+- Correlate load metrics with logs and traces in the Grafana ecosystem
+
+> **Source:** [Grafana k6 — OSS page](https://grafana.com/oss/k6/)
+
+## Recommended videos
+
+For those who prefer to learn visually:
+
+1. **Grafana k6 for Beginners**: [Watch on YouTube](https://www.youtube.com/watch?v=1mtYVDA2_iQ), official Grafana playlist
+2. **Introducing Grafana Cloud k6**: [Watch on YouTube](https://www.youtube.com/watch?v=HyM4lNZjKqk)
+3. **Getting Started with API Load Testing** (Nick): practical demonstration with k6, covering stress, spike, load and soak tests
+
+> All links were verified in the official Grafana sources and in relevant technical channels.
+
+## Conclusion
+
+k6 represents a paradigm shift in load testing. It is not just another tool: it is an approach that treats **performance as a software requirement**, with versioned, automated tests integrated into the development cycle.
+
+If you work with APIs, microservices or web applications, and you still do not have load tests in your pipeline, k6 is probably the shortest path between "we do not test performance" and "our system holds up under pressure".
+
+Start small: a 10 line script, one threshold, one commit. Then expand. What matters is to **start**.
+
+### Useful links
+
+- [Official k6 site](https://k6.io/)
+- [Complete documentation](https://grafana.com/docs/k6/latest/)
+- [GitHub repository](https://github.com/grafana/k6)
+- [Grafana Cloud k6](https://grafana.com/products/cloud/k6/)
+- [Community forum](https://community.grafana.com/)
+- [Load testing guide with k6 (Flavio Copes)](https://flaviocopes.com/k6-load-testing-tutorial/)
+- [k6 + CI/CD tutorial (QA Practices)](https://qapractices.com/documentation/k6-load-testing-tutorial/)
+- [k6 + Grafana Cloud 2026 tutorial (QASkills.sh)](https://qaskills.sh/blog/k6-grafana-cloud-load-testing-tutorial-2026/)
+- [Baeldung — How to Execute Load Tests Using k6](https://www.baeldung.com/k6-framework-load-testing)

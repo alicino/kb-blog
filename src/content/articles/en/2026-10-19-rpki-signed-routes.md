@@ -8,7 +8,7 @@ tags: ["RPKI", "BGP", "security", "networking"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-19-rpki-rotas-assinadas-en-1.png" alt="RPKI: signed routes, ROAs and origin validation" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-19-rpki-rotas-assinadas-en-1.png" alt="RPKI: signed routes, ROAs and origin validation" width="1200" height="333" />
 
 On the morning of June 24, 2019, traffic to thousands of sites, including Cloudflare's, started taking a detour through a metals manufacturer in Pennsylvania. Nobody hacked anything. No malware, no attack. The internet did exactly what its routing protocol tells it to do: believe the most specific announcement it found.
 
@@ -78,12 +78,12 @@ When a route announcement arrives at a router that performs origin validation, c
 ```mermaid
 stateDiagram-v2
     [*] --> Arrival: route announcement
-    Arrival --> Valid: a ROA exists and everything matches
-    Arrival --> Invalid: a ROA exists and the route contradicts it
+    Arrival --> Valid: a ROA exists and matches
+    Arrival --> Invalid: a ROA contradicts it
     Arrival --> Unknown: no ROA covers the prefix
     Valid --> Table: route accepted
     Invalid --> Trash: route dropped
-    Unknown --> Table: accepted, with a footnote
+    Unknown --> Table: accepted, with a note
 ```
 
 The third verdict is the subtlety that trips up beginners the most. Unknown is not invalid: it is the announcement of a prefix that simply has no ROA. The internet cannot punish whoever did not sign, because half the world is still learning. Invalid is a route that **contradicts** an existing document: the wrong ASN originating, or a length beyond what was authorized. Unknown is just missing paperwork. Validating routers drop the invalid and keep the unknown, and that prudent choice is what allows gradual adoption without splitting the internet.

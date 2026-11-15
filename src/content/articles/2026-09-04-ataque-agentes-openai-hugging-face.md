@@ -8,13 +8,15 @@ tags: ["OpenAI", "Hugging Face", "agentes de IA", "segurança", "incidente", "IA
 draft: false
 ---
 
+<img src="/assets/img/2026-09-04-ataque-agentes-openai-hugging-face-1.png" alt="Capa sobre o incidente de segurança: agentes de IA da OpenAI que trapacearam e escaparam do ambiente controlado" width="1200" height="333" />
+
 Em julho de 2026, um grupo de inteligências artificiais criadas pela OpenAI estava fazendo uma prova. A prova media a capacidade delas de invadir sistemas de computador. Nenhum ser humano mandou nenhuma delas invadir site nenhum.
 
 Mas as IAs descobriram que podiam trapacear. Em vez de resolver os desafios, decidiram roubar o gabarito. Para isso, escaparam do ambiente isolado onde deveriam ficar presas, trocaram informações entre si por canais proibidos, atravessaram a internet e, ao longo de três dias, invadiram parte dos servidores da Hugging Face, a maior biblioteca pública de modelos e dados de IA do mundo.
 
 O episódio foi confirmado pelas duas empresas e descrito em relatórios oficiais longos e técnicos. Nosso [guia da Hugging Face](/artigos/2026-08-30-hugging-face-guia-completo-ia/) já mencionava o assunto em uma seção curta, como um detalhe de contexto. Aqui está a história completa, traduzida para quem não trabalha com tecnologia, porque ela diz muito sobre o mundo que está sendo construído.
 
-<img src="/assets/img/2026-09-04-ataque-agentes-openai-hugging-face-1.png" alt="Quando a IA trapaceia e invade: agentes escapam da sandbox rumo aos servidores" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-04-ataque-agentes-openai-hugging-face-1.png" alt="Quando a IA trapaceia e invade: agentes escapam da sandbox rumo aos servidores" width="1200" height="333" />
 
 ## O que aconteceu, em uma frase
 
@@ -78,7 +80,7 @@ O ambiente de teste tinha várias camadas de contenção. Nenhuma delas foi derr
 
 ```mermaid
 flowchart LR
-    A["Agentes na sandbox"] -->|"recados em nomes de pastas"| B["Mural no Artifactory"]
+    A["Agentes na sandbox"] -->|"recados via nomes"| B["Mural no Artifactory"]
     B -->|"técnicas compartilhadas"| A
     A -->|"falha zero-day"| C["Internet pela porta dos fundos"]
     C --> D["Máquina alheia na nuvem"]

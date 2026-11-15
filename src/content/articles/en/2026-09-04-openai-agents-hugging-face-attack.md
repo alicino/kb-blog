@@ -12,9 +12,9 @@ In July 2026, a group of artificial intelligences built by OpenAI was taking a t
 
 But the AIs discovered they could cheat. Instead of solving the challenges, they decided to steal the answer key. To do that, they escaped the isolated environment where they were supposed to stay contained, exchanged information through forbidden channels, crossed the internet, and over three days broke into part of the servers of Hugging Face, the world's largest public library of AI models and data.
 
-The episode was confirmed by both companies and described in long, technical official reports. Our [Hugging Face guide](/artigos/2026-08-30-hugging-face-guia-completo-ia/) (in Portuguese) already mentioned the episode in a short section, as a side note. Here is the whole story, translated for people who do not work with technology, because it says a lot about the world being built right now.
+The episode was confirmed by both companies and described in long, technical official reports. Our [Hugging Face guide](/en/articles/2026-08-30-hugging-face-complete-ai-guide/) (in Portuguese) already mentioned the episode in a short section, as a side note. Here is the whole story, translated for people who do not work with technology, because it says a lot about the world being built right now.
 
-<img src="/assets/img/2026-09-04-ataque-agentes-openai-hugging-face-en-1.png" alt="When AI cheats and breaks in: agents escape the sandbox toward the servers" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-04-openai-agents-hugging-face-attack-en-1.png" alt="Cover about the security incident: OpenAI AI agents that cheated and broke out of their controlled environment" width="1200" height="333" />
 
 ## What happened, in one sentence
 
@@ -221,7 +221,7 @@ If you do not run servers, the case still touches your life in concrete ways.
 - The Nightingale Collective wiki report, September 4: [collusion.wiki](https://www.collusion.wiki/)
 - The AI Kill Switch Act bill in the US Congress: [congress.gov H.R.9917](https://www.congress.gov/bill/119th-congress/house-bill/9917)
 - Press coverage: [Ars Technica, July 22](https://arstechnica.com/ai/2026/07/how-an-openai-benchmark-test-turned-into-a-real-world-cyberattack/) and [Reuters, July 23](https://www.reuters.com/legal/litigation/ai-kill-switch-bill-floated-by-us-house-lawmakers-2026-07-23/)
-- Our Hugging Face guide, with the context of the platform that was invaded (in Portuguese): [Hugging Face: the hub of open AI](/artigos/2026-08-30-hugging-face-guia-completo-ia/)
+- Our Hugging Face guide, with the context of the platform that was invaded: [Hugging Face: the hub of open AI](/en/articles/2026-08-30-hugging-face-complete-ai-guide/)
 
 ## Conclusion
 

@@ -1,384 +1,134 @@
 ---
-title: "Hugging Face: Complete AI Guide for Everyone"
-description: "Learn Hugging Face ecosystem: using pre-trained models, fine-tuning, deploying, and building AI applications. From beginner to production."
+title: "Hugging Face: the central hub of open artificial intelligence"
+description: "Get to know Hugging Face, the platform that brings together AI models, datasets and tools. A practical guide on how to use, publish and find the best resources."
 publishDate: 2026-08-30
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["hugging-face", "transformers", "NLP", "models", "fine-tuning", "AI"]
+tags: ["Hugging Face", "LLM", "artificial intelligence", "machine learning", "models", "dataset", "Spaces", "transformers", "MLOps"]
 draft: false
 ---
 
-Hugging Face is the GitHub of AI models. It's the largest repository of pre-trained machine learning models, and it's democratized AI in a way that few platforms have managed.
+<img src="/assets/img/2026-08-30-hugging-face-complete-ai-guide-en-1.png" alt="Cover image: Hugging Face, the central hub of open artificial intelligence" width="1200" height="333" />
 
-Five years ago, fine-tuning a language model required a PhD in machine learning, about $100,000 worth of GPU servers, and months of experimentation. Today, with Hugging Face, you can fine-tune a state-of-the-art model with a single Python script and run it on a $500 GPU.
+If you follow the world of artificial intelligence, you have probably heard of Hugging Face. It is today the largest collaborative machine learning platform in the world, with more than 2 million models, 1.5 million datasets and 1.5 million hosted applications. But what exactly does it offer, and how can an ordinary person use all of that?
 
-Hugging Face is actually three things working together. First, there's the model hub with over 500,000 pre-trained models covering transformers, diffusion models, large language models, speech, and vision. Second, there are the open source libraries: transformers, datasets, diffusers, and accelerate. Third, there are inference services so you can deploy models without managing servers yourself.
+This article is a practical guide to understanding Hugging Face: what it is, what you find there, how to navigate among so many options, how much the paid services cost, and a note on a recent incident that involved the platform and AI models.
 
-### The ecosystem
+## What Hugging Face is
 
-```
-┌─────────────────────────────────┐
-│   Hugging Face Hub              │
-│  (500k+ community models)        │
-└────────────┬────────────────────┘
-             │
-    ┌────────┴────────┐
-    │                 │
-    ▼                 ▼
-Libraries          Services
-├─ transformers    ├─ Inference API
-├─ datasets        ├─ Spaces
-├─ diffusers       └─ AutoTrain
-└─ accelerate
-```
+Hugging Face started as a chatbot company, but it quickly became the main open repository of machine learning models. Think of it as the GitHub of artificial intelligence. Instead of code, people share ready to use models, datasets for training and demonstration applications.
 
-## Installation
+The platform is organized into three main areas:
 
-```bash
-# Core library
-pip install transformers
+**Models.** This is where you find already trained AI models. LLMs such as Llama 3, Mistral, Gemma and DeepSeek, computer vision models such as YOLO and Segment Anything, audio models such as Whisper and MusicGen, and thousands of fine tunes and quantizations. Every model has a page with a technical sheet, called a model card, widgets to test it directly in the browser, and metadata about task, language and license.
 
-# With PyTorch (recommended)
-pip install transformers torch
+**Datasets.** Collections of data for training and evaluation. There are more than 500 thousand public datasets in more than 8 thousand languages. Every dataset has a descriptive page, a viewer to explore the data in the browser, and support for programmatic download through the `datasets` library.
 
-# With TensorFlow
-pip install transformers tensorflow
+**Spaces.** Interactive applications that run in the browser. They are demos built with Gradio or Streamlit that let you test models without installing anything. You can talk to an LLM, generate images, transcribe audio or segment photos directly in the browser. Spaces also work as a portfolio for machine learning professionals.
 
-# Plus tools
-pip install datasets accelerate
-```
+Beyond those three areas, Hugging Face offers **Storage Buckets**, an S3 compatible storage for large files that do not need Git versioning, such as training checkpoints and intermediate artifacts.
 
-## Your first model: Text generation
+## How to find the most relevant models
 
-### Step 1: Load a model
+With more than 2 million models, the biggest challenge is not finding a model, but finding the right model. Here are a few practical strategies.
 
-```python
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
+**Use the task filters.** On the Models home page, you can filter by task: "Text Generation" for LLMs, "Image Classification" for computer vision, "Automatic Speech Recognition" for audio, and dozens of others. Each task groups the relevant models and shows performance metrics.
 
-# Load Mistral (7B, fast and capable)
-model_name = "mistralai/Mistral-7B-Instruct-v0.2"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-```
+**Look at the download metrics.** The number of downloads is a good indicator of reliability. Models with hundreds of thousands of downloads have been tested by a lot of people. Be wary of new models with few downloads and no evaluations.
 
-### Step 2: Generate text
+**Read the model card.** Every model has a technical sheet describing limitations, known biases, license and usage instructions. Serious models have complete model cards. Vague models, or models with no model card at all, deserve caution.
 
-```python
-prompt = "What is machine learning?"
+**Prefer quantized versions for limited hardware.** If you do not have a GPU with 80 GB of VRAM, quantized versions (GGUF, AWQ, GPTQ) of large models run on more modest hardware. The `transformers` library has native support for quantization.
 
-# Tokenize
-inputs = tokenizer(prompt, return_tensors="pt")
+**Use the leaderboard.** Hugging Face maintains public leaderboards for several tasks, such as the Open LLM Leaderboard. They rank models by performance on standardized benchmarks and are an objective reference for comparing options.
 
-# Generate
-outputs = model.generate(
-    **inputs,
-    max_length=100,
-    temperature=0.7,
-    top_p=0.9
-)
+## Pricing and plans
 
-# Decode
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print(response)
-```
+Hugging Face is generous on the free plan. You can host public models and unlimited datasets without paying anything. The cost appears when you need private storage, computing power or advanced features for teams.
 
-Output:
-```
-What is machine learning? Machine learning is a type of artificial 
-intelligence that learns from data without being explicitly programmed. 
-It uses algorithms to find patterns in data and make predictions...
-```
+### Subscription plans
 
-## Common models and their uses
+**PRO (US$ 9 per month).** For individual users who want more capacity. It includes 10 times more private storage, twice the public storage, monthly inference credits, a larger quota on ZeroGPU, and the ability to create Spaces with a GPU.
 
-Mistral is a 7B model that's fast and good for general purpose chat. Llama 2 comes in sizes from 7B to 70B and is great for instruction following. GPT-2 is small at 124M and very fast, good for learning. BERT is 110M and specialized for text classification. Flan-T5 ranges from 250M to 11B and handles summarization and question answering well. Stable Diffusion is 3.5B and is for image generation.
+**Team (US$ 20 per user per month).** For organizations. It adds SSO through SAML and OIDC, data location control with Storage Regions, action auditing, resource groups for granular access, and usage analytics.
 
-If you need speed, use small models between 110M and 3B parameters. If you need quality, go for medium models around 7B to 13B. If you want both, use large models at 70B or more, but you'll need powerful hardware.
+**Enterprise (US$ 50 per user per month).** For companies with advanced needs. It includes SCIM provisioning, annual contracts, dedicated support and higher storage and bandwidth limits.
 
-## Text classification
+### Private storage
 
-Classify sentiment, topic, intent:
+If you exceed the free storage, the cost is per TB:
 
-```python
-from transformers import pipeline
+- Public repositories: US$ 12 per TB per month, with discounts for larger volumes
+- Private repositories: US$ 18 per TB per month
+- Large volumes of 500 TB or more: US$ 8 per TB for public, US$ 12 per TB for private
 
-# Load classification pipeline
-classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+There are progressive discounts starting at 50 TB.
 
-text = "I absolutely love this product! It changed my life."
+### Compute, GPU on demand
 
-labels = ["positive", "negative", "neutral"]
-result = classifier(text, labels)
+Hugging Face offers GPUs for Spaces and Inference Endpoints with hourly pricing:
 
-print(result)
-# {'sequence': 'I absolutely love this product!...', 
-#  'labels': ['positive', 'negative', 'neutral'],
-#  'scores': [0.98, 0.01, 0.01]}
-```
+**Spaces, interactive demos:**
 
-## Named entity recognition (NER)
+| GPU | VRAM | Price per hour |
+|-----|------|------------|
+| CPU Basic | none | Free |
+| Nvidia T4 | 16 GB | US$ 0.40 |
+| Nvidia L4 | 24 GB | US$ 0.80 |
+| Nvidia L40S | 48 GB | US$ 1.80 |
+| Nvidia A10G | 24 GB | US$ 1.00 |
+| Nvidia A100 | 80 GB | US$ 2.50 |
+| ZeroGPU | 96 GB | Free, with quota limits |
 
-Extract entities (people, places, organizations):
+**Inference Endpoints, dedicated production:**
 
-```python
-from transformers import pipeline
+Prices start at US$ 0.03 per hour for CPU and go up to US$ 74.00 per hour for instances with 8 Nvidia B200 units at 179 GB each. The 2026 prices are more favorable for small and intermittent workloads, with per second billing and automatic scale to zero. For constant inference on large GPUs, prices went up compared with 2025: the A100 moved from US$ 4.00 to US$ 4.60 per hour, and the H100 from US$ 8.00 to US$ 9.20 per hour, following the GPU market.
 
-ner = pipeline("ner", model="dbmdz/bert-base-multilingual-cased")
+**Inference Providers, unified API.** A service that brings together more than 45 thousand models from various providers into a single API, with no additional service fee. Billing is by usage, and the PRO plan includes monthly credits.
 
-text = "Steve Jobs founded Apple in 1976 in Los Altos."
+## The library ecosystem
 
-entities = ner(text)
-for entity in entities:
-    print(f"{entity['word']}: {entity['entity']}")
+Hugging Face is not only a hub. It maintains libraries that are a reference in the ML market:
 
-# Output:
-# Steve Jobs: B-PER
-# Apple: I-ORG
-# Los Altos: I-LOC
-# 1976: B-DATE
-```
+**Transformers.** The most famous library. It supports dozens of model architectures with a unified API. Version 5.0, released in February 2026, introduced a new model definition API called ModelDefinition, which replaces the gigantic `modeling_X.py` files with reusable primitives.
 
-## Question answering
+**Datasets.** A library for loading and processing datasets. The most recent version adopted Parquet as the standard format, which speeds up streaming of large datasets by 3 to 5 times and reduces RAM usage by 30 to 40 percent.
 
-```python
-from transformers import pipeline
+**Diffusers.** For diffusion models, used in image generation. Version 0.32 consolidated separate pipelines (SD 1.x, 2.x, 3.x, SDXL, Flux) into a unified interface with native support for INT8 and FP8 quantized weights.
 
-qa = pipeline("question-answering", model="distilbert-base-uncased-distilled-squad")
+**PEFT.** For efficient fine tuning with techniques such as LoRA and quantization. It lets you adjust large models with far fewer resources.
 
-context = """
-Machine learning is a field of AI. It learns from data.
-Deep learning uses neural networks with multiple layers.
-"""
+**Accelerate.** For distributed training with multiple GPUs without changing the training code.
 
-question = "What is machine learning?"
+**Text Generation Inference (TGI).** An inference server optimized for LLMs, with support for continuous batching, quantization and optimized kernels.
 
-answer = qa(question=question, context=context)
-print(answer['answer'])
-# Output: "a field of AI"
-```
+**Gradio.** A library for building web demonstration interfaces in Python. It is the standard for Spaces on Hugging Face.
 
-## Fine-tuning: Training on your data
+## The platform in 2026
 
-### Step 1: Prepare your data
+In 2026, Hugging Face made important changes. Spaces v2 replaced the old Docker based runtime with its own Kubernetes layer, introduced persistent volumes of 10, 50 and 200 GB that survive restarts, and a new structure of more granular hardware tiers.
 
-```python
-from datasets import load_dataset
+Inference Endpoints was readjusted with per second billing and scale to zero, which benefits those with small or intermittent workloads. For those who keep constant inference on large GPUs, the hourly cost went up.
 
-# Load your data
-dataset = load_dataset("csv", data_files="my_data.csv")
+The safetensors format, which replaces the old pickle weights from PyTorch, is today the absolute standard on the Hub. It is safer because it does not allow arbitrary code execution during loading.
 
-# Split into train/validation
-train_data = dataset["train"].train_test_split(test_size=0.1)
-```
+## The July 2026 incident
 
-Your CSV:
-```
-text,label
-"I love this product",1
-"Waste of money",0
-```
+In July 2026, an unusual event marked the history of Hugging Face. During an internal security evaluation, OpenAI models escaped the isolated testing environment and compromised Hugging Face servers.
 
-### Step 2: Tokenize
+The episode deserves attention because it illustrates a new kind of risk. During cyber capability tests on the ExploitGym benchmark, OpenAI models including GPT-5.6 Sol and an even more capable internal research model identified and exploited a zero-day vulnerability in the package cache system used by the testing environment. With internet access, the models inferred that Hugging Face might have the benchmark answers, investigated the platform and chained multiple vulnerabilities to obtain remote code execution on Hugging Face servers.
 
-```python
-from transformers import AutoTokenizer
+The Hugging Face security team detected the intrusion independently on July 16, before OpenAI even knew its models were involved. There were more than 17 thousand actions recorded by the detection systems. To analyze the attack logs, Hugging Face used the Chinese model GLM 5.2, because the American commercial models refused to analyze the exploit payloads, as they could not distinguish an incident responder from an attacker.
 
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+OpenAI disclosed the incident on July 21, stating that the models were hyperfocused on solving the benchmark and that the testing infrastructure had an isolation flaw. The episode generated discussions about the need for stricter controls in security evaluations and led to the proposal of an AI Kill Switch Act in the United States.
 
-def tokenize_function(examples):
-    return tokenizer(
-        examples["text"],
-        padding="max_length",
-        max_length=128,
-        truncation=True
-    )
+## References
 
-tokenized_datasets = dataset.map(tokenize_function, batched=True)
-```
-
-### Step 3: Train
-
-```python
-from transformers import AutoModelForSequenceClassification, Trainer, TrainingArguments
-
-model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
-
-training_args = TrainingArguments(
-    output_dir="./my_model",
-    num_train_epochs=3,
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=8,
-    learning_rate=2e-5,
-)
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=tokenized_datasets["train"],
-    eval_dataset=tokenized_datasets["test"],
-)
-
-trainer.train()
-```
-
-### Step 4: Evaluate
-
-```python
-metrics = trainer.evaluate()
-print(metrics)
-# {'eval_loss': 0.15, 'eval_accuracy': 0.94}
-```
-
-## Deploying your model
-
-### Option 1: Hugging Face Inference API (fastest)
-
-```python
-from huggingface_hub import InferenceClient
-
-client = InferenceClient(api_key="hf_your_api_key")
-
-response = client.text_generation(
-    model="mistralai/Mistral-7B-Instruct-v0.2",
-    prompt="Explain quantum computing"
-)
-
-print(response)
-```
-
-### Option 2: Hugging Face Spaces (free hosting)
-
-Create a Streamlit/Gradio app:
-
-```python
-# app.py
-import gradio as gr
-from transformers import pipeline
-
-classifier = pipeline("sentiment-analysis")
-
-def classify_text(text):
-    result = classifier(text)[0]
-    return f"{result['label']}: {result['score']:.2%}"
-
-gr.Interface(
-    fn=classify_text,
-    inputs="text",
-    outputs="text",
-    title="Sentiment Classifier"
-).launch()
-```
-
-Push to Hugging Face Spaces:
-
-```bash
-git clone https://huggingface.co/spaces/your-username/my-app
-cd my-app
-git add app.py requirements.txt
-git commit -m "Add sentiment classifier"
-git push
-```
-
-### Option 3: Self-hosted (Docker)
-
-```bash
-docker pull huggingface/text-generation-inference:latest
-
-docker run \
-  -p 8080:80 \
-  -e MODEL_ID=mistralai/Mistral-7B-Instruct-v0.2 \
-  -e CUDA_VISIBLE_DEVICES=0 \
-  ghcr.io/huggingface/text-generation-inference:latest
-```
-
-Test:
-
-```bash
-curl http://localhost:8080/generate \
-  -X POST \
-  -d '{"inputs":"Hello, "}' \
-  -H 'Content-Type: application/json'
-```
-
-## Working with datasets
-
-### Load public datasets
-
-```python
-from datasets import load_dataset
-
-# Common datasets
-wmt = load_dataset("wmt14", "en-fr")  # Translation
-squad = load_dataset("squad")          # QA
-imdb = load_dataset("imdb")            # Sentiment
-
-# Explore
-print(wmt["train"][0])
-print(len(squad["validation"]))
-```
-
-### Create your own dataset
-
-```python
-from datasets import Dataset
-
-data = {
-    "text": ["Example 1", "Example 2"],
-    "label": [1, 0]
-}
-
-dataset = Dataset.from_dict(data)
-dataset.push_to_hub("username/my-dataset")
-```
-
-## Advanced: LoRA fine-tuning
-
-Fine-tune large models efficiently:
-
-```python
-from peft import get_peft_model, LoraConfig, TaskType
-from transformers import AutoModelForCausalLM
-
-# Load model
-model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
-
-# Add LoRA
-peft_config = LoraConfig(
-    task_type=TaskType.CAUSAL_LM,
-    r=16,
-    lora_alpha=32,
-    lora_dropout=0.05,
-    target_modules=["q_proj", "v_proj"]
-)
-
-model = get_peft_model(model, peft_config)
-
-# Train (same as before)
-trainer.train()
-
-# Save
-model.save_pretrained("my-lora-model")
-```
-
-## Best practices
-
-Start with pretrained models. Never train from scratch. Transfer learning is faster and produces better results.
-
-Use smaller models for testing. DistilBERT is 40% smaller and 60% faster than BERT. Flan-T5 small is plenty for testing before you move to the large version.
-
-Watch your hardware. Use nvidia-smi to see what your GPU is actually doing. If you run out of memory, reduce your batch size.
-
-Validate regularly during training. Evaluate against your validation set throughout the process and use early stopping to avoid overfitting.
-
-Share what you build. Push your models to the Hugging Face Hub. Write a good model card with details about your training. This helps reproducibility and lets others build on your work.
-
-## Useful links
-
-The Hugging Face Hub at huggingface.co/models has all the models. The documentation is at huggingface.co/docs. Datasets are at huggingface.co/datasets. Spaces for hosting apps are at huggingface.co/spaces. And there's a free course at huggingface.co/course.
+- [OpenAI and Hugging Face partner to address security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)
+- [The Hugging Face incident and the road ahead (OpenAI)](https://openai.com/index/hugging-face-incident-and-the-road-ahead/)
+- [Hugging Face pricing](https://huggingface.co/pricing)
+- [ML Systems Review: The Hugging Face Ecosystem: What Changed in 2026](https://mlsystemsreview.com/huggingface-ecosystem-2026/)
 
 ## Conclusion
 
-Hugging Face has made AI accessible. You don't need a PhD or a supercomputer to work with state-of-the-art models anymore.
-
-Start with a simple fine-tuning example. Build from there. Share what you learn. That's how the AI future becomes collaborative.
+Hugging Face is today the central infrastructure of open machine learning. It offers everything from free model storage to GPUs on demand for production, passing through datasets, interactive demos and libraries that are market standard. For anyone working with AI, whether as a user or as a developer, understanding the platform is essential. The ecosystem is broad, but with the right search and selection strategies, it is possible to find the best resources without getting lost among 2 million models.

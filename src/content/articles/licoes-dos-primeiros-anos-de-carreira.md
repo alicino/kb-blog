@@ -8,8 +8,10 @@ tags: ["carreira", "aprendizado"]
 draft: false
 ---
 
+<img src="/assets/img/licoes-dos-primeiros-anos-de-carreira-1.png" alt="Capa sobre lições dos primeiros anos de carreira: perguntar cedo, documentar decisões e progressão não linear" width="1200" height="333" />
+
 Nenhuma dessas lições é original. Mas escutar alguém dizer não substitui
-sentir na pele — e por isso escrevo do jeito que gostaria de ter lido antes.
+sentir na pele, e por isso escrevo do jeito que gostaria de ter lido antes.
 
 ## Perguntar cedo custa menos do que parece
 
@@ -32,4 +34,4 @@ Comentários e registros de decisão economizam arqueologia de código.
 ## Carreira não é uma corrida linear
 
 Trocar de direção, desacelerar por um tempo ou recomeçar em outra área não é
-retrocesso — é só informação nova sendo incorporada ao percurso.
+retrocesso: é só informação nova sendo incorporada ao percurso.

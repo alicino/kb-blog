@@ -8,7 +8,7 @@ tags: ["btop", "terminal", "monitor", "CPU", "GPU", "system", "diagnostics", "Li
 draft: false
 ---
 
-<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-1.png" alt="btop: monitor de recursos no terminal" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-20-btop-system-resource-monitor-en-1.png" alt="Cover about btop: interactive CPU, memory, disk, network and GPU monitor in the terminal" width="1200" height="333" />
 
 You are working and the computer starts to slow down. The browser takes longer to open a tab. The compiler is running slower than usual. What is consuming your machine's resources?
 
@@ -20,7 +20,7 @@ If you also use [Octomon](/en/articles/octomon-network-diagnostics-terminal) for
 
 ## What btop shows
 
-<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="btop screen showing CPU, memory, disks, network, and processes in real time" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="btop screen showing CPU, memory, disks, network, and processes in real time" width="1200" height="333" />
 
 btop splits the screen into panels that you can rearrange. Each panel shows a resource category.
 

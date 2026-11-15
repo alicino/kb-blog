@@ -8,6 +8,8 @@ tags: ["skills", "Claude Code", "agentes", "automação", "SKILL.md", "iniciante
 draft: false
 ---
 
+<img src="/assets/img/2026-09-16-criar-sua-propria-skill-agentes-ia-1.png" alt="Capa sobre criar sua própria skill para agentes de IA: três exemplos práticos passo a passo" width="1200" height="333" />
+
 No artigo anterior sobre o SkillSpector da NVIDIA, eu mostrei que 26% das skills prontas em marketplaces contêm vulnerabilidades. A conclusão mais importante foi esta: sempre que possível, crie sua própria skill.
 
 Criar uma skill não é coisa de outro mundo. É um arquivo de texto com instruções em linguagem natural. Você escreve o que quer que o agente faça, ele lê e executa. Não precisa saber programar. Não precisa de API key. Não precisa de permissão de ninguém.

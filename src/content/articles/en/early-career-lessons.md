@@ -8,6 +8,8 @@ tags: ["career", "learning"]
 draft: false
 ---
 
+<img src="/assets/img/early-career-lessons-en-1.png" alt="Cover about early career lessons: asking early, documenting decisions and non-linear progression" width="1200" height="333" />
+
 None of these lessons are original. But hearing someone say something doesn't
 replace feeling it yourself, and that is why I write the way I wish I had read
 it before.

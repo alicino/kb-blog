@@ -10,19 +10,17 @@ tags:
   - grafana
   - devops
   - javascript
-language: "pt-BR"
-hero:
-  image: "/images/hero/k6-test-carga.svg"
-  alt: "Ilustração do k6 simulando múltiplos usuários virtuais contra uma API"
 ---
 
-O teste de carga sempre foi visto como uma daquelas áreas "só para especialistas" — ferramentas pesadas, interfaces cheias de botões, relatórios que ninguém sabia interpretar. Mas os tempos mudaram. Hoje, com arquiteturas baseadas em microsserviços, APIs públicas e deploys contínuos, saber como sua aplicação se comporta sob pressão não é mais um luxo: é parte do ciclo de desenvolvimento.
+<img src="/assets/img/2026-09-09-k6-test-carga-moderno-1.png" alt="Capa do artigo: teste de carga moderno com k6, scripts leves e resultados sérios" width="1200" height="333" />
 
-É nesse cenário que entra o **k6** (agora **Grafana k6**): uma ferramenta open source de teste de carga que trata testes como código, escreve cenários em JavaScript, e cabe em um binário único — sem dependências, sem JVM, sem IDE.
+O teste de carga sempre foi visto como uma área "só para especialistas": ferramentas pesadas, interfaces cheias de botões, relatórios que ninguém sabia interpretar. Mas os tempos mudaram. Hoje, com arquiteturas baseadas em microsserviços, APIs públicas e deploys contínuos, saber como sua aplicação se comporta sob pressão não é mais um luxo: é parte do ciclo de desenvolvimento.
+
+É nesse cenário que entra o **k6** (agora **Grafana k6**): uma ferramenta open source de teste de carga que trata testes como código, escreve cenários em JavaScript, e cabe em um binário único, sem dependências, sem JVM e sem IDE.
 
 Se você já usou JMeter e sentiu que precisava de um curso só para entender a interface, ou tentou Locust e achou o ecossistema Python pesado para um teste rápido, o k6 vai te surpreender.
 
-> Este artigo é um guia completo — desde a instalação até cenários avançados, com exemplos práticos e referências para você se aprofundar.
+> Este artigo é um guia completo, da instalação a cenários avançados, com exemplos práticos e referências para você se aprofundar.
 
 ## O que é o k6?
 
@@ -30,11 +28,11 @@ O k6 é uma ferramenta de **teste de carga e performance** criada pela empresa k
 
 A ideia central é simples: você escreve um script em JavaScript (ou TypeScript), define quantos usuários virtuais vão acessar sua aplicação, e o k6 executa o teste gerando relatórios com métricas como tempo de resposta, taxa de erro e throughput.
 
-O que torna o k6 especial é a **arquitetura**: ele é escrito em Go, e cada usuário virtual roda como uma goroutine — um mecanismo leve de concorrência. Isso significa que uma única máquina pode simular **milhares de usuários simultâneos** sem consumir os recursos que um JMeter, por exemplo, precisaria.
+O que torna o k6 especial é a **arquitetura**: ele é escrito em Go, e cada usuário virtual roda como uma goroutine, um mecanismo leve de concorrência. Isso significa que uma única máquina pode simular **milhares de usuários simultâneos** sem consumir os recursos que um JMeter, por exemplo, precisaria.
 
 > **Fonte oficial:** [k6.io — Load testing for engineering teams](https://k6.io/)
 >
-> **Repositório GitHub:** [github.com/grafana/k6](https://github.com/grafana/k6) — mais de 30 mil estrelas
+> **Repositório GitHub:** [github.com/grafana/k6](https://github.com/grafana/k6), com mais de 30 mil estrelas
 
 ## Para que serve o k6? (Cenários de uso)
 
@@ -44,7 +42,7 @@ O k6 pode ser usado em várias situações, todas relacionadas a entender os lim
 O uso mais comum. Você simula requisições HTTP (GET, POST, PUT, DELETE) contra endpoints da sua API e mede como eles se comportam sob carga. O k6 suporta HTTP/1.1 e HTTP/2 nativamente.
 
 ### Teste de stress e breakpoint
-Quer saber até onde sua aplicação aguenta antes de cair? O k6 permite aumentar gradualmente o número de usuários até o sistema começar a falhar — o famoso "breakpoint test".
+Quer saber até onde sua aplicação aguenta antes de cair? O k6 permite aumentar gradualmente o número de usuários até o sistema começar a falhar, o famoso "breakpoint test".
 
 ### Teste de pico (spike test)
 Simule eventos como Black Friday, lançamento de produto ou uma campanha de e-mail que dispara milhares de acessos simultâneos em segundos.
@@ -56,7 +54,7 @@ Coloque carga moderada por horas (ou dias) para detectar vazamentos de memória,
 Integre o k6 diretamente no GitHub Actions, GitLab CI ou qualquer outro pipeline. Defina thresholds (limiares) como "p95 menor que 500ms" e o teste falha automaticamente se o sistema não atingir a meta.
 
 ### Teste de WebSocket e gRPC
-Além de HTTP, o k6 suporta testes com WebSockets (conexões persistentes) e gRPC (chamadas RPC modernas) — dois protocolos cada vez mais comuns em aplicações reativas e microsserviços.
+Além de HTTP, o k6 suporta testes com WebSockets (conexões persistentes) e gRPC (chamadas RPC modernas), dois protocolos cada vez mais comuns em aplicações reativas e microsserviços.
 
 > **Fonte oficial:** [Grafana k6 — Testing guides](https://grafana.com/docs/k6/latest/testing-guides/)
 
@@ -147,17 +145,17 @@ Quando você executa `k6 run script.js`, o k6:
 
 1. Inicia 10 usuários virtuais (VUs) simultâneos
 2. Cada VU executa a função `default` em loop
-3. A cada iteração, faz uma requisição GET e espera 1 segundo (simulando o "tempo de思考" de um usuário real)
+3. A cada iteração, faz uma requisição GET e espera 1 segundo (simulando o "tempo de reflexão" de um usuário real)
 4. Ao final, exibe um relatório completo no terminal
 
 ### Resultado esperado
 
 O relatório mostra métricas como:
 
-- `http_req_duration` — tempo total da requisição (média, mediana, p90, p95, p99)
-- `http_req_failed` — percentual de requisições que falharam
-- `http_reqs` — requisições por segundo (throughput)
-- `vus` — número de usuários virtuais ao longo do tempo
+- `http_req_duration`, o tempo total da requisição (média, mediana, p90, p95, p99)
+- `http_req_failed`, o percentual de requisições que falharam
+- `http_reqs`, as requisições por segundo, ou throughput
+- `vus`, o número de usuários virtuais ao longo do tempo
 
 ```
     http_req_duration..............: avg=145ms   p(95)=320ms  p(99)=580ms
@@ -168,7 +166,7 @@ O relatório mostra métricas como:
 
 ## Thresholds: transformando métricas em decisões
 
-Uma das funcionalidades mais úteis do k6 são os **thresholds** — limites que você define no próprio script. Se a métrica ultrapassar o limite, o k6 retorna código de saída diferente de zero, fazendo o pipeline de CI falhar.
+Uma das funcionalidades mais úteis do k6 são os **thresholds**: limites que você define no próprio script. Se a métrica ultrapassar o limite, o k6 retorna código de saída diferente de zero, fazendo o pipeline de CI falhar.
 
 ```javascript
 export const options = {
@@ -190,7 +188,7 @@ Isso significa:
 
 ## Cenários e executors: simulando tráfego real
 
-O k6 permite configurar **cenários** com diferentes **executors** — formas de aumentar ou diminuir a carga. Você pode simular desde um crescimento suave de usuários até um pico abrupto.
+O k6 permite configurar **cenários** com diferentes **executors**, formas de aumentar ou diminuir a carga. Você pode simular desde um crescimento suave de usuários até um pico abrupto.
 
 ### Carga crescente (ramping VUs)
 
@@ -289,7 +287,7 @@ export default function () {
 
 ### Browser testing (e2e)
 
-Com o módulo `k6/browser`, você pode simular interações reais de usuário no navegador — cliques, navegação, formulários — enquanto mede métricas de frontend como First Contentful Paint (FCP) e Cumulative Layout Shift (CLS).
+Com o módulo `k6/browser`, você pode simular interações reais de usuário no navegador, com cliques, navegação e formulários, enquanto mede métricas de frontend como First Contentful Paint (FCP) e Cumulative Layout Shift (CLS).
 
 ```javascript
 import { browser } from 'k6/browser';
@@ -308,11 +306,11 @@ export default async function () {
 
 O k6 gera métricas automaticamente para cada teste. As principais são:
 
-- `http_req_duration` — duração total (conexão + TLS + envio + espera + recebimento)
-- `http_req_failed` — requisições com status >= 200 e < 200? Na verdade, falhas são requisições que retornaram erro ou timeout
-- `http_reqs` — taxa de requisições por segundo
-- `vus` — número de usuários virtuais ativos
-- `iteration_duration` — tempo total de cada iteração do script
+- `http_req_duration`: duração total (conexão + TLS + envio + espera + recebimento)
+- `http_req_failed`: proporção de requisições que falharam, sejam por resposta de erro ou por timeout
+- `http_reqs`: taxa de requisições por segundo
+- `vus`: número de usuários virtuais ativos
+- `iteration_duration`: tempo total de cada iteração do script
 
 Você pode criar **métricas customizadas** para monitorar aspectos específicos do seu negócio:
 
@@ -332,7 +330,7 @@ export default function () {
 }
 ```
 
-Os resultados podem ser exportados para JSON, InfluxDB, Prometheus ou diretamente para o **Grafana Cloud** — integração nativa que dispensa configuração extra.
+Os resultados podem ser exportados para JSON, InfluxDB, Prometheus ou diretamente para o **Grafana Cloud**, integração nativa que dispensa configuração extra.
 
 > **Fonte oficial:** [Grafana k6 — Metrics](https://grafana.com/docs/k6/latest/using-k6/metrics/)
 
@@ -367,7 +365,7 @@ JMeter ainda é referência para protocolos além de HTTP (JDBC, JMS, LDAP) e pa
 
 ## k6 na prática: exemplos de empresas
 
-Organizações como **Cloudflare**, **Citibank**, **Informatica**, **MIT** e muitas outras usam k6 em produção. O caso mais emblemático talvez seja a própria **Grafana Labs**, que oferece o **Grafana Cloud k6** — uma plataforma SaaS para execução de testes em escala, com dashboards integrados e suporte a milhões de usuários virtuais distribuídos geograficamente.
+Organizações como **Cloudflare**, **Citibank**, **Informatica**, **MIT** e muitas outras usam k6 em produção. O caso mais emblemático talvez seja a própria **Grafana Labs**, que oferece o **Grafana Cloud k6**, uma plataforma SaaS para execução de testes em escala, com dashboards integrados e suporte a milhões de usuários virtuais distribuídos geograficamente.
 
 Com o k6, é possível:
 
@@ -382,15 +380,15 @@ Com o k6, é possível:
 
 Para quem prefere aprender visualmente:
 
-1. **Grafana k6 for Beginners** — [Assistir no YouTube](https://www.youtube.com/watch?v=1mtYVDA2_iQ) — Playlist oficial da Grafana
-2. **Introducing Grafana Cloud k6** — [Assistir no YouTube](https://www.youtube.com/watch?v=HyM4lNZjKqk)
-3. **Getting Started with API Load Testing** (Nick) — Demonstração prática com k6, cobrindo stress, spike, load e soak tests
+1. **Grafana k6 for Beginners**: [Assistir no YouTube](https://www.youtube.com/watch?v=1mtYVDA2_iQ), playlist oficial da Grafana
+2. **Introducing Grafana Cloud k6**: [Assistir no YouTube](https://www.youtube.com/watch?v=HyM4lNZjKqk)
+3. **Getting Started with API Load Testing** (Nick): demonstração prática com k6, cobrindo stress, spike, load e soak tests
 
 > Todos os links foram verificados nas fontes oficiais da Grafana e em canais técnicos relevantes.
 
 ## Conclusão
 
-O k6 representa uma mudança de paradigma no teste de carga. Ele não é apenas mais uma ferramenta — é uma abordagem que trata **performance como requisito de software**, com testes versionados, automatizados e integrados ao ciclo de desenvolvimento.
+O k6 representa uma mudança de paradigma no teste de carga. Ele não é apenas mais uma ferramenta: é uma abordagem que trata **performance como requisito de software**, com testes versionados, automatizados e integrados ao ciclo de desenvolvimento.
 
 Se você trabalha com APIs, microsserviços ou aplicações web, e ainda não tem testes de carga no seu pipeline, o k6 é provavelmente o caminho mais curto entre "não testamos performance" e "nosso sistema aguenta o tranco".
 

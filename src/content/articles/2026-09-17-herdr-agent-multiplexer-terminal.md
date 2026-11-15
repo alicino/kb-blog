@@ -8,13 +8,15 @@ tags: ["Herdr", "terminal", "agent multiplexer", "agentes", "automação", "orqu
 draft: false
 ---
 
+<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Capa sobre o Herdr: terminal multiplexer construído para agentes de IA, com workspaces e detecção de estado" width="1200" height="333" />
+
 Rodar um agente de IA no terminal é simples. Rodar cinco deles em máquinas diferentes já é outro problema. Saber o que cada um está fazendo sem abrir uma janela para cada um é algo que o terminal tradicional não resolve.
 
 O tmux mantém sessões vivas quando você fecha o laptop. O Zellij adiciona uma interface mais moderna. Mas nenhum dos dois entende que dentro daquele terminal tem um agente de IA. Esse agente pode estar processando, esperando sua resposta ou simplesmente parado.
 
 O Herdr foi construído para preencher essa lacuna.
 
-<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Interface do Herdr mostrando múltiplos terminais com agentes de IA" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Interface do Herdr mostrando múltiplos terminais com agentes de IA" width="1200" height="333" />
 
 ## O que é o Herdr
 

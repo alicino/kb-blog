@@ -1,355 +1,207 @@
 ---
-title: "Octomon: Network Diagnostics Tool for the Terminal"
-description: "Discover Octomon, a lightweight terminal-based network diagnostic tool. Real-time monitoring, troubleshooting, and performance analysis from the command line."
+title: "Octomon: network diagnostics in the terminal to find out if it's the Wi-Fi, the provider or the internet"
+description: "Meet Octomon, a terminal tool that shows latency, bandwidth, Wi-Fi and DNS in a single panel and tells you which layer of your connection is failing."
 publishDate: 2026-08-30
 author: "Alicino"
 category: "Ferramentas"
-tags: ["octomon", "networking", "diagnostics", "terminal", "devops", "monitoring"]
+tags: ["networking", "terminal", "diagnostics", "Octomon", "monitoring", "macOS", "Linux", "DNS"]
 draft: false
 ---
 
-Network problems are vague. When someone says "the internet is slow," that tells you almost nothing. Is it your connection? The DNS server? The destination server? Packet loss? Jitter? Latency? Something else entirely?
+<img src="/assets/img/2026-08-30-octomon-network-diagnostics-terminal-en-1.png" alt="Octomon cover: network diagnostics dashboard in the terminal showing latency, bandwidth, Wi-Fi and DNS in a single screen" width="1200" height="333" />
 
-Traditional tools like ping, traceroute, and netstat are powerful but scattered. You end up running five different commands just to understand a single problem.
+Everyone who works with technology knows the ritual. The internet starts to
+feel slow, a page will not load, a video call freezes. So you open
+`ping` to see whether the gateway responds. Then a `traceroute` to find where
+the bottleneck is. You check the Wi-Fi signal in the system menu. You open
+speedtest.cloudflare.com in the browser to measure bandwidth. You verify
+whether DNS is resolving. In the end you have answers scattered across five
+different windows and you still do not know exactly what is happening.
 
-Octomon is a single tool that shows you what's happening on your network in real time. It's built for terminal users who need to troubleshoot fast.
+[Octomon](https://octomon.dev) solves exactly that problem. It gathers all of
+those measurements into a single terminal screen and offers something no
+separate tool does: a single analysis that names the layer that is failing.
 
-Octomon is a lightweight, open-source network diagnostics tool written in Go. It combines ping for testing connectivity and latency, traceroute to visualize the network path, DNS lookup to resolve domain names, HTTP monitoring to check website availability, port scanning to find open ports, and bandwidth testing to measure speed. All of that functionality in one interface, all in the terminal.
+## What Octomon does
 
-The repository is at github.com/cyberdyne-enterprises/octomon if you want to check it out.
+Octomon is a dashboard in the style of `btop`, those colorful panels that
+update in real time in the terminal, but aimed entirely at networking. It
+shows four main panels with detailed information and, below them, an analysis
+line that states the state of your connection directly.
 
-## Installation
+The four panels are:
 
-### macOS
+**Connection quality.** ICMP latency to configurable targets with averages,
+p95, maximum, jitter and packet loss. A bufferbloat score. And the same
+measurement over TCP connections on port 443, which keep working when ping is
+being blocked by the network.
+
+**Bandwidth.** Live transfer rate, an on-demand speed test and the list of
+processes using the network the most, or traffic organized by remote address.
+
+**Network.** Active interface, connection type (Wi-Fi, Ethernet, cellular,
+VPN), addresses, IPv4 and IPv6 gateways, DNS resolution with response time for
+each resolver, Wi-Fi SSID and channel, spectrum congestion, and information
+about proxy, clock, path-MTU and NAT.
+
+**Machine.** Your own computer as a possible bottleneck: CPU with the busiest
+core, memory pressure, load, interface errors and thermal throttling.
+
+## What it detects beyond the graphs
+
+Octomon does not just show numbers. It interprets what it sees and highlights
+specific situations that ordinary tools ignore.
+
+It identifies when you are not connected, when there is no default route, when
+the address is a self-assigned 169.254, or when there is an address with no
+gateway. And it names the cause as such, not as "downstream failure".
+
+It detects captive portals, when the web is blocked but ping works, when IPv6
+is broken but IPv4 works, and exactly where the break happens. It also detects
+an HTTP proxy configured on the system.
+
+For DNS it does not merely measure speed. It performs an honesty check: it
+queries a reference public resolver alongside yours. If yours fails and the
+reference works, the answer is "change your DNS". If the opposite happens, the
+network is forcing its own DNS. And every minute it verifies whether
+non-existent names return NXDOMAIN instead of an ads page, something common in
+providers that hijack DNS queries.
+
+It also detects clock skew via NTP, CGNAT or double NAT through the first
+hops, path-MTU black holes and blocked outbound ports (SSH, SMTP,
+DNS-over-TLS, NTP, QUIC).
+
+## Memory per network and incidents
+
+One of the most useful features of Octomon is that it learns what is normal
+for each network you use. It keeps a persistent baseline and an incident
+history. When something happens it can say "worse than normal here" and "three
+outages this week, concentrated between 8pm and 11pm".
+
+The history is visible in a session bar on screen. Each time slice of the
+current run is colored: green for normal, yellow for degraded, red for outage.
+The bar adapts to the session length, so a nine-hour run on a flight takes the
+same space as a five-minute check. You can navigate the bar to see what was
+wrong at every moment.
+
+## How to install
+
+On macOS the installation goes through Homebrew:
 
 ```bash
+brew tap securitypedant/octomon
+brew trust securitypedant/octomon
 brew install octomon
 ```
 
-### Linux (Debian/Ubuntu)
+On Debian and Ubuntu the repository is signed:
 
 ```bash
-sudo apt-get install octomon
+curl -fsSL https://octomon.dev/apt/octomon.gpg | sudo tee /usr/share/keyrings/octomon.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/octomon.gpg] https://octomon.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/octomon.list
+sudo apt update && sudo apt install octomon
 ```
 
-### Linux (Arch)
+On other Linux distributions, static binaries (musl) work on any distribution.
+The installer picks the right architecture and places the binary in
+`~/.cargo/bin`:
 
 ```bash
-yay -S octomon
+curl --proto '=https' --tlsv1.2 -LsSf \
+  https://github.com/securitypedant/octomon/releases/latest/download/octomon-installer.sh | sh
 ```
 
-### From source
+On Windows the PowerShell installer works for x64 and ARM64:
+
+```powershell
+irm https://github.com/securitypedant/octomon/releases/latest/download/octomon-installer.ps1 | iex
+```
+
+And to install from source with Rust:
 
 ```bash
-git clone https://github.com/cyberdyne-enterprises/octomon
-cd octomon
-cargo build --release
-./target/release/octomon
+cargo install octomon
 ```
 
-### Docker
+## How to use it
+
+With Octomon installed, just run:
 
 ```bash
-docker run -it --network host cyberdyne/octomon
+octomon
 ```
 
-## Basic commands
+That opens the full dashboard in the terminal. All measurements start
+automatically.
 
-### Ping a host
+For a quick check without opening the interface, use doctor mode:
 
 ```bash
-octomon ping google.com
+octomon --doctor
 ```
 
-Output:
-```
-PING google.com (142.250.185.46)
+It watches the network for about 20 seconds and prints a full analysis in the
+terminal. Useful to attach to a provider support ticket. The `--json` mode
+returns the analysis in JSON format. It redacts SSID, IPs and MACs by default,
+so it is safe to share. Use `--full` to see all the data.
 
-64 bytes from 142.250.185.46: icmp_seq=1 time=12.3ms TTL=55
-64 bytes from 142.250.185.46: icmp_seq=2 time=11.8ms TTL=55
-64 bytes from 142.250.185.46: icmp_seq=3 time=12.1ms TTL=55
-
---- google.com ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss
-rtt min/avg/max/stddev = 11.8/12.1/12.3/0.2 ms
-```
-
-### Trace route to a host
+For continuous monitoring in the background:
 
 ```bash
-octomon traceroute example.com
+octomon --watch
 ```
 
-Output:
-```
-TRACEROUTE to example.com (93.184.216.34), 30 hops max
-
- 1  192.168.1.1 (192.168.1.1)  1.2ms
- 2  10.0.0.1 (10.0.0.1)  5.3ms
- 3  203.0.113.45 (203.0.113.45)  8.7ms
- 4  203.0.113.60 (203.0.113.60)  12.1ms
- 5  example.com (93.184.216.34)  14.5ms
-```
-
-### DNS lookup
-
-```bash
-octomon dns google.com
-```
-
-Output:
-```
-DNS LOOKUP for google.com
-
-A records:
-  142.250.185.46
-
-AAAA records:
-  2607:f8b0:4004:80a::200e
-
-MX records:
-  10 smtp.google.com
-  20 smtp2.google.com
-
-Lookup time: 23ms
-```
-
-### HTTP status check
-
-```bash
-octomon http https://example.com
-```
-
-Output:
-```
-HTTP GET https://example.com
-
-Status: 200 OK
-Response time: 145ms
-Content-Length: 1256 bytes
-Server: nginx/1.21.0
-
-Redirect chain:
-  https://example.com -> https://www.example.com (301)
-  https://www.example.com -> 200 OK
-```
-
-### Port scan
-
-```bash
-octomon scan example.com
-```
-
-Output:
-```
-PORT SCAN for example.com
-
-Port 22 (SSH): closed
-Port 80 (HTTP): open
-Port 443 (HTTPS): open
-Port 3306 (MySQL): closed
-Port 5432 (PostgreSQL): closed
-
-Scan complete: 3 open ports found
-```
-
-## Real-world troubleshooting scenarios
-
-### Scenario 1: Website is slow
-
-```bash
-octomon http https://myapp.example.com --verbose
-```
-
-This shows:
-- DNS resolution time
-- Connection time
-- SSL/TLS handshake time
-- Time to first byte (TTFB)
-- Total response time
-
-If TTFB is high, the server is slow. If DNS is high, the DNS server is slow.
-
-### Scenario 2: Connection to a database server is timing out
-
-```bash
-octomon ping db.example.com
-octomon traceroute db.example.com
-octomon scan db.example.com -p 5432
-```
-
-- Ping tells you if the host is reachable
-- Traceroute shows the path and where it fails
-- Port scan shows if the database port is open
-
-### Scenario 3: Email isn't sending
-
-```bash
-octomon dns gmail.com --type MX
-octomon scan smtp.gmail.com -p 587
-octomon http https://smtp.gmail.com --verbose
-```
-
-Check:
-- MX records (where email goes)
-- SMTP port reachability
-- Connection details
-
-## Advanced usage
-
-### Continuous monitoring
-
-```bash
-# Monitor a host continuously
-octomon ping google.com --continuous
-
-# With interval
-octomon ping google.com --continuous --interval 2s
-```
-
-Output updates every 2 seconds, showing real-time statistics.
-
-### Custom resolution (DNS)
-
-```bash
-# Use a specific DNS server
-octomon dns google.com --server 8.8.8.8
-
-# Query a specific record type
-octomon dns google.com --type CNAME
-```
-
-### Bandwidth testing
-
-```bash
-# Test download speed
-octomon speedtest
-
-# Test to a specific server
-octomon speedtest --server speedtest.example.com
-```
-
-Output:
-```
-SPEED TEST
-
-Download: 125.3 Mbps
-Upload: 45.7 Mbps
-Latency: 12ms
-Jitter: 1.2ms
-```
-
-### Concurrent tests
-
-```bash
-# Test multiple hosts at once
-octomon ping google.com github.com example.com --concurrent
-```
-
-Useful for checking if a DNS provider is down.
-
-### Export results
-
-```bash
-# Export to JSON
-octomon ping google.com --output json > result.json
-
-# Export to CSV
-octomon ping google.com --output csv > result.csv
-```
-
-Use for automation, logging, or processing in other tools.
-
-## Integration examples
-
-### Bash script: Monitor uptime
-
-```bash
-#!/bin/bash
-HOSTS=(
-  "google.com"
-  "example.com"
-  "my-api.example.com"
-)
-
-for host in "${HOSTS[@]}"; do
-  echo "Testing $host..."
-  result=$(octomon ping "$host" --count 3 --output json)
-  packet_loss=$(echo "$result" | jq '.packet_loss')
-  
-  if [ "$packet_loss" -gt 10 ]; then
-    echo "ALERT: $host has ${packet_loss}% packet loss"
-    # Send alert (email, Slack, etc)
-  fi
-done
-```
-
-### Python: Network dashboard
-
-```python
-import subprocess
-import json
-
-def check_host(host):
-    result = subprocess.run(
-        ['octomon', 'ping', host, '--count', '5', '--output', 'json'],
-        capture_output=True,
-        text=True
-    )
-    data = json.loads(result.stdout)
-    return {
-        'host': host,
-        'avg_time': data['avg_rtt_ms'],
-        'packet_loss': data['packet_loss_percent']
-    }
-
-hosts = ['google.com', 'example.com', 'api.github.com']
-status = [check_host(h) for h in hosts]
-
-for result in status:
-    print(f"{result['host']}: {result['avg_time']:.1f}ms, {result['packet_loss']:.1f}% loss")
-```
-
-### Cron job: Regular health checks
-
-```bash
-# /etc/cron.d/octomon-health-check
-0 * * * * root octomon ping api.example.com --count 10 >> /var/log/octomon.log 2>&1
-0 * * * * root octomon http https://status.example.com >> /var/log/octomon.log 2>&1
-```
-
-## Tips and tricks
-
-If you want faster DNS lookups, try using faster DNS servers. Google's DNS is 8.8.8.8. Cloudflare's is 1.1.1.1. Quad9 is 9.9.9.9. Just pass the --server flag.
-
-If you're testing on slow international links, increase the timeout. The default is 2 seconds, but you can bump it to 5 seconds or more with the --timeout flag.
-
-Some network functions require root privileges. If you need to do low-level diagnostics, use sudo.
-
-You can combine Octomon with other tools. Pipe the output through grep to filter results. Send results to JSON format and pipe them into other monitoring systems.
-
-## Limitations
-
-Some networks block ICMP ping. If ping doesn't work, try traceroute or an HTTP check instead. Scanning ports below 1024 requires sudo. Results are printed to stdout, so if you want to save them, redirect to a file. Port scanning is serial, not parallel, so if you need to scan multiple hosts, use the --concurrent flag.
-
-## Comparison with alternatives
-
-| Tool | Ping | Traceroute | DNS | HTTP | Port Scan | Speed Test |
-|---|---|---|---|---|---|---|
-| ping | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| traceroute | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ |
-| dig | ✗ | ✗ | ✓ | ✗ | ✗ | ✗ |
-| curl | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
-| nmap | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
-| speedtest | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ |
-| **octomon** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-
-Octomon consolidates all common tools into one.
+That runs without the interface and prints every finding to standard output as
+it appears and when it is resolved. Combine with `--alert` for desktop
+notifications, `--alert-cmd` to run a command when something happens, or
+`--alert-url` to send a JSON POST to a webhook.
+
+## Why you should install Octomon
+
+If you manage your own network at home, work with infrastructure, or simply
+want to understand what is happening when the internet gets slow, Octomon
+replaces the ritual of opening five different tools.
+
+Few terminal tools offer:
+
+1. A consolidated analysis. Instead of looking at isolated numbers, you get a
+   line saying "gateway is not responding" or "healthy connection", with the
+   full diagnosis one keypress away.
+
+2. Detection of problems ordinary tools ignore. Hijacked DNS, captive portal,
+   CGNAT, bufferbloat, path-MTU black holes, forced proxy. Octomon looks for
+   all of them automatically.
+
+3. Memory per network. The tool learns what is normal for each network you use
+   and keeps an incident history. That turns "the internet is slow" into "it is
+   worse than normal for this network, and there were similar outages in the
+   last few days at the same time".
+
+4. Doctor mode safe to share. One command generates a full report of your
+   connection with sensitive data redacted by default. Perfect to send to
+   provider support or to help forums.
+
+5. Works without privileges. Octomon runs without sudo on most platforms. On
+   macOS everything works without elevating privileges. On Linux only the
+   per-process bandwidth measurement may need sudo.
+
+## Where to learn more
+
+The official repository is on GitHub at
+[securitypedant/octomon](https://github.com/securitypedant/octomon). The
+official site is [octomon.dev](https://octomon.dev), which includes detailed
+installation instructions and links to releases. There is also an
+[introductory video](https://www.youtube.com/watch?v=sHPd2LeYvaw) that
+explains the purpose of the tool and shows a guided tour of the interface.
 
 ## Conclusion
 
-Network troubleshooting is part of any developer or sysadmin's work. Octomon makes it fast and simple.
+Octomon is a tool that solves a real problem elegantly. Instead of spreading
+the diagnosis across ping, traceroute, ifconfig, speed test and activity
+monitor, it gathers everything into a single screen with an analysis that
+actually helps you understand what is happening. For anyone who works with
+networking or simply wants to stop guessing when the internet fails, it is
+worth installing.
 
-Instead of running five separate commands and trying to piece together the results, you run one. Get results in seconds. Move on to fixing the actual problem.
-
-If you work in infrastructure or DevOps, or you're just tired of remembering all the different network command syntax, Octomon is worth adding to your toolkit.
+The tool is open source (MIT or Apache 2.0 license), written in Rust, and runs
+on macOS, Linux and Windows.

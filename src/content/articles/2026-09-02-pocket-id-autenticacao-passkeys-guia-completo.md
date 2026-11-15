@@ -8,6 +8,8 @@ tags: ["Pocket ID", "autenticação", "passkey", "OIDC", "OAuth", "Cloudflare", 
 draft: false
 ---
 
+<img src="/assets/img/2026-09-02-pocket-id-autenticacao-passkeys-guia-completo-1.png" alt="Capa do artigo: Pocket ID, seu provedor de autenticação com passkeys, do zero à produção" width="1200" height="333" />
+
 Imagine que você tem vários serviços rodando na sua casa ou num servidor na nuvem. Um painel administrativo, um servidor de mídia, uma ferramenta de gestão de projetos, um monitor de rede. Cada um com seu próprio login e senha. Alguns você acessa de casa, outros de fora, outros só por aplicativo.
 
 Gerenciar isso é um pesadelo. Você acaba repetindo senhas, anotando em lugares inseguros, ou simplesmente desistindo de proteger alguns serviços.
@@ -207,7 +209,7 @@ Muitos serviços modernos (Authelia, Grafana, Nextcloud, Home Assistant, authent
 
 ### Serviços que não suportam OIDC
 
-Se um serviço não suporta OIDC, você pode usar o [OAuth2 Proxy](https://oauth2-proxy.github.io/). Ele funciona como um porteiro: fica na frente do serviço, intercepta requisições não autenticadas, redireciona para o Pocket ID, e só deixa passar se o token for válido.
+Se um serviço não suporta OIDC, você pode usar o [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/). Ele funciona como um porteiro: fica na frente do serviço, intercepta requisições não autenticadas, redireciona para o Pocket ID, e só deixa passar se o token for válido.
 
 ## Integração com Cloudflare Zero Trust
 
@@ -320,7 +322,7 @@ Para muitos cenários, especialmente homelab e pequenas equipes, essas limitaç�
 - **Repositório GitHub:** [github.com/pocket-id/pocket-id](https://github.com/pocket-id/pocket-id)
 - **Documentação oficial:** [docs.pocket-id.org](https://docs.pocket-id.org/)
 - **Demo interativa:** [demo.pocket-id.org](https://demo.pocket-id.org)
-- **OAuth2 Proxy (para serviços sem OIDC):** [oauth2-proxy.github.io](https://oauth2-proxy.github.io/)
+- **OAuth2 Proxy (para serviços sem OIDC):** [oauth2-proxy.github.io](https://oauth2-proxy.github.io/oauth2-proxy/)
 - **Cloudflare Zero Trust:** [cloudflare.com/products/zero-trust](https://www.cloudflare.com/products/zero-trust/)
 - **Passkeys (explicação oficial):** [passkeys.io](https://www.passkeys.io/)
 - **WebAuthn (especificação W3C):** [w3.org/TR/webauthn](https://www.w3.org/TR/webauthn/)

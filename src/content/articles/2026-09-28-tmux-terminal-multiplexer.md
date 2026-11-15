@@ -14,7 +14,7 @@ Essa cena é velha, e a solução também. O Unix tem um programa para isso desd
 
 Se você leu o post sobre o [Herdr](/artigos/2026-09-17-herdr-agent-multiplexer-terminal/), o multiplexer desenhado para agentes de IA, já conhece o papel do tmux na história: ele é o alicerce sobre o qual as ferramentas mais novas foram construídas. Neste post, o assunto é o tmux em si: o que ele faz, como usa, como administra e por que continua indispensável.
 
-<img src="/assets/img/2026-09-28-tmux-terminal-multiplexer-1.png" alt="Tmux: o terminal que nunca morre, sessões persistentes e painéis" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-28-tmux-terminal-multiplexer-1.png" alt="Tmux: o terminal que nunca morre, sessões persistentes e painéis" width="1200" height="333" />
 
 ## O que é um multiplexer de terminal
 

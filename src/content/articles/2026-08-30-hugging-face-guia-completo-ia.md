@@ -8,6 +8,8 @@ tags: ["Hugging Face", "LLM", "inteligência artificial", "machine learning", "m
 draft: false
 ---
 
+<img src="/assets/img/2026-08-30-hugging-face-guia-completo-ia-1.png" alt="Capa do artigo: Hugging Face, o hub central da inteligência artificial aberta" width="1200" height="333" />
+
 Se você acompanha o mundo de inteligência artificial, já deve ter ouvido falar
 da Hugging Face. Ela é hoje a maior plataforma colaborativa de machine learning
 do mundo, com mais de 2 milhões de modelos, 1,5 milhão de datasets e 1,5
@@ -121,7 +123,7 @@ hora:
 
 | GPU | VRAM | Preço/hora |
 |-----|------|------------|
-| CPU Basic | — | Grátis |
+| CPU Basic | Não se aplica | Grátis |
 | Nvidia T4 | 16 GB | US$ 0,40 |
 | Nvidia L4 | 24 GB | US$ 0,80 |
 | Nvidia L40S | 48 GB | US$ 1,80 |

@@ -7,7 +7,7 @@ category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "futuro do trabalho", "inteligência artificial", "carreira", "automação"]
 draft: false
 ---
-<img src="/assets/img/2026-11-13-ia-para-quem-nao-usa-parte-3-1.png" alt="Quem perde espaço com a IA, e quem não perde" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-11-13-ia-para-quem-nao-usa-parte-3-1.png" alt="Quem perde espaço com a IA, e quem não perde" width="1200" height="333" />
 
 
 A IA não vai roubar o seu emprego é a frase mais repetida e a menos útil sobre o assunto.

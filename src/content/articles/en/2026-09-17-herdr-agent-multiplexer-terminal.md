@@ -14,7 +14,7 @@ tmux keeps sessions alive when you close the laptop. Zellij adds a more modern i
 
 Herdr was built to fill exactly that gap.
 
-<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-1.png" alt="Herdr interface showing multiple terminal panes with AI agents" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-17-herdr-agent-multiplexer-terminal-en-1.png" alt="Cover about Herdr: a terminal multiplexer built for AI agents, with workspaces and state detection" width="1200" height="333" />
 
 ## What is Herdr
 

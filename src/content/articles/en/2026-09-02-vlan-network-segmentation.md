@@ -128,29 +128,6 @@ flowchart TB
 
 In the diagram above, port 1 of each switch is configured as **tagged** for VLANs 10, 20, and 30. This allows the cable between the two switches to carry packets from all three VLANs. Computers connected to ports 2 and 3 receive **untagged** packets only from their specific VLAN.
 
-## VLAN, Subnet, and VNet: what is the difference?
-
-It is common to see these terms used interchangeably. They are not the same. Each operates at a different OSI layer and solves different problems.
-
-**Subnet.** A layer 3 (network) concept. A subnet divides an IP address space into smaller blocks. Instead of using the entire 192.168.0.0/16 range, you create 192.168.10.0/24 for one department and 192.168.20.0/24 for another. Two different subnets cannot talk directly without a router.
-
-Subnets organize **IP addresses**. They exist with or without VLANs. You can have two subnets on the same switch without VLANs, but then they would be on the same broadcast domain, and the separation would be logical only, not physical. A device could change subnets by changing its IP, without changing ports.
-
-**VLAN.** A layer 2 (data link) concept. A VLAN isolates traffic at the switch level. Devices on different VLANs do not exchange Ethernet frames with each other. The separation is real, at the hardware level: the switch treats each VLAN as a separate MAC address table.
-
-**VNet (Virtual Network in the cloud).** A cloud infrastructure concept. AWS VPC, Azure VNet, and GCP VPC are isolated virtual networks you create inside the provider's datacenter. They combine subnet and VLAN concepts into a single managed service: you define IP blocks, create subnets, configure routing tables, and set security groups, all without touching hardware.
-
-| | VLAN | Subnet | VNet |
-|---|---|---|---|
-| OSI layer | 2 (Data Link) | 3 (Network) | 2 + 3 (cloud abstraction) |
-| What it isolates | Switch ports and Ethernet frames | IP addresses and routing | Entire cloud network |
-| Identifier | VLAN ID (1-4094) | CIDR (e.g. 192.168.10.0/24) | VNet name + CIDR |
-| Configured on | Manageable switches | Routers and DHCP servers | Cloud provider console |
-| Needs hardware | Yes (manageable switch) | No (any router can do it) | No (everything virtualized) |
-| Example | TL-SG1024DE port config | 192.168.10.0/24 in DHCP | aws_vpc in Terraform |
-
-In practice, you use VLANs and Subnets together. The best practice is **one VLAN = one Subnet**. The VLAN isolates at layer 2, the subnet organizes at layer 3, and the router (or firewall) bridges them while applying security rules.
-
 ## Practical example with TP-Link TL-SG1024DE
 
 The TP-Link TL-SG1024DE is a 24-port "Easy Smart" manageable switch with 802.1Q VLAN support at an affordable price. It is a great example because it represents the entry point for anyone wanting to move from unmanageable switches to network segmentation.
@@ -189,6 +166,15 @@ You want everything to share the same physical switch, but without seeing each o
 
 **Step 4:** Connect port 24 to the router or firewall, which should have a sub-interface configured for each VLAN.
 
+When a computer on port 3 sends a packet, the switch:
+
+1. Receives the packet untagged
+2. Adds the tag with VLAN ID 10 (based on the PVID of port 3)
+3. Forwards the packet only to the ports that also belong to VLAN 10 (ports 1-8 and the tagged port 24)
+4. Removes the tag before delivering the packet to the computers on ports 1-8
+
+A camera on port 10 will never see that packet. The switch discards inter-VLAN traffic at the hardware level.
+
 ```mermaid
 flowchart TB
     subgraph TL[TP-Link TL-SG1024DE]
@@ -214,29 +200,105 @@ flowchart TB
     TRUNK --> FW[Firewall / Router<br>VLAN sub-interfaces 10,20,30,40]
 ```
 
+## VLAN, Subnet, and VNet: what is the difference?
+
+It is common to see these terms used interchangeably. They are not the same. Each operates at a different OSI layer and solves different problems.
+
+**Subnet.** A layer 3 (network) concept. A subnet divides an IP address space into smaller blocks. Instead of using the entire 192.168.0.0/16 range, you create 192.168.10.0/24 for one department and 192.168.20.0/24 for another. Two different subnets cannot talk directly without a router.
+
+Subnets organize **IP addresses**. They exist with or without VLANs. You can have two subnets on the same switch without VLANs, but then they would be on the same broadcast domain, and the separation would be logical only, not physical. A device could change subnets by changing its IP, without changing ports.
+
+**VLAN.** A layer 2 (data link) concept. A VLAN isolates traffic at the switch level. Devices on different VLANs do not exchange Ethernet frames with each other. The separation is real, at the hardware level: the switch treats each VLAN as a separate MAC address table.
+
+**VNet (Virtual Network in the cloud).** A cloud infrastructure concept. AWS VPC, Azure VNet, and GCP VPC are isolated virtual networks you create inside the provider's datacenter. They combine subnet and VLAN concepts into a single managed service: you define IP blocks, create subnets, configure routing tables, and set security groups, all without touching hardware.
+
+The table below summarizes the differences:
+
+| | VLAN | Subnet | VNet |
+|---|---|---|---|
+| OSI layer | 2 (Data Link) | 3 (Network) | 2 + 3 (cloud abstraction) |
+| What it isolates | Switch ports and Ethernet frames | IP addresses and routing | Entire cloud network |
+| Identifier | VLAN ID (1-4094) | CIDR (e.g. 192.168.10.0/24) | VNet name + CIDR |
+| Configured on | Manageable switches | Routers and DHCP servers | Cloud provider console |
+| Needs hardware | Yes (manageable switch) | No (any router can do it) | No (everything virtualized) |
+| Example | TL-SG1024DE port config | 192.168.10.0/24 in DHCP | aws_vpc in Terraform |
+
+In practice, you use VLANs and Subnets together. The best practice is **one VLAN = one Subnet**. The VLAN isolates at layer 2, the subnet organizes at layer 3, and the router (or firewall) bridges them while applying security rules.
+
+For example: VLAN 10 gets subnet 192.168.10.0/24. VLAN 20 gets 192.168.20.0/24. A firewall routes between them, allowing only the traffic that is actually needed.
+
 ## The limitation: inter-VLAN communication
 
 VLANs isolate, but at some point different groups need to talk. The file server on VLAN 10 needs to be accessed by computers on VLAN 30 (guests)? Probably not. But computers on VLAN 10 need internet access, and that is on another network.
 
-To allow inter-VLAN communication, you need a device that performs routing:
+To allow inter-VLAN communication, you need a device that performs routing, which can be:
 
 **Router-on-a-stick.** A router with a single physical interface connected to the switch via a trunk port. The router creates virtual sub-interfaces, one for each VLAN, each with its own IP address. Traffic between VLANs passes through the router, which decides whether to allow or block.
 
-**Layer 3 switch (SVI).** More advanced switches can perform routing internally using Switch Virtual Interfaces (SVIs). You create a virtual interface for each VLAN, assign an IP, and the switch routes between them in hardware, without needing an external router.
+**Layer 3 switch (SVI).** More advanced switches (like the TP-Link TL-SG3424 or a Cisco Catalyst) can perform routing internally using Switch Virtual Interfaces (SVIs). You create a virtual interface for each VLAN, assign an IP, and the switch routes between them in hardware, without needing an external router.
 
 **Firewall.** A firewall (like pfSense, OPNsense, or a physical appliance) connected to the switch via trunk can route between VLANs and apply granular security policies. This is the most secure option.
+
+```mermaid
+flowchart LR
+    subgraph NET[Network with inter-VLAN routing via firewall]
+        direction TB
+        FW[Firewall<br>pfSense / OPNsense]
+        SW[Manageable switch<br>with VLANs]
+        PC1[PC - VLAN 10]
+        CAM[Camera - VLAN 20]
+        IOT[Smart light - VLAN 40]
+        SW --> |Trunk port<br>VLANs 10,20,30,40| FW
+        PC1 --> |Untagged port<br>VLAN 10| SW
+        CAM --> |Untagged port<br>VLAN 20| SW
+        IOT --> |Untagged port<br>VLAN 40| SW
+        FW -->|Rule: allow<br>VLAN 10 -> internet| WAN[Internet]
+        FW -->|Rule: block<br>VLAN 20,30,40<br>from each other and<br>from VLAN 10| BLOCKED[Blocked traffic]
+    end
+```
+
+## Use cases
+
+**Homelab with servers and services.** An enthusiast has a Proxmox server, a NAS, Docker containers, and personal computers. They create VLAN 10 for the main network, VLAN 50 for servers (reachable only from VLAN 10 through the firewall), and VLAN 99 for managing switches and routers out of band.
+
+**Office with separate departments.** A company separates the finance computers on VLAN 10, sales on VLAN 20, and IT on VLAN 30. Each VLAN has its own subnet. The firewall lets everyone reach the internet but blocks sales from reaching the finance server.
+
+**Guest network.** A shop offers Wi-Fi to customers. The router creates a dedicated guest VLAN with internet-only access. Customers cannot reach the point-of-sale computers or the printers.
+
+**Isolated IoT.** Smart lights, plugs, doorbells, and robot vacuums go into a separate VLAN. They have internet access so they keep working, but they do not talk to the rest of the network. If some manufacturer decides to scan the local network, it only finds other IoT devices.
+
+## How to test without buying new hardware
+
+If you do not have a manageable switch but want to experiment with VLANs, there are two ways:
+
+**A VM with Open vSwitch.** Inside Proxmox or VMware, you create a virtual switch with VLANs using Open vSwitch. The VMs are connected to ports on different VLANs. It is a safe environment to test configurations before applying them to real hardware.
+
+**A virtual router (pfSense/OPNsense).** pfSense can create virtual VLANs on network interfaces. You can simulate segmentation between different subnets without needing a physical manageable switch. The isolation will not happen at layer 2, because everything goes through the same physical interface, but the routing and firewall rules will be exactly the same.
+
+## Limitations of VLANs
+
+VLANs do not solve everything.
+
+**They do not replace a firewall.** VLANs isolate at the switch level, but any device that routes between VLANs can break that isolation if it is misconfigured. A firewall is what actually applies the rules.
+
+**The limit is 4094 VLANs.** The VLAN ID field in the 802.1Q standard has 12 bits, allowing at most 4094 VLANs (IDs 0 and 4095 are reserved). For most scenarios that is plenty. For large providers, there are extensions such as Q-in-Q.
+
+**Unmanageable switches do not support them.** If your switch is the kind you buy for a few dollars with no configuration options at all, it does not do VLANs. Every device connected to it is on the same network, full stop.
+
+**Configuration requires planning.** Poorly configured VLANs can isolate devices that need to talk to each other, or worse, open security gaps if the trunk is not protected.
 
 ## Useful links
 
 - **IEEE 802.1Q standard:** [ieee802.org](https://www.ieee802.org/1/pages/802.1Q.html)
-- **TP-Link TL-SG1024DE:** [tp-link.com](https://www.tp-link.com/us/business-networking/easy-smart-switch/tl-sg1024de/)
-- **TP-Link 802.1Q VLAN configuration guide:** [tp-link.com/support/faq/328/](https://www.tp-link.com/us/support/faq/328/)
+- **TP-Link TL-SG1024DE (Easy Smart Switch):** [tp-link.com](https://www.tp-link.com/us/business-networking/easy-smart-switch/tl-sg1024de/)
+- **TL-SG1024DE manual (PDF):** [User guide](https://static.tp-link.com/TL-SG1024DE(UN)_V2_UG_1478227605744t.pdf)
+- **TP-Link 802.1Q VLAN configuration guide:** [How to configure 802.1Q VLAN](https://www.tp-link.com/us/support/faq/328/)
 - **pfSense (firewall for inter-VLAN routing):** [pfsense.org](https://www.pfsense.org/)
 
 ## Conclusion
 
 VLANs are the fundamental tool for organizing networks that have grown beyond a handful of devices. They allow everything to share the same cable without mixing, improving security, performance, and organization.
 
-The beauty of the concept lies in its simplicity: an entry-level manageable switch, combined with some 802.1Q configuration, transforms a flat, insecure network into a segmented, controlled one.
+The beauty of the concept lies in its simplicity: an entry-level manageable switch, such as the TP-Link TL-SG1024DE, combined with some 802.1Q configuration, transforms a flat, insecure network into a segmented, controlled one.
 
 The next step, after mastering VLANs, is to place a firewall between them to decide what can and cannot pass. But the foundation is understanding that at layer 2, the switch can separate what the cable unites. And with VLANs, you do exactly that: everything together, but nothing mixed.

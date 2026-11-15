@@ -8,6 +8,8 @@ tags: ["terminal", "cli-tools", "productivity"]
 draft: false
 ---
 
+<img src="/assets/img/productive-terminal-2026-en-1.png" alt="Cover about a productive terminal in 2026: emulator, multiplexer and essential shortcuts" width="1200" height="333" />
+
 Setting up your terminal is one of the most common hobbies disguised as
 productivity among people who code. This is the point where I stopped tinkering.
 

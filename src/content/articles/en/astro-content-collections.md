@@ -8,6 +8,8 @@ tags: ["astro", "typescript", "content-collections"]
 draft: false
 ---
 
+<img src="/assets/img/astro-content-collections-en-1.png" alt="Astro Content Collections cover: Markdown articles with a typed structure validated by schema" width="1200" height="333" />
+
 When a project grows beyond a handful of loose pages, it's worth having a
 structured way to store content. That's exactly what Astro's **Content
 Collections** solve.
@@ -16,7 +18,7 @@ Collections** solve.
 
 Before collections, it was common to import Markdown files manually and hope
 the front matter was correct. A missing field was only noticed in
-production — usually in the worst possible way.
+production, usually in the worst possible way.
 
 ## How it works in practice
 
@@ -34,7 +36,7 @@ const articles = defineCollection({
 ```
 
 If a new article has `publishDate: "yesterday"` instead of a valid date, the
-build fails immediately — not in production.
+build fails immediately, not in production.
 
 > Validating content at build time is one of the cheapest ways to avoid silly
 > bugs on a blog or documentation site.

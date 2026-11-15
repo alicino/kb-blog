@@ -8,7 +8,7 @@ tags: ["segurança", "auditoria de código", "Cloudflare", "agentes de IA", "ski
 draft: false
 ---
 
-<img src="/assets/img/2026-10-06-cloudflare-security-audit-skill-1.png" alt="Skill Security Audit da Cloudflare: seu agente de IA como auditor de segurança" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-06-cloudflare-security-audit-skill-1.png" alt="Skill Security Audit da Cloudflare: seu agente de IA como auditor de segurança" width="1200" height="333" />
 
 Seu agente de código escreve centenas de linhas por dia. Ele cria rotas, consulta bancos de dados, recebe requisições de usuários e cuida de credenciais. Quem audita tudo isso? Revisar segurança é a tarefa que ninguém sobra para fazer com calma, e o próprio agente de IA é péssimo em julgar o próprio trabalho: quando você pede para ele revisar o código que ele acabou de escrever, ele aprova quase tudo.
 

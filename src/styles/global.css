@@ -495,3 +495,22 @@ textarea {
     font-size: 1.02rem;
   }
 }
+
+/* ===== CAPA DO ARTIGO (1200x333) =====
+/* Dimensao acordada da capa: 1200x333 (proporcao 3.6:1). A capa fica no topo
+   do post. Os atributos width/height do <img> no Markdown existem para evitar
+   salto de layout (CLS), mas sao faceis de errar na mao (630, duplicados, um
+   style de width:80% por cima). Esta regra e a garantia final: mesmo que a tag
+   venha errada, a capa ocupa a largura do conteudo e mantem a proporcao certa,
+   sem esticar nem cortar. Vale para a PRIMEIRA imagem do corpo do artigo. */
+.prose > p:first-of-type > img:only-child,
+.prose > img:first-child {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  aspect-ratio: 1200 / 333;
+  object-fit: cover;
+  margin: 0 auto 2rem;
+  border-radius: 0.5rem;
+}

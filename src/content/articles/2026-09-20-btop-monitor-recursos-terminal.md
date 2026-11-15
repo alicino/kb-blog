@@ -8,7 +8,7 @@ tags: ["btop", "terminal", "monitor", "CPU", "GPU", "sistema", "diagnóstico", "
 draft: false
 ---
 
-<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-1.png" alt="btop: monitor de recursos no terminal" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-1.png" alt="btop: monitor de recursos no terminal" width="1200" height="333" />
 
 Você está trabalhando e o computador começa a ficar lento. O navegador demora para abrir uma aba. O compilador está demorando mais que o normal. O que está consumindo os recursos da sua máquina?
 
@@ -20,7 +20,7 @@ Se você também usa o [Octomon](/artigos/octomon-ferramenta-diagnostico-rede-te
 
 ## O que o btop mostra
 
-<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="Tela do btop mostrando CPU, memória, discos, rede e processos em tempo real" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-20-btop-monitor-recursos-terminal-2.jpg" alt="Tela do btop mostrando CPU, memória, discos, rede e processos em tempo real" width="1200" height="333" />
 
 O btop divide a tela em painéis que você pode reorganizar. Cada painel mostra uma categoria de recurso.
 

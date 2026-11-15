@@ -183,7 +183,7 @@ draft: false
 
 <div class="artigo-regex">
 
-<img src="/assets/img/2026-09-23-regex-guia-pratico-1.png" alt="Entenda regex de forma simples e descomplicada" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-09-23-regex-guia-pratico-1.png" alt="Entenda regex de forma simples e descomplicada" width="1200" height="333" />
 
 A primeira vez que você encara uma expressão regular, ela parece ter sido digitada por alguém que caiu no teclado. Uma sopa de barras invertidas, chaves, parênteses e asteriscos, sem nenhum ponto de entrada óbvio.
 

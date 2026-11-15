@@ -8,7 +8,7 @@ tags: ["RPKI", "BGP", "Segurança", "redes"]
 draft: false
 ---
 
-<img src="/assets/img/2026-10-19-rpki-rotas-assinadas-1.png" alt="RPKI: rotas assinadas, ROAs e validação de origem" style="width:80%;height:auto;display:block;margin:2rem auto" />
+<img src="/assets/img/2026-10-19-rpki-rotas-assinadas-1.png" alt="RPKI: rotas assinadas, ROAs e validação de origem" width="1200" height="333" />
 
 Na manhã de 24 de junho de 2019, o tráfego de milhares de sites, entre eles o da própria Cloudflare, começou a passar por uma fabricante de metais na Pensilvânia. Ninguém hackeou nada. Nenhum malware, nenhum ataque. A internet fez exatamente o que o seu protocolo de roteamento manda fazer: acreditar no anúncio mais específico que encontrou.
 
@@ -83,7 +83,7 @@ stateDiagram-v2
     Chegada --> Desconhecida: não há ROA para o prefixo
     Válida --> Tabela: rota aceita
     Inválida --> Lixo: rota derrubada
-    Desconhecida --> Tabela: aceita, com a ressalva do futuro
+    Desconhecida --> Tabela: aceita, com ressalva
 ```
 
 O terceiro veredicto é a sutileza que mais engana iniciantes. Desconhecido não é inválido: é o anúncio de um prefixo que simplesmente não tem ROA. A internet não pode punir quem não assinou, porque metade do mundo ainda está aprendendo. Inválida é a rota que **contradiz** um documento existente: o ASN errado originando, ou um comprimento além do autorizado. Desconhecida é apenas ausência de papelada. O roteador que valida derruba a inválida e mantém a desconhecida, e essa escolha prudente é o que permite a adoção gradual sem partir a internet.
@@ -95,7 +95,7 @@ Nenhum roteador fala com o cartório diretamente. Entre os repositórios públic
 ```mermaid
 flowchart LR
     R["Repositórios dos RIRs"] -->|"sincronização contínua"| V["Validador: rpki-client, Fort e afins"]
-    V -->|"catálogo via RTR, porta 323"| B["Roteador decide"]
+    V -->|"catálogo via RTR, 323"| B["Roteador decide"]
 ```
 
 O validador, um software dedicado como o rpki-client ou o Fort, coleta e verifica todos os certificados e ROAs dos cinco RIRs, confere as assinaturas da cadeia inteira e entrega ao roteador apenas o resultado limpo, o catálogo de VRPs, por um protocolo próprio chamado RTR. O roteador consulta o catálogo local a cada anúncio e aplica o veredicto. O ciclo se repete a cada poucos minutos, porque promessas expiram e novas aparecem.

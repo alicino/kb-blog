@@ -8,6 +8,8 @@ tags: ["ia", "LLM", "custo", "hardware", "automação"]
 draft: false
 ---
 
+<img src="/assets/img/custo-real-llm-local-1.png" alt="Capa sobre o custo real de rodar LLMs localmente: energia, GPU e comparativo com APIs" width="1200" height="333" />
+
 ## A promessa e a realidade dos LLMs locais
 
 Rodar modelos de linguagem localmente tem um apelo forte. Você não paga por token, não depende de internet, não envia seus dados para terceiros e tem liberdade total para usar o modelo que quiser. Empresas que lidam com dados sensíveis veem nisso uma solução para manter informações dentro do próprio ambiente.

@@ -8,6 +8,8 @@ tags: ["fine-tuning", "iniciantes", "LLM", "LoRA", "quantização", "GPU", "glos
 draft: false
 ---
 
+<img src="/assets/img/2026-09-12-fine-tuning-ia-para-iniciantes-glossario-1.png" alt="Capa do glossário de fine-tuning: os termos do ajuste de modelos de IA explicados sem jargão" width="1200" height="333" />
+
 Se você está começando a explorar o mundo dos modelos de inteligência artificial, já deve ter se deparado com frases como:
 
 > "Com um arquivo YAML você define o modelo base, a tarefa SFT ou DPO, os hiperparâmetros, aplica quantização e começa o treinamento."
