@@ -102,4 +102,4 @@ If you're starting out, your risk is bigger than they told you. The way out isn'
 
 In both cases, the answer is the same: **migrate to work that requires judgment**. It's the only place where AI augments instead of replacing.
 
-The next post in the series deals with the other side of this: if you're going to use AI to work better, you need to know when it's wrong. And it's wrong with a confidence that deceives.
+The [next post in the series](/en/articles/2026-11-01-ai-for-people-who-dont-use-ai-part-4/) deals with the other side of this: if you're going to use AI to work better, you need to know when it's wrong. And it's wrong with a confidence that deceives.
