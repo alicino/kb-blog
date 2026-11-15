@@ -1,14 +1,14 @@
 ---
 title: "When AI gets it wrong: how to use it without being fooled"
 description: "AI does not make mistakes the way an intern does, it makes them confidently. Here are the most common errors, the data showing how often they happen, and a practical rule for checking by consequence."
-publishDate: 2026-11-01
+publishDate: 2026-11-15
 author: "Alicino"
 category: "Inteligência Artificial"
 tags: ["IA para iniciantes", "inteligência artificial", "pensamento crítico", "verificação", "aprender IA"]
 draft: false
 ---
 
-<img src="/assets/img/2026-11-01-ai-for-people-who-dont-use-ai-part-4-1.png" alt="Cover about when AI gets things wrong: the most common errors and how to check by consequence" width="1200" height="333" />
+<img src="/assets/img/2026-11-15-ia-para-quem-nao-usa-parte-4-en-1.png" alt="Cover about when AI gets things wrong: the most common errors and how to check by consequence" width="1200" height="333" />
 
 AI does not make mistakes the way an intern does. An intern hesitates, asks, apologizes. AI writes something wrong with the same confidence it uses to write something right, and that is what makes it dangerous.
 
