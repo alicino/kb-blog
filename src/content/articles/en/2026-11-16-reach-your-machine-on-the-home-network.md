@@ -5,7 +5,7 @@ publishDate: 2026-11-16
 author: "Alicino"
 category: "Infraestrutura e Redes"
 tags: ["rede doméstica", "mDNS", "Docker", "servidor caseiro", "Raspberry Pi", "acesso remoto"]
-draft: true
+draft: false
 ---
 
 <img src="/assets/img/2026-11-16-reach-your-machine-on-the-home-network-1.png" alt="Cover about reaching a machine on your home network without a monitor: a home server, the .local name and Docker ports" width="1200" height="333" />

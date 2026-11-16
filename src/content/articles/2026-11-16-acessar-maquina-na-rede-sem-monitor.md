@@ -5,7 +5,7 @@ publishDate: 2026-11-16
 author: "Alicino"
 category: "Infraestrutura e Redes"
 tags: ["rede doméstica", "mDNS", "Docker", "servidor caseiro", "Raspberry Pi", "acesso remoto"]
-draft: true
+draft: false
 ---
 
 <img src="/assets/img/2026-11-16-acessar-maquina-na-rede-sem-monitor-1.png" alt="Capa sobre acessar uma máquina na rede local sem monitor: servidor em casa, nome .local e portas do Docker" width="1200" height="333" />
