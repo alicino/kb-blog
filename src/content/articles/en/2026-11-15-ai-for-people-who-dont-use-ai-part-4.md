@@ -4,7 +4,7 @@ description: "AI does not make mistakes the way an intern does, it makes them co
 publishDate: 2026-11-15
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["IA para iniciantes", "inteligência artificial", "pensamento crítico", "verificação", "aprender IA"]
+tags: ["AI for beginners", "artificial intelligence", "critical thinking", "verification", "learning AI"]
 draft: false
 ---
 
