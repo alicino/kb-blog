@@ -4,7 +4,7 @@ description: "Where does what you paste into an AI chat actually go? What the pr
 publishDate: 2026-11-17
 author: "Alicino"
 category: "Inteligência Artificial"
-tags: ["IA para iniciantes", "privacidade", "inteligência artificial", "segurança", "dados"]
+tags: ["AI for beginners", "privacy", "artificial intelligence", "security", "data"]
 draft: false
 ---
 

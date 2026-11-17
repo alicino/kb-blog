@@ -4,7 +4,7 @@ description: "How to reach a server, Raspberry Pi or container that sits on your
 publishDate: 2026-11-16
 author: "Alicino"
 category: "Infraestrutura e Redes"
-tags: ["rede doméstica", "mDNS", "Docker", "servidor caseiro", "Raspberry Pi", "acesso remoto"]
+tags: ["home network", "mDNS", "Docker", "home server", "Raspberry Pi", "remote access"]
 draft: false
 ---
 
